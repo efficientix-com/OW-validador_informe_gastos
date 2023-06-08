@@ -34,81 +34,76 @@
          errorConfig = [];
 
      function onRequest(context) {
-
-
-
          var form = null;
          try {
-             params = context.request.parameters,
-                 request = context.request,
-                 response = context.response;
-             log.audit({ title: 'onRequest - params', details: params });
-             paramPreviousStep = params.custparam_step || '';
-             log.audit({ title: 'onRequest - paramPreviousStep', details: paramPreviousStep });
-             paramCredit = params.custpage_credit_card || 'F';
-             log.audit({ title: 'onRequest - paramCredit', details: paramCredit });
-             paramNotes = params.custpage_notes || '';
-             log.audit({ title: 'onRequest - paramNotes', details: paramNotes });
-             expenseReportId = params.er || 0;
-             log.audit({ title: 'onRequest - expenseReportId', details: expenseReportId });
-             paramCurrency = params.custpage_currency || 0;
-             log.audit({ title: 'onRequest - paramCurrency', details: paramCurrency });
-             paramSubsidiary = params.custpage_subsidiary || 0;
-             log.audit({ title: 'onRequest - paramSubsidiary', details: paramSubsidiary });
-             paramHasInvoice = params.custpage_deductible || 'F';
-             log.audit({ title: 'onRequest - paramHasInvoice', details: paramHasInvoice });
-             paramAmount = params.custpage_amount || 0;
-             log.audit({ title: 'onRequest - paramAmount', details: paramAmount });
-             paramCustomer = params.custpage_client || 0;
-             log.audit({ title: 'onRequest - paramCustomer', details: paramCustomer });
+            params = context.request.parameters,
+            request = context.request,
+            response = context.response;
+            log.audit({ title: 'onRequest - params', details: params });
+            paramPreviousStep = params.custparam_step || '';
+            log.audit({ title: 'onRequest - paramPreviousStep', details: paramPreviousStep });
+            paramCredit = params.custpage_credit_card || 'F';
+            log.audit({ title: 'onRequest - paramCredit', details: paramCredit });
+            paramNotes = params.custpage_notes || '';
+            log.audit({ title: 'onRequest - paramNotes', details: paramNotes });
+            expenseReportId = params.er || 0;
+            log.audit({ title: 'onRequest - expenseReportId', details: expenseReportId });
+            paramCurrency = params.custpage_currency || 0;
+            log.audit({ title: 'onRequest - paramCurrency', details: paramCurrency });
+            paramSubsidiary = params.custpage_subsidiary || 0;
+            log.audit({ title: 'onRequest - paramSubsidiary', details: paramSubsidiary });
+            paramHasInvoice = params.custpage_deductible || 'F';
+            log.audit({ title: 'onRequest - paramHasInvoice', details: paramHasInvoice });
+            paramAmount = params.custpage_amount || 0;
+            log.audit({ title: 'onRequest - paramAmount', details: paramAmount });
+            paramCustomer = params.custpage_client || 0;
+            log.audit({ title: 'onRequest - paramCustomer', details: paramCustomer });
 
-             if (paramPreviousStep == firstId) {
-                 paramPDf = request.files.custpage_pdf || null;
-             }
-             else {
-                 paramPDf = params.custpage_pdf || null;
-             }
-             log.audit({ title: 'onRequest - paramPDf', details: paramPDf });
-             paramFinished = params.custpage_finished || 'F';
-             log.audit({ title: 'onRequest - paramFinished', details: paramFinished });
-             paramExpense = params.custpage_expense_report || 0;
-             log.audit({ title: 'onRequest - paramExpense', details: paramExpense });
-             paramCategory = params.custpage_pay_method || 0;
-             log.audit({ title: 'onRequest - paramCategory', details: paramCategory });
-             if (paramPDf && params.custparam_step == firstId) {
-                 log.audit({ title: 'onRequest', details: 'Uploading file ' + paramPDf.name });
-                 var jsonPDf = fileUpload(paramPDf, 1);
+            if (paramPreviousStep == firstId) {
+                paramPDf = request.files.custpage_pdf || null;
+            }else {
+                paramPDf = params.custpage_pdf || null;
+            }
+            log.audit({ title: 'onRequest - paramPDf', details: paramPDf });
+            paramFinished = params.custpage_finished || 'F';
+            log.audit({ title: 'onRequest - paramFinished', details: paramFinished });
+            paramExpense = params.custpage_expense_report || 0;
+            log.audit({ title: 'onRequest - paramExpense', details: paramExpense });
+            paramCategory = params.custpage_pay_method || 0;
+            log.audit({ title: 'onRequest - paramCategory', details: paramCategory });
+            if (paramPDf && params.custparam_step == firstId) {
+                log.audit({ title: 'onRequest', details: 'Uploading file ' + paramPDf.name });
+                var jsonPDf = fileUpload(paramPDf, 1);
 
-                 paramPDf = JSON.stringify(jsonPDf);
-             }
-             if (paramPreviousStep == firstId) {
-                 log.audit({ title: 'request.files.custpage_xml', details: request.files.custpage_xml });
-                 paramXML = request.files.custpage_xml || null;
-             }
-             else {
-                 log.audit({ title: 'params.custpage_xml', details: params.custpage_xml });
-                 paramXML = params.custpage_xml || null;
-             }
-             log.audit({ title: 'onRequest - paramXML', details: paramXML });
+                paramPDf = JSON.stringify(jsonPDf);
+            }
+            if (paramPreviousStep == firstId) {
+                log.audit({ title: 'request.files.custpage_xml', details: request.files.custpage_xml });
+                paramXML = request.files.custpage_xml || null;
+            }else {
+                log.audit({ title: 'params.custpage_xml', details: params.custpage_xml });
+                paramXML = params.custpage_xml || null;
+            }
+            log.audit({ title: 'onRequest - paramXML', details: paramXML });
 
-             if (paramXML && params.custparam_step == firstId) {
-                 log.audit({ title: 'onRequest', details: 'Uploading file ' + paramXML.name });
-                 var jsonXML = fileUpload(paramXML);
-                 paramXML = JSON.stringify(jsonXML, 2);
-             }
-             log.audit({ title: 'onRequest', details: 'paramHasInvoice: ' + paramHasInvoice });
-             log.audit({ title: 'onRequest', details: 'paramPreviousStep: ' + paramPreviousStep });
+            if (paramXML && params.custparam_step == firstId) {
+                log.audit({ title: 'onRequest', details: 'Uploading file ' + paramXML.name });
+                var jsonXML = fileUpload(paramXML);
+                paramXML = JSON.stringify(jsonXML, 2);
+            }
+            log.audit({ title: 'onRequest', details: 'paramHasInvoice: ' + paramHasInvoice });
+            log.audit({ title: 'onRequest', details: 'paramPreviousStep: ' + paramPreviousStep });
 
-             var finish = createInterface({});
-             //Aqui esta el finish
-             log.audit("finishPrueba", finish);
-             if (assistant) {
-                 response.writePage(assistant);
-             }
-             else {
-                 var formError = createFormError("Ha ocurrido un error al tratar de construir la interfaz.");
-                 response.writePage(formError);
-             }
+            var finish = createInterface({});
+            //Aqui esta el finish
+            log.audit("finishPrueba", finish);
+            if (assistant) {
+                response.writePage(assistant);
+            }
+            else {
+                var formError = createFormError("Ha ocurrido un error al tratar de construir la interfaz.");
+                response.writePage(formError);
+            }
          } catch (e) {
              log.error({ title: 'onRequest', details: e });
              var formError = createFormError("Ha ocurrido un error, contacte a su administrador.");

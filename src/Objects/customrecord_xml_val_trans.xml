@@ -1,0 +1,863 @@
+<customrecordtype scriptid="customrecord_xml_val_trans">
+  <accesstype>CUSTRECORDENTRYPERM</accesstype>
+  <allowattachments>F</allowattachments>
+  <allowinlinedeleting>F</allowinlinedeleting>
+  <allowinlinedetaching>F</allowinlinedetaching>
+  <allowinlineediting>F</allowinlineediting>
+  <allowmobileaccess>F</allowmobileaccess>
+  <allownumberingoverride>F</allownumberingoverride>
+  <allowquickadd>T</allowquickadd>
+  <allowquicksearch>F</allowquicksearch>
+  <allowuiaccess>T</allowuiaccess>
+  <customsegment></customsegment>
+  <description></description>
+  <enabledle>T</enabledle>
+  <enablekeywords>T</enablekeywords>
+  <enablemailmerge>F</enablemailmerge>
+  <enablenametranslation>F</enablenametranslation>
+  <enablenumbering>F</enablenumbering>
+  <enableoptimisticlocking>T</enableoptimisticlocking>
+  <enablesystemnotes>T</enablesystemnotes>
+  <hierarchical>F</hierarchical>
+  <icon></icon>
+  <iconbuiltin>T</iconbuiltin>
+  <iconindex></iconindex>
+  <includeinsearchmenu>T</includeinsearchmenu>
+  <includename>T</includename>
+  <isinactive>F</isinactive>
+  <isordered>F</isordered>
+  <numberinginit></numberinginit>
+  <numberingmindigits></numberingmindigits>
+  <numberingprefix></numberingprefix>
+  <numberingsuffix></numberingsuffix>
+  <recordname>Validator Translation</recordname>
+  <showcreationdate>F</showcreationdate>
+  <showcreationdateonlist>F</showcreationdateonlist>
+  <showid>F</showid>
+  <showlastmodified>F</showlastmodified>
+  <showlastmodifiedonlist>F</showlastmodifiedonlist>
+  <shownotes>F</shownotes>
+  <showowner>F</showowner>
+  <showownerallowchange>F</showownerallowchange>
+  <showowneronlist>F</showowneronlist>
+  <customrecordcustomfields>
+    <customrecordcustomfield scriptid="custrecord_xml_la_text">
+      <accesslevel>2</accesslevel>
+      <allowquickadd>F</allowquickadd>
+      <applyformatting>F</applyformatting>
+      <checkspelling>F</checkspelling>
+      <defaultchecked>F</defaultchecked>
+      <defaultselection></defaultselection>
+      <defaultvalue></defaultvalue>
+      <description></description>
+      <displayheight></displayheight>
+      <displaytype>NORMAL</displaytype>
+      <displaywidth></displaywidth>
+      <dynamicdefault></dynamicdefault>
+      <encryptatrest>F</encryptatrest>
+      <fieldtype>TEXT</fieldtype>
+      <globalsearch>F</globalsearch>
+      <help></help>
+      <isformula>F</isformula>
+      <ismandatory>F</ismandatory>
+      <isparent>F</isparent>
+      <label>Latin American Spanish</label>
+      <linktext></linktext>
+      <maxlength></maxlength>
+      <maxvalue></maxvalue>
+      <minvalue></minvalue>
+      <onparentdelete></onparentdelete>
+      <parentsubtab></parentsubtab>
+      <rolerestrict>F</rolerestrict>
+      <searchcomparefield></searchcomparefield>
+      <searchdefault></searchdefault>
+      <searchlevel>2</searchlevel>
+      <selectrecordtype></selectrecordtype>
+      <showinlist>F</showinlist>
+      <sourcefilterby></sourcefilterby>
+      <sourcefrom></sourcefrom>
+      <sourcelist></sourcelist>
+      <storevalue>T</storevalue>
+      <subtab></subtab>
+    </customrecordcustomfield>
+    <customrecordcustomfield scriptid="custrecord_xml_spanish_text">
+      <accesslevel>2</accesslevel>
+      <allowquickadd>F</allowquickadd>
+      <applyformatting>F</applyformatting>
+      <checkspelling>F</checkspelling>
+      <defaultchecked>F</defaultchecked>
+      <defaultselection></defaultselection>
+      <defaultvalue></defaultvalue>
+      <description></description>
+      <displayheight></displayheight>
+      <displaytype>NORMAL</displaytype>
+      <displaywidth></displaywidth>
+      <dynamicdefault></dynamicdefault>
+      <encryptatrest>F</encryptatrest>
+      <fieldtype>TEXT</fieldtype>
+      <globalsearch>F</globalsearch>
+      <help></help>
+      <isformula>F</isformula>
+      <ismandatory>F</ismandatory>
+      <isparent>F</isparent>
+      <label>Spanish</label>
+      <linktext></linktext>
+      <maxlength></maxlength>
+      <maxvalue></maxvalue>
+      <minvalue></minvalue>
+      <onparentdelete></onparentdelete>
+      <parentsubtab></parentsubtab>
+      <rolerestrict>F</rolerestrict>
+      <searchcomparefield></searchcomparefield>
+      <searchdefault></searchdefault>
+      <searchlevel>2</searchlevel>
+      <selectrecordtype></selectrecordtype>
+      <showinlist>F</showinlist>
+      <sourcefilterby></sourcefilterby>
+      <sourcefrom></sourcefrom>
+      <sourcelist></sourcelist>
+      <storevalue>T</storevalue>
+      <subtab></subtab>
+    </customrecordcustomfield>
+    <customrecordcustomfield scriptid="custrecord_xml_en_int_text">
+      <accesslevel>2</accesslevel>
+      <allowquickadd>F</allowquickadd>
+      <applyformatting>F</applyformatting>
+      <checkspelling>F</checkspelling>
+      <defaultchecked>F</defaultchecked>
+      <defaultselection></defaultselection>
+      <defaultvalue></defaultvalue>
+      <description></description>
+      <displayheight></displayheight>
+      <displaytype>NORMAL</displaytype>
+      <displaywidth></displaywidth>
+      <dynamicdefault></dynamicdefault>
+      <encryptatrest>F</encryptatrest>
+      <fieldtype>TEXT</fieldtype>
+      <globalsearch>F</globalsearch>
+      <help></help>
+      <isformula>F</isformula>
+      <ismandatory>F</ismandatory>
+      <isparent>F</isparent>
+      <label>English (International)</label>
+      <linktext></linktext>
+      <maxlength></maxlength>
+      <maxvalue></maxvalue>
+      <minvalue></minvalue>
+      <onparentdelete></onparentdelete>
+      <parentsubtab></parentsubtab>
+      <rolerestrict>F</rolerestrict>
+      <searchcomparefield></searchcomparefield>
+      <searchdefault></searchdefault>
+      <searchlevel>2</searchlevel>
+      <selectrecordtype></selectrecordtype>
+      <showinlist>F</showinlist>
+      <sourcefilterby></sourcefilterby>
+      <sourcefrom></sourcefrom>
+      <sourcelist></sourcelist>
+      <storevalue>T</storevalue>
+      <subtab></subtab>
+    </customrecordcustomfield>
+    <customrecordcustomfield scriptid="custrecord_xml_en_au_text">
+      <accesslevel>2</accesslevel>
+      <allowquickadd>F</allowquickadd>
+      <applyformatting>F</applyformatting>
+      <checkspelling>F</checkspelling>
+      <defaultchecked>F</defaultchecked>
+      <defaultselection></defaultselection>
+      <defaultvalue></defaultvalue>
+      <description></description>
+      <displayheight></displayheight>
+      <displaytype>NORMAL</displaytype>
+      <displaywidth></displaywidth>
+      <dynamicdefault></dynamicdefault>
+      <encryptatrest>F</encryptatrest>
+      <fieldtype>TEXT</fieldtype>
+      <globalsearch>F</globalsearch>
+      <help></help>
+      <isformula>F</isformula>
+      <ismandatory>F</ismandatory>
+      <isparent>F</isparent>
+      <label>English (AU)</label>
+      <linktext></linktext>
+      <maxlength></maxlength>
+      <maxvalue></maxvalue>
+      <minvalue></minvalue>
+      <onparentdelete></onparentdelete>
+      <parentsubtab></parentsubtab>
+      <rolerestrict>F</rolerestrict>
+      <searchcomparefield></searchcomparefield>
+      <searchdefault></searchdefault>
+      <searchlevel>2</searchlevel>
+      <selectrecordtype></selectrecordtype>
+      <showinlist>F</showinlist>
+      <sourcefilterby></sourcefilterby>
+      <sourcefrom></sourcefrom>
+      <sourcelist></sourcelist>
+      <storevalue>T</storevalue>
+      <subtab></subtab>
+    </customrecordcustomfield>
+    <customrecordcustomfield scriptid="custrecord_xml_en_ca_text">
+      <accesslevel>2</accesslevel>
+      <allowquickadd>F</allowquickadd>
+      <applyformatting>F</applyformatting>
+      <checkspelling>F</checkspelling>
+      <defaultchecked>F</defaultchecked>
+      <defaultselection></defaultselection>
+      <defaultvalue></defaultvalue>
+      <description></description>
+      <displayheight></displayheight>
+      <displaytype>NORMAL</displaytype>
+      <displaywidth></displaywidth>
+      <dynamicdefault></dynamicdefault>
+      <encryptatrest>F</encryptatrest>
+      <fieldtype>TEXT</fieldtype>
+      <globalsearch>F</globalsearch>
+      <help></help>
+      <isformula>F</isformula>
+      <ismandatory>F</ismandatory>
+      <isparent>F</isparent>
+      <label>English (CA)</label>
+      <linktext></linktext>
+      <maxlength></maxlength>
+      <maxvalue></maxvalue>
+      <minvalue></minvalue>
+      <onparentdelete></onparentdelete>
+      <parentsubtab></parentsubtab>
+      <rolerestrict>F</rolerestrict>
+      <searchcomparefield></searchcomparefield>
+      <searchdefault></searchdefault>
+      <searchlevel>2</searchlevel>
+      <selectrecordtype></selectrecordtype>
+      <showinlist>F</showinlist>
+      <sourcefilterby></sourcefilterby>
+      <sourcefrom></sourcefrom>
+      <sourcelist></sourcelist>
+      <storevalue>T</storevalue>
+      <subtab></subtab>
+    </customrecordcustomfield>
+    <customrecordcustomfield scriptid="custrecord_xml_en_uk_text">
+      <accesslevel>2</accesslevel>
+      <allowquickadd>F</allowquickadd>
+      <applyformatting>F</applyformatting>
+      <checkspelling>F</checkspelling>
+      <defaultchecked>F</defaultchecked>
+      <defaultselection></defaultselection>
+      <defaultvalue></defaultvalue>
+      <description></description>
+      <displayheight></displayheight>
+      <displaytype>NORMAL</displaytype>
+      <displaywidth></displaywidth>
+      <dynamicdefault></dynamicdefault>
+      <encryptatrest>F</encryptatrest>
+      <fieldtype>TEXT</fieldtype>
+      <globalsearch>F</globalsearch>
+      <help></help>
+      <isformula>F</isformula>
+      <ismandatory>F</ismandatory>
+      <isparent>F</isparent>
+      <label>English (UK)</label>
+      <linktext></linktext>
+      <maxlength></maxlength>
+      <maxvalue></maxvalue>
+      <minvalue></minvalue>
+      <onparentdelete></onparentdelete>
+      <parentsubtab></parentsubtab>
+      <rolerestrict>F</rolerestrict>
+      <searchcomparefield></searchcomparefield>
+      <searchdefault></searchdefault>
+      <searchlevel>2</searchlevel>
+      <selectrecordtype></selectrecordtype>
+      <showinlist>F</showinlist>
+      <sourcefilterby></sourcefilterby>
+      <sourcefrom></sourcefrom>
+      <sourcelist></sourcelist>
+      <storevalue>T</storevalue>
+      <subtab></subtab>
+    </customrecordcustomfield>
+    <customrecordcustomfield scriptid="custrecord_xml_english_text">
+      <accesslevel>2</accesslevel>
+      <allowquickadd>F</allowquickadd>
+      <applyformatting>F</applyformatting>
+      <checkspelling>F</checkspelling>
+      <defaultchecked>F</defaultchecked>
+      <defaultselection></defaultselection>
+      <defaultvalue></defaultvalue>
+      <description></description>
+      <displayheight></displayheight>
+      <displaytype>NORMAL</displaytype>
+      <displaywidth></displaywidth>
+      <dynamicdefault></dynamicdefault>
+      <encryptatrest>F</encryptatrest>
+      <fieldtype>TEXT</fieldtype>
+      <globalsearch>F</globalsearch>
+      <help></help>
+      <isformula>F</isformula>
+      <ismandatory>F</ismandatory>
+      <isparent>F</isparent>
+      <label>English (USA)</label>
+      <linktext></linktext>
+      <maxlength></maxlength>
+      <maxvalue></maxvalue>
+      <minvalue></minvalue>
+      <onparentdelete></onparentdelete>
+      <parentsubtab></parentsubtab>
+      <rolerestrict>F</rolerestrict>
+      <searchcomparefield></searchcomparefield>
+      <searchdefault></searchdefault>
+      <searchlevel>2</searchlevel>
+      <selectrecordtype></selectrecordtype>
+      <showinlist>F</showinlist>
+      <sourcefilterby></sourcefilterby>
+      <sourcefrom></sourcefrom>
+      <sourcelist></sourcelist>
+      <storevalue>T</storevalue>
+      <subtab></subtab>
+    </customrecordcustomfield>
+    <customrecordcustomfield scriptid="custrecord13">
+      <accesslevel>2</accesslevel>
+      <allowquickadd>F</allowquickadd>
+      <applyformatting>F</applyformatting>
+      <checkspelling>F</checkspelling>
+      <defaultchecked>F</defaultchecked>
+      <defaultselection></defaultselection>
+      <defaultvalue></defaultvalue>
+      <description></description>
+      <displayheight></displayheight>
+      <displaytype>NORMAL</displaytype>
+      <displaywidth></displaywidth>
+      <dynamicdefault></dynamicdefault>
+      <encryptatrest>F</encryptatrest>
+      <fieldtype>SELECT</fieldtype>
+      <globalsearch>F</globalsearch>
+      <help></help>
+      <isformula>F</isformula>
+      <ismandatory>F</ismandatory>
+      <isparent>F</isparent>
+      <label>Prueba Field</label>
+      <linktext></linktext>
+      <maxlength></maxlength>
+      <maxvalue></maxvalue>
+      <minvalue></minvalue>
+      <onparentdelete>NO_ACTION</onparentdelete>
+      <parentsubtab></parentsubtab>
+      <rolerestrict>F</rolerestrict>
+      <searchcomparefield></searchcomparefield>
+      <searchdefault></searchdefault>
+      <searchlevel>2</searchlevel>
+      <selectrecordtype>-124</selectrecordtype>
+      <showinlist>F</showinlist>
+      <sourcefilterby></sourcefilterby>
+      <sourcefrom></sourcefrom>
+      <sourcelist></sourcelist>
+      <storevalue>T</storevalue>
+      <subtab></subtab>
+    </customrecordcustomfield>
+  </customrecordcustomfields>
+  <instances>
+    <instance scriptid="val_244670_t905028_796">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>XML Validator</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>XML Validator</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>XML Validator</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>XML Validator</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>XML Validator</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Validador de XML</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Validador de XML</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>validator_xml_title</name>
+    </instance>
+    <instance scriptid="val_244671_t905028_328">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Choice your expense report</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Choice your expense report</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Choice your expense report</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Choice your expense report</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Choice your expense report</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Elige tu informe de gastos</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Elige tu informe de gastos</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>choice_exp_rep_step</name>
+    </instance>
+    <instance scriptid="val_244672_t905028_879">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Upload your files</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Upload your files</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Upload your files</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Upload your files</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Upload your files</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Sube tus archivos</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Sube tus archivos</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>upload_file_step</name>
+    </instance>
+    <instance scriptid="val_244673_t905028_488">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Invoice Validation</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Invoice Validation</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Invoice Validation</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Invoice Validation</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Invoice Validation</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Validación de factura</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Validación de factura</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>validation_inv_step</name>
+    </instance>
+    <instance scriptid="val_244674_t905028_883">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Enter expense report data</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Enter expense report data</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Enter expense report data</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Enter expense report data</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Enter expense report data</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Ingresa los datos del reporte</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Ingresa los datos del reporte</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>exp_rep_data_step</name>
+    </instance>
+    <instance scriptid="val_244675_t905028_217">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Available expense reports</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Available expense reports</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Available expense reports</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Available expense reports</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Available expense reports</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Reporte de gastos disponibles</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Reporte de gastos disponibles</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>av_exp_rep_text</name>
+    </instance>
+    <instance scriptid="val_244676_t905028_552">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Subsidiary</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Subsidiary</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Subsidiary</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Subsidiary</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Subsidiary</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Subsidiaria</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Subsidiaria</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>subsidiary_text</name>
+    </instance>
+    <instance scriptid="val_244677_t905028_638">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Summary</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Summary</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Summary</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Summary</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Summary</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Resumen</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Resumen</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>summary_fld_grp</name>
+    </instance>
+    <instance scriptid="val_244678_t905028_579">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Expense report number</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Expense report number</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Expense report number</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Expense report number</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Expense report number</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Número de reporte de gastos</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Número de reporte de gastos</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>exp_rep_num_text</name>
+    </instance>
+    <instance scriptid="val_244679_t905028_843">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Total</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Total</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Total</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Total</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Total</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Total</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Total</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>total_text</name>
+    </instance>
+    <instance scriptid="val_244680_t905028_751">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Non-Reimbursable expense</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Non-Reimbursable expense</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Non-Reimbursable expense</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Non-Reimbursable expense</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Non-Reimbursable expense</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Gastos no reembolsable</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Gastos no reembolsable</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>non_reim_text</name>
+    </instance>
+    <instance scriptid="val_244681_t905028_474">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Reimbursable expenses</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Reimbursable expenses</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Reimbursable expenses</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Reimbursable expenses</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Reimbursable expenses</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Gastos Reembolsables</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Gastos Reembolsables</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>reim_exp_text</name>
+    </instance>
+    <instance scriptid="val_244682_t905028_331">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Advance to apply</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Advance to apply</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Advance to apply</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Advance to apply</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Advance to apply</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Avanzar para aplicar</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Avanzar para aplicar</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>adv_app_text</name>
+    </instance>
+    <instance scriptid="val_244683_t905028_669">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Total reimbursable amount</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Total reimbursable amount</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Total reimbursable amount</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Total reimbursable amount</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Total reimbursable amount</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Importe total reembolsable</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Importe total reembolsable</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>reim_amo_text</name>
+    </instance>
+    <instance scriptid="val_244684_t905028_504">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Has invoice?</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Has invoice?</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Has invoice?</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Has invoice?</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Has invoice?</custrecord_xml_english_text>
+      <custrecord_xml_la_text>¿Tiene factura?</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>¿Tiene factura?</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>has_inv_text</name>
+    </instance>
+    <instance scriptid="val_244685_t905028_919">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>XML file</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>XML file</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>XML file</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>XML file</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>XML file</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Archivo XML</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Archivo XML</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>xml_text</name>
+    </instance>
+    <instance scriptid="val_244686_t905028_191">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>PDF file</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>PDF file</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>PDF file</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>PDF file</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>PDF file</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Archivo PDF</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Archivo PDF</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>pdf_text</name>
+    </instance>
+    <instance scriptid="val_244687_t905028_144">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Expense type</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Expense type</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Expense type</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Expense type</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Expense type</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Tipo de gasto</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Tipo de gasto</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>exp_typ_text</name>
+    </instance>
+    <instance scriptid="val_244688_t905028_307">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Amount</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Amount</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Amount</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Amount</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Amount</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Importe</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Importe</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>amount_text</name>
+    </instance>
+    <instance scriptid="val_244689_t905028_646">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Currency</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Currency</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Currency</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Currency</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Currency</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Moneda</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Moneda</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>currency_text</name>
+    </instance>
+    <instance scriptid="val_244690_t905028_519">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Notes</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Notes</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Notes</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Notes</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Notes</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Notas</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Notas</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>notes_text</name>
+    </instance>
+    <instance scriptid="val_244691_t905028_195">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>XML file is empty</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>XML file is empty</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>XML file is empty.</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>XML file is empty</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>XML file is empty</custrecord_xml_english_text>
+      <custrecord_xml_la_text>El archivo XML no tiene información.</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>El archivo XML no tiene información.</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>empty_file_xml_error</name>
+    </instance>
+    <instance scriptid="val_244692_t905028_411">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Set invoice validating URL, please.</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Set invoice validating URL, please.</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Set invoice validating URL, please.</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Set invoice validating URL, please.</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Set invoice validating URL, please.</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Por favor, configurar el URL para validar la factura.</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Por favor, configurar el URL para validar la factura.</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>url_val_missing_error</name>
+    </instance>
+    <instance scriptid="val_244693_t905028_894">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>EFX FE - Método de Envío record has an error.</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>EFX FE - Método de Envío record has an error.</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>EFX FE - Método de Envío record has an error.</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>EFX FE - Método de Envío record has an error.</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>EFX FE - Método de Envío record has an error.</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Existe un error con el registro de EFX FE - Método de Envío.</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Existe un error con el registro de EFX FE - Método de Envío.</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>met_env_error</name>
+    </instance>
+    <instance scriptid="val_244694_t905028_308">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>XML validating fail, check your internet connection.</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>XML validating fail, check your internet connection.</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>XML validating fail, check your internet connection.</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>XML validating fail, check your internet connection.</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>XML validating fail, check your internet connection.</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Ha fallado la validación de XML, revisar conexión.</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Ha fallado la validación de XML, revisar conexión.</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>connection_xml_error</name>
+    </instance>
+    <instance scriptid="val_244695_t905028_842">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Uploaded invoices is invalid, you can´t continue.</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Uploaded invoices is invalid, you can´t continue.</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Uploaded invoices is invalid, you can´t continue.</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Uploaded invoices is invalid, you can´t continue.</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Uploaded invoices is invalid, you can´t continue.</custrecord_xml_english_text>
+      <custrecord_xml_la_text>La factura que ha cargado no es válida, no puede continuar con este proceso.</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>La factura que ha cargado no es válida, no puede continuar con este proceso.</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>invalid_inv_text</name>
+    </instance>
+    <instance scriptid="val_244696_t905028_693">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Uploaded invoice is already in system, you can&apos;t continue.</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Uploaded invoice is already in system, you can&apos;t continue.</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Uploaded invoice is already in system, you can&apos;t continue.</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Uploaded invoice is already in system, you can&apos;t continue.</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Uploaded invoice is already in system, you can&apos;t continue.</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Esta factura ya ha sido caputarada anteriormente, no puede continuar con este proceso.</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Esta factura ya ha sido caputarada anteriormente, no puede continuar con este proceso.</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>existing_inv_text</name>
+    </instance>
+    <instance scriptid="val_244697_t905028_527">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Payment method is invalid, you can´t continue.</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Payment method is invalid, you can´t continue.</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Payment method is invalid, you can´t continue.</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Payment method is invalid, you can´t continue.</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Payment method is invalid, you can´t continue.</custrecord_xml_english_text>
+      <custrecord_xml_la_text>El método de pago no es válido, no puede continuar con este proceso.</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>El método de pago no es válido, no puede continuar con este proceso.</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>inv_pay_met_text</name>
+    </instance>
+    <instance scriptid="val_244698_t905028_516">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Year of issue is invalid, you can&apos;t continue.</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Year of issue is invalid, you can&apos;t continue.</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Year of issue is invalid, you can&apos;t continue.</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Year of issue is invalid, you can&apos;t continue.</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Year of issue is invalid, you can&apos;t continue.</custrecord_xml_english_text>
+      <custrecord_xml_la_text>El año de emisión de la factura no es válido, no puede continuar con este proceso.</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>El año de emisión de la factura no es válido, no puede continuar con este proceso.</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>year_inv_text</name>
+    </instance>
+    <instance scriptid="val_244699_t905028_780">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Invalid RFC, you can&apos;t continue.</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Invalid RFC, you can&apos;t continue.</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Invalid RFC, you can&apos;t continue.</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Invalid RFC, you can&apos;t continue.</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Invalid RFC, you can&apos;t continue.</custrecord_xml_english_text>
+      <custrecord_xml_la_text>El RFC no es válido, no puede continuar con este proceso.</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>El RFC no es válido, no puede continuar con este proceso.</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>rfc_inv_text</name>
+    </instance>
+    <instance scriptid="val_244700_t905028_548">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Valid files, you can continue.</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Valid files, you can continue.</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Valid files, you can continue.</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Valid files, you can continue.</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Valid files, you can continue.</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Los archivos son válidos, puedes continuar con el proceso.</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Los archivos son válidos, puedes continuar con el proceso.</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>val_files_text</name>
+    </instance>
+    <instance scriptid="val_244701_t905028_925">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>You must attach files to continue.</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>You must attach files to continue.</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>You must attach files to continue.</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>You must attach files to continue.</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>You must attach files to continue.</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Debe adjuntar los archivos para poder continuar.</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Debe adjuntar los archivos para poder continuar.</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>attach_file_msg</name>
+    </instance>
+    <instance scriptid="val_244702_t905028_374">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>File type must be PDF.</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>File type must be PDF.</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>File type must be PDF.</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>File type must be PDF.</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>File type must be PDF.</custrecord_xml_english_text>
+      <custrecord_xml_la_text>El tipo de archivo debe ser de tipo PDF.</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>El tipo de archivo debe ser de tipo PDF.</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>pdf_type_msg</name>
+    </instance>
+    <instance scriptid="val_244703_t905028_352">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>File type must be XML.</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>File type must be XML.</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>File type must be XML.</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>File type must be XML.</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>File type must be XML.</custrecord_xml_english_text>
+      <custrecord_xml_la_text>El tipo de archivo debe ser de tipo XML.</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>El tipo de archivo debe ser de tipo XML.</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>xml_type_msg</name>
+    </instance>
+    <instance scriptid="val_244704_t905028_182">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Not allowed action, select other invoice.</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Not allowed action, select other invoice.</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Not allowed action, select other invoice.</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Not allowed action, select other invoice.</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Not allowed action, select other invoice.</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Esto no esta permitido, ingrese otra factura.</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Esto no esta permitido, ingrese otra factura.</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>no_allow_msg</name>
+    </instance>
+    <instance scriptid="val_244705_t905028_667">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>New</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>New</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>New</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>New</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>New</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Nuevo</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Nuevo</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>new_text</name>
+    </instance>
+    <instance scriptid="val_244706_t905028_137">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>There&apos;s no uploaded files in the system.</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>There&apos;s no uploaded files in the system.</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>There&apos;s no uploaded files in the system.</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>There&apos;s no uploaded files in the system.</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>There&apos;s no uploaded files in the system.</custrecord_xml_english_text>
+      <custrecord_xml_la_text>No ha cargado ningún archivo al sistema</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>No ha cargado ningún archivo al sistema</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>uploaded_file_error</name>
+    </instance>
+    <instance scriptid="val_244707_t905028_157">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Please, set valid payment method parameter.</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Please, set valid payment method parameter.</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Please, set valid payment method parameter.</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Please, set valid payment method parameter.</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Please, set valid payment method parameter.</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Por favor, configurar el método de pago válido.</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Por favor, configurar el método de pago válido.</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>val_pay_met_para_error</name>
+    </instance>
+    <instance scriptid="val_244708_t905028_145">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Please, set valid RFC parameter.</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Please, set valid RFC parameter.</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Please, set valid RFC parameter.</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Please, set valid RFC parameter.</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Please, set valid RFC parameter.</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Por favor, configurar el RFC válido.</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Por favor, configurar el RFC válido.</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>valid_rfc_param_error</name>
+    </instance>
+    <instance scriptid="val_244767_t905028_171">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Send to approval</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Send to approval</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Send to approval</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Send to approval</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Send to approval</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Enviar a aprobación</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Enviar a aprobación</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>send_aproval_text</name>
+    </instance>
+    <instance scriptid="val_247220_t905028_694">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Customer</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Customer</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Customer</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Customer</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Customer</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Cliente</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Cliente</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>customer_text</name>
+    </instance>
+    <instance scriptid="val_299032_t905028_425">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Uploaded invoices is invalid, you can´t continue.</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Uploaded invoices is invalid, you can´t continue.</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Uploadedzz invoices is invalid, you can´t continue.</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Uploaded invoices is invalid, you can´t continue.</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Uploadedzzz invoices is invalid, you can´t continue.</custrecord_xml_english_text>
+      <custrecord_xml_la_text>La factura que ha cargado no es válida, no puede continuar con este proceso.</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>La factura que ha cargado no es válida, no puede continuar con este proceso.</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>invalid_inv_textt</name>
+    </instance>
+  </instances>
+</customrecordtype>
