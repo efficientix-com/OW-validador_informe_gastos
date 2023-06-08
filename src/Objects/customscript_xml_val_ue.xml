@@ -97,7 +97,7 @@
       <allpartners>F</allpartners>
       <allroles>T</allroles>
       <audslctrole></audslctrole>
-      <audsubsidiary>[ACCOUNT_SPECIFIC_VALUE]|[ACCOUNT_SPECIFIC_VALUE]|[ACCOUNT_SPECIFIC_VALUE]|[ACCOUNT_SPECIFIC_VALUE]|[ACCOUNT_SPECIFIC_VALUE]|[ACCOUNT_SPECIFIC_VALUE]|[ACCOUNT_SPECIFIC_VALUE]|[ACCOUNT_SPECIFIC_VALUE]</audsubsidiary>
+      <audsubsidiary></audsubsidiary>
       <custscript_tkio_redirect>F</custscript_tkio_redirect>
       <custscript_xml_approval_status>1</custscript_xml_approval_status>
       <custscript_xml_reject_status>3</custscript_xml_reject_status>
