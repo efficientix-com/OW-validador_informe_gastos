@@ -859,5 +859,41 @@
       <isinactive>F</isinactive>
       <name>invalid_inv_textt</name>
     </instance>
+    <instance scriptid="val_334626_t905028_371">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Memo</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Memo</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Memo</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Memo</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Memo</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Nota</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Nota</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>av_memo_prueba</name>
+    </instance>
+    <instance scriptid="val_334629_t905028_343">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Customer</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Customer</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Customer</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Customer</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Customer</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Cliente</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Cliente</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>customer_line</name>
+    </instance>
+    <instance scriptid="val_334632_t905028_657">
+      <custrecord13></custrecord13>
+      <custrecord_xml_en_au_text>Associated with</custrecord_xml_en_au_text>
+      <custrecord_xml_en_ca_text>Associated with</custrecord_xml_en_ca_text>
+      <custrecord_xml_en_int_text>Associated with</custrecord_xml_en_int_text>
+      <custrecord_xml_en_uk_text>Associated with</custrecord_xml_en_uk_text>
+      <custrecord_xml_english_text>Associated with</custrecord_xml_english_text>
+      <custrecord_xml_la_text>Asociado a</custrecord_xml_la_text>
+      <custrecord_xml_spanish_text>Asociado a</custrecord_xml_spanish_text>
+      <isinactive>F</isinactive>
+      <name>asociado_a</name>
+    </instance>
   </instances>
 </customrecordtype>

@@ -214,16 +214,10 @@
       <eventtype></eventtype>
       <isdeployed>T</isdeployed>
       <isonline>F</isonline>
-      <loglevel>AUDIT</loglevel>
+      <loglevel>DEBUG</loglevel>
       <runasrole>ADMINISTRATOR</runasrole>
       <status>RELEASED</status>
       <title>XML validator SL Deploy</title>
-      <links>
-        <link>
-          <linkcategory>EMPLOYEEHOMEEXPENSEREPORTS</linkcategory>
-          <linklabel>XML Validator</linklabel>
-        </link>
-      </links>
     </scriptdeployment>
   </scriptdeployments>
 </suitelet>
