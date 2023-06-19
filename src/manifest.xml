@@ -15,10 +15,5 @@
       <feature required="true">CUSTOMRECORDS</feature>
       <feature required="false">CREATESUITEBUNDLES</feature>
     </features>
-    <objects>
-      <object>customrecord_efx_fe_metodospago.val_15877_t905028_433</object>
-      <object>customrecord_efx_fe_metodospago</object>
-      <object>customrecord_efx_fe_mtd_envio</object>
-    </objects>
   </dependencies>
 </manifest>
