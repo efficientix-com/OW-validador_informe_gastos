@@ -62,33 +62,6 @@
       <setting></setting>
       <storevalue>T</storevalue>
     </scriptcustomfield>
-    <scriptcustomfield scriptid="custscript_xml_url_validator">
-      <accesslevel>2</accesslevel>
-      <applyformatting>F</applyformatting>
-      <checkspelling>F</checkspelling>
-      <defaultchecked>F</defaultchecked>
-      <defaultselection></defaultselection>
-      <defaultvalue></defaultvalue>
-      <description></description>
-      <displayheight></displayheight>
-      <displaytype>NORMAL</displaytype>
-      <displaywidth></displaywidth>
-      <dynamicdefault></dynamicdefault>
-      <fieldtype>SELECT</fieldtype>
-      <help></help>
-      <isformula>F</isformula>
-      <ismandatory>F</ismandatory>
-      <label>URL Validator</label>
-      <linktext></linktext>
-      <maxlength></maxlength>
-      <maxvalue></maxvalue>
-      <minvalue></minvalue>
-      <onparentdelete>NO_ACTION</onparentdelete>
-      <searchlevel>2</searchlevel>
-      <selectrecordtype>[scriptid=customrecord_efx_fe_mtd_envio]</selectrecordtype>
-      <setting>COMPANY</setting>
-      <storevalue>T</storevalue>
-    </scriptcustomfield>
     <scriptcustomfield scriptid="custscript_efx_taxcode_hon">
       <accesslevel>2</accesslevel>
       <applyformatting>F</applyformatting>
@@ -210,7 +183,6 @@
       <custscript_efx_taxcode_ppp></custscript_efx_taxcode_ppp>
       <custscript_xml_allw_pay_method>[scriptid=customrecord_efx_fe_metodospago.val_15877_t905028_433]</custscript_xml_allw_pay_method>
       <custscript_xml_folder>46129</custscript_xml_folder>
-      <custscript_xml_url_validator></custscript_xml_url_validator>
       <eventtype></eventtype>
       <isdeployed>T</isdeployed>
       <isonline>F</isonline>
