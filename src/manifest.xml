@@ -4,15 +4,23 @@
   <dependencies>
     <features>
       <feature required="false">MULTILANGUAGE</feature>
+      <feature required="false">EXPREPORTS</feature>
       <feature required="false">SUBSIDIARIES</feature>
-      <feature required="true">SERVERSIDESCRIPTING</feature>
+      <feature required="false">ADVRECEIVING</feature>
+      <feature required="false">MULTILOCINVT</feature>
       <feature required="true">ACCOUNTING</feature>
       <feature required="false">CRM</feature>
-      <feature required="false">CUSTOMSEGMENTS</feature>
+      <feature required="false">CUSTOMTRANSACTIONS</feature>
       <feature required="false">SUBSCRIPTIONBILLING</feature>
       <feature required="false">EXTREMELIST</feature>
       <feature required="false">MAILMERGE</feature>
       <feature required="true">CUSTOMRECORDS</feature>
+      <feature required="false">TIMETRACKING</feature>
+      <feature required="false">WEBSITE</feature>
+      <feature required="true">SERVERSIDESCRIPTING</feature>
+      <feature required="false">PAYCHECKJOURNAL</feature>
+      <feature required="false">CUSTOMSEGMENTS</feature>
+      <feature required="false">WORKORDERS</feature>
       <feature required="false">CREATESUITEBUNDLES</feature>
     </features>
   </dependencies>

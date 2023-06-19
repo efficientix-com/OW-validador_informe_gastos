@@ -1167,6 +1167,13 @@
             log.audit("Campos nuevos",camposResult.count);
             if (camposResult.count > 0) {
                 var dataCampos = [];
+                var infoObj;
+                if (expenseReportId) {
+                    infoObj = record.load({
+                        type: record.Type.EXPENSE_REPORT,
+                        id: expenseReportId
+                    });
+                }
                 camposResult.pageRanges.forEach(function(pageRange){
                     var myPage = camposResult.fetch({index: pageRange.index});
                     myPage.data.forEach(function(result){
@@ -1278,9 +1285,6 @@
                                     text: searchResult.data[i].value
                                 });
                             }
-                            // if (expenseReportId) {
-                            //     fieldCustom.defaultValue = expenseReportId;
-                            // }
                         }
                     }else{
                         fieldCustom = assistant.addField({
@@ -1294,6 +1298,12 @@
                     }
                     if (dataCampos[campoLine].mandatory == true) {
                         fieldCustom.isMandatory = true;
+                    }
+                    if (expenseReportId) {
+                        fieldCustom.updateDisplayType({
+                            displayType: ui.FieldDisplayType.DISABLED
+                        });
+                        fieldCustom.defaultValue = infoObj.getValue({fieldId: dataCampos[campoLine].idNetsuite});;
                     }
                 }
             }
@@ -2255,32 +2265,32 @@
          return newFolderID;
      }
 
-     function getValueXMl(xmlDocument, node, attribute) {
-         log.audit({ title: 'getValueXMl - xmlDocument', details: xmlDocument });
-         log.audit({ title: 'getValueXMl - node', details: node });
-         log.audit({ title: 'getValueXMl - attribute', details: attribute });
-         var invoiceXML = xml.Parser.fromString({
-             text: xmlDocument
-         });
+    function getValueXMl(xmlDocument, node, attribute) {
+        log.audit({ title: 'getValueXMl - xmlDocument', details: xmlDocument });
+        log.audit({ title: 'getValueXMl - node', details: node });
+        log.audit({ title: 'getValueXMl - attribute', details: attribute });
+        var invoiceXML = xml.Parser.fromString({
+            text: xmlDocument
+        });
 
-         var nodeInfo = xml.XPath.select({
-             node: invoiceXML,
-             xpath: node
-         });
+        var nodeInfo = xml.XPath.select({
+            node: invoiceXML,
+            xpath: node
+        });
 
-         if (!nodeInfo[0]) {
-             throw node + " doesn't exist.";
-         }
-         if (!attribute) {
-             return nodeInfo[0].textContent;
-         }
-         var att = nodeInfo[0].getAttributeNode({
-             name: attribute
-         });
+        if (!nodeInfo[0]) {
+            throw node + " doesn't exist.";
+        }
+        if (!attribute) {
+            return nodeInfo[0].textContent;
+        }
+        var att = nodeInfo[0].getAttributeNode({
+            name: attribute
+        });
 
-         att = att.value;
-         return att;
-     }
+        att = att.value;
+        return att;
+    }
 
      function getTaxNodes(xmlDocument, xPath) {
          var invoiceXML = xml.Parser.fromString({
@@ -2299,8 +2309,9 @@
             var uploadedFile = file.load({
                 'id': fileId
             });
-            log.debug({title:'readFile ID:', details:fileId});
+            log.debug({title:'readFile', details:uploadedFile});
             var fileContent = uploadedFile.getContents();
+            log.debug({title:'fileContent', details:fileContent});
             xmlFile = uploadedFile;
             return fileContent;
         } catch (e) {
