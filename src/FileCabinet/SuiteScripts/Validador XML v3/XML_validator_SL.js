@@ -812,7 +812,7 @@
         try {
             var userObj = runtime.getCurrentUser();
             var idAuthor = userObj.id;
-
+            log.debug({title:'getExpenseReport', details:"INICIO author: " + idAuthor});
             var result = search.create({
                 type: search.Type.EXPENSE_REPORT,
                 filters: [
@@ -1401,189 +1401,189 @@
          }
      }
 
-     function secondStep() {
-         try {
+    function secondStep() {
+        try {
 
-             var isValid = 'T';
-             //Datos del XML File
-             paramXML = JSON.parse(paramXML);
-             if (!paramXML) {
-                 return;
-             }
-             if (!paramXML || !paramXML.id) {
-                 log.error({ title: 'secondStep', details: 'Missing select File' });
-                 addErrorMSgsAssitant(getTranslationLabel('uploaded_file_error'));
-                 return;
-             }
-             //Leer y validar archivo
-             var xmlText = readFile(paramXML.id);
-             var xml_vars = xml.Parser.fromString({
-                 text: xmlText
-             });
-             log.audit({
-                 title: "xml_vars",
-                 details: xml_vars
-             });
-             var anyTypeProveedor = xml.XPath.select({
-                 node: xml_vars,
-                 xpath: 'cfdi:Comprobante'
-             });
-             log.audit({ title: 'anyTypeProveedor: ', details: anyTypeProveedor });
-             var fechaPrueba = anyTypeProveedor[0].getAttributeNode({
-                 name: 'Fecha'
-             });
-             fechaPrueba = fechaPrueba.value;
-             log.audit({ title: 'fechaPrueba: ', details: JSON.stringify(fechaPrueba) });
+            var isValid = 'T';
+            //Datos del XML File
+            paramXML = JSON.parse(paramXML);
+            if (!paramXML) {
+                return;
+            }
+            if (!paramXML || !paramXML.id) {
+                log.error({ title: 'secondStep', details: 'Missing select File' });
+                addErrorMSgsAssitant(getTranslationLabel('uploaded_file_error'));
+                return;
+            }
+            //Leer y validar archivo
+            var xmlText = readFile(paramXML.id);
+            var xml_vars = xml.Parser.fromString({
+                text: xmlText
+            });
+            log.audit({
+                title: "xml_vars",
+                details: xml_vars
+            });
+            var anyTypeProveedor = xml.XPath.select({
+                node: xml_vars,
+                xpath: 'cfdi:Comprobante'
+            });
+            log.audit({ title: 'anyTypeProveedor: ', details: anyTypeProveedor });
+            var fechaPrueba = anyTypeProveedor[0].getAttributeNode({
+                name: 'Fecha'
+            });
+            fechaPrueba = fechaPrueba.value;
+            log.audit({ title: 'fechaPrueba: ', details: JSON.stringify(fechaPrueba) });
 
-             var totalPrueba = anyTypeProveedor[0].getAttributeNode({
-                 name: 'Total'
-             });
-             totalPrueba = totalPrueba.value;
-             log.audit({ title: 'totalPrueba: ', details: JSON.stringify(totalPrueba) });
-             // --------------------------------------------------------------------------------------------------------------
+            var totalPrueba = anyTypeProveedor[0].getAttributeNode({
+                name: 'Total'
+            });
+            totalPrueba = totalPrueba.value;
+            log.audit({ title: 'totalPrueba: ', details: JSON.stringify(totalPrueba) });
+            // --------------------------------------------------------------------------------------------------------------
 
-             var anyTypeProveedor1 = xml.XPath.select({
-                 node: xml_vars,
-                 xpath: 'cfdi:Comprobante//cfdi:Complemento//tfd:TimbreFiscalDigital'
-             });
+            var anyTypeProveedor1 = xml.XPath.select({
+                node: xml_vars,
+                xpath: 'cfdi:Comprobante//cfdi:Complemento//tfd:TimbreFiscalDigital'
+            });
 
-             var uuidPrueba = anyTypeProveedor1[0].getAttributeNode({
-                 name: 'UUID'
-             });
-             uuidPrueba = uuidPrueba.value;
-             log.audit({ title: 'uuidPrueba: ', details: JSON.stringify(uuidPrueba) });
+            var uuidPrueba = anyTypeProveedor1[0].getAttributeNode({
+                name: 'UUID'
+            });
+            uuidPrueba = uuidPrueba.value;
+            log.audit({ title: 'uuidPrueba: ', details: JSON.stringify(uuidPrueba) });
 
-             anyTypeProveedor1 = xml.XPath.select({
-                 node: xml_vars,
-                 xpath: 'cfdi:Comprobante//cfdi:Emisor'
-             });
+            anyTypeProveedor1 = xml.XPath.select({
+                node: xml_vars,
+                xpath: 'cfdi:Comprobante//cfdi:Emisor'
+            });
 
-             var rfcemiPrueba = anyTypeProveedor1[0].getAttributeNode({
-                 name: 'Rfc'
-             });
-             rfcemiPrueba = rfcemiPrueba.value;
-             log.audit({ title: 'rfcemiPrueba: ', details: JSON.stringify(rfcemiPrueba) });
+            var rfcemiPrueba = anyTypeProveedor1[0].getAttributeNode({
+                name: 'Rfc'
+            });
+            rfcemiPrueba = rfcemiPrueba.value;
+            log.audit({ title: 'rfcemiPrueba: ', details: JSON.stringify(rfcemiPrueba) });
 
-             anyTypeProveedor1 = xml.XPath.select({
-                 node: xml_vars,
-                 xpath: 'cfdi:Comprobante//cfdi:Receptor'
-             });
+            anyTypeProveedor1 = xml.XPath.select({
+                node: xml_vars,
+                xpath: 'cfdi:Comprobante//cfdi:Receptor'
+            });
 
-             var rfcrecPrueba = anyTypeProveedor1[0].getAttributeNode({
-                 name: 'Rfc'
-             });
-             rfcrecPrueba = rfcrecPrueba.value;
-             log.audit({ title: 'rfcrecPrueba: ', details: JSON.stringify(rfcrecPrueba) });
+            var rfcrecPrueba = anyTypeProveedor1[0].getAttributeNode({
+                name: 'Rfc'
+            });
+            rfcrecPrueba = rfcrecPrueba.value;
+            log.audit({ title: 'rfcrecPrueba: ', details: JSON.stringify(rfcrecPrueba) });
 
-             var xmlValid = isValidSat(xmlText, uuidPrueba, rfcemiPrueba, rfcrecPrueba, totalPrueba);
-             log.audit({
-                 title: "xmlValid",
-                 details: xmlValid
-             })
+            var xmlValid = isValidSat(xmlText, uuidPrueba, rfcemiPrueba, rfcrecPrueba, totalPrueba);
+            log.audit({
+                title: "xmlValid",
+                details: xmlValid
+            })
 
-             if (xmlValid == -1) {
+            if (xmlValid == -1) {
 
-                 
-                 addHiddenField("custpage_valid_xml", 'T', ui.FieldType.CHECKBOX);
-                 log.audit({title:"xmlValid",details:xmlValid});
-                 flag = -1;
-                 //addSuccessMsgsAssitant('Se ha validado correctamente');
-                 //return;
-             }
-             else if (!xmlValid) {
+                
+                addHiddenField("custpage_valid_xml", 'T', ui.FieldType.CHECKBOX);
+                log.audit({title:"xmlValid",details:xmlValid});
+                flag = -1;
+                //addSuccessMsgsAssitant('Se ha validado correctamente');
+                //return;
+            }
+            else if (!xmlValid) {
 
-                 //     //addHiddenField("custpage_valid", 'F', ui.FieldType.CHECKBOX);
-                 addHiddenField("custpage_valid_xml", 'T', ui.FieldType.CHECKBOX);;
-                 log.error({ title: 'secondStep', details: 'XML is not valid' });
-                 addErrorMSgsAssitant(getTranslationLabel('invalid_inv_text'));
-                 return;
-             }
+                //     //addHiddenField("custpage_valid", 'F', ui.FieldType.CHECKBOX);
+                addHiddenField("custpage_valid_xml", 'T', ui.FieldType.CHECKBOX);;
+                log.error({ title: 'secondStep', details: 'XML is not valid' });
+                addErrorMSgsAssitant(getTranslationLabel('invalid_inv_text'));
+                return;
+            }
 
-             //Validar UUID no repetido.
-             var isUsed = isUsedUUID(xmlText);
+            //Validar UUID no repetido.
+            var isUsed = isUsedUUID(xmlText);
 
-             if (isUsed == -1) {
+            if (isUsed == -1) {
 
-                 //addHiddenField("custpage_valid", 'F', ui.FieldType.CHECKBOX);
-                 addHiddenField("custpage_valid_uuid", 'T', ui.FieldType.CHECKBOX);
-                 //addSuccessMsgsAssitant('Se ha validado correctamente el UUID');
-                 //return;
-             }
-             else if (isUsed) {
+                //addHiddenField("custpage_valid", 'F', ui.FieldType.CHECKBOX);
+                addHiddenField("custpage_valid_uuid", 'T', ui.FieldType.CHECKBOX);
+                //addSuccessMsgsAssitant('Se ha validado correctamente el UUID');
+                //return;
+            }
+            else if (isUsed) {
 
-                 //addHiddenField("custpage_valid", 'F', ui.FieldType.CHECKBOX);
-                 addHiddenField("custpage_valid_uuid", 'T', ui.FieldType.CHECKBOX);
-                 log.error({ title: 'secondStep', details: 'This UUID is used' });
-                 addErrorMSgsAssitant('Error, se ingreso un UUID ya usado');
-                 return;
-             }
+                //addHiddenField("custpage_valid", 'F', ui.FieldType.CHECKBOX);
+                addHiddenField("custpage_valid_uuid", 'T', ui.FieldType.CHECKBOX);
+                log.error({ title: 'secondStep', details: 'This UUID is used' });
+                addErrorMSgsAssitant('Error, se ingreso un UUID ya usado');
+                return;
+            }
 
-             //Validar metodo de pago
-             var isValidMP = isPUE(xmlText);
-             log.audit({
-                 title: "isValidMP UUID",
-                 details: isValidMP
-             })
-             if (isValidMP == -1) {
+            //Validar metodo de pago
+            var isValidMP = isPUE(xmlText);
+            log.audit({
+                title: "isValidMP UUID",
+                details: isValidMP
+            })
+            if (isValidMP == -1) {
 
-                 //addHiddenField("custpage_valid", 'F', ui.FieldType.CHECKBOX);
-                 addHiddenField("custpage_valid", 'T', ui.FieldType.CHECKBOX);
-                 return;
-             }
-             else if (!isValidMP) {
+                //addHiddenField("custpage_valid", 'F', ui.FieldType.CHECKBOX);
+                addHiddenField("custpage_valid", 'T', ui.FieldType.CHECKBOX);
+                return;
+            }
+            else if (!isValidMP) {
 
-                 //addHiddenField("custpage_valid", 'F', ui.FieldType.CHECKBOX);
-                 addHiddenField("custpage_valid", 'T', ui.FieldType.CHECKBOX);
-                 log.error({ title: 'secondStep', details: 'Payment Method is not allowes' });
-                 addErrorMSgsAssitant("La factura no es de tipo PUE");
-                 return;
-             }
+                //addHiddenField("custpage_valid", 'F', ui.FieldType.CHECKBOX);
+                addHiddenField("custpage_valid", 'T', ui.FieldType.CHECKBOX);
+                log.error({ title: 'secondStep', details: 'Payment Method is not allowes' });
+                addErrorMSgsAssitant("La factura no es de tipo PUE");
+                return;
+            }
 
-             //Validar el año en curso
-             var currentYear = isCurrentYear(xmlText);
-             if (currentYear == -1) {
+            //Validar el año en curso
+            var currentYear = isCurrentYear(xmlText);
+            if (currentYear == -1) {
 
-                 //addHiddenField("custpage_valid", 'F', ui.FieldType.CHECKBOX);
-                 addHiddenField("custpage_valid", 'T', ui.FieldType.CHECKBOX);
-                 return;
-             }
-             else if (!currentYear) {
+                //addHiddenField("custpage_valid", 'F', ui.FieldType.CHECKBOX);
+                addHiddenField("custpage_valid", 'T', ui.FieldType.CHECKBOX);
+                return;
+            }
+            else if (!currentYear) {
 
-                 //addHiddenField("custpage_valid", 'F', ui.FieldType.CHECKBOX);
-                 addHiddenField("custpage_valid", 'T', ui.FieldType.CHECKBOX);
-                 log.error({ title: 'secondStep', details: 'Payment Method is not allowes' });
-                 addErrorMSgsAssitant("No es del año actual la factura");
-                 return;
-             }
+                //addHiddenField("custpage_valid", 'F', ui.FieldType.CHECKBOX);
+                addHiddenField("custpage_valid", 'T', ui.FieldType.CHECKBOX);
+                log.error({ title: 'secondStep', details: 'Payment Method is not allowes' });
+                addErrorMSgsAssitant("No es del año actual la factura");
+                return;
+            }
 
-             //Validar el RFC
-             var validRFC = isRightRFC(xmlText);
-             //var validRFC = -1;
+            //Validar el RFC
+            var validRFC = isRightRFC(xmlText);
+            //var validRFC = -1;
 
-             if (validRFC == -1) {
-                 //
-                 //addHiddenField("custpage_valid", 'F', ui.FieldType.CHECKBOX);
-                 addHiddenField("custpage_valid", 'T', ui.FieldType.CHECKBOX);
-                 return;
-             }
-             else if (!validRFC) {
+            if (validRFC == -1) {
+                //
+                //addHiddenField("custpage_valid", 'F', ui.FieldType.CHECKBOX);
+                addHiddenField("custpage_valid", 'T', ui.FieldType.CHECKBOX);
+                return;
+            }
+            else if (!validRFC) {
 
-                 //addHiddenField("custpage_valid", 'F', ui.FieldType.CHECKBOX);
-                 addHiddenField("custpage_valid", 'T', ui.FieldType.CHECKBOX);
-                 log.error({ title: 'secondStep', details: 'Payment Method is not allowes' });
-                 addErrorMSgsAssitant("RFC receptor no concuerda con la subsidiaria");
-                 return;
-             }
+                //addHiddenField("custpage_valid", 'F', ui.FieldType.CHECKBOX);
+                addHiddenField("custpage_valid", 'T', ui.FieldType.CHECKBOX);
+                log.error({ title: 'secondStep', details: 'Payment Method is not allowes' });
+                addErrorMSgsAssitant("RFC receptor no concuerda con la subsidiaria");
+                return;
+            }
 
-             // addSuccessMsgsAssitant(getTranslationLabel('val_files_text'));
-             addSuccessMsgsAssitant("Se han validado los datos correctamente");
-             addHiddenField("custpage_valid", 'T', ui.FieldType.CHECKBOX);
+            // addSuccessMsgsAssitant(getTranslationLabel('val_files_text'));
+            addSuccessMsgsAssitant("Se han validado los datos correctamente");
+            addHiddenField("custpage_valid", 'T', ui.FieldType.CHECKBOX);
 
-         } catch (e) {
-             log.error({ title: 'secondStep', details: e });
-             throw "Ha ocurrido un error.";
-         }
-     }
+        } catch (e) {
+            log.error({ title: 'secondStep', details: e });
+            throw "Ha ocurrido un error.";
+        }
+    }
 
      function thirdStep() {
          try {
@@ -1654,571 +1654,569 @@
          }
      }
 
-     function finish() {
-         try {
-            log.debug({title:'paramExpenses', details:paramExpense});
-             if (!paramExpense) {
-                 log.error({ title: 'finish', details: paramExpense + ' is not fill.' });
-                 return "Ha fallado la actualización de reportes de gastos."
-             }
-
-             var objRecord = null;
-             var userObj = runtime.getCurrentUser();
-             if (paramExpense == -1) {
-                 var idAuthor = userObj.id;
-
-                 log.audit({ title: '+++++++++++++++++ ENTRO RECORD CREATE +++++++++++++++++', details: '+++++++++++++++++ ENTRO RECORD CREATE +++++++++++++++++' });
-
-                 objRecord = record.create({
-                     type: record.Type.EXPENSE_REPORT,
-                     isDynamic: true,
-                     // defaultValues: {entity: 'ExpRept:A'}
-                     //    defaultValues: {entity: idAuthor}
-                 });
-                 log.audit({ title: 'ID Author: ', details: idAuthor });
-                 objRecord.setValue({
-                     fieldId: 'entity',
-                     value: idAuthor
-                 });
-
-                 objRecord.setValue({
-                     fieldId: 'approvalstatus',
-                     value: 11
-                 });
-                 objRecord.setValue({
-                     fieldId: 'complete',
-                     value: false
-                 });
-             }
-             else {
-                 log.audit({ title: '+++++++++++++++++ ENTRO RECORD LOAD +++++++++++++++++', details: '+++++++++++++++++ ENTRO RECORD LOAD +++++++++++++++++' });
-                 objRecord = record.load({
-                     type: record.Type.EXPENSE_REPORT,
-                     id: paramExpense,
-                     isDynamic: true,
-                 });
-                 log.audit({ title: '+++++++++++++++++ TERMINA RECORD LOAD +++++++++++++++++', details: '+++++++++++++++++ TERMINA RECORD LOAD +++++++++++++++++' });
-             }
-             log.audit({ title: 'finish - paramExpense', details: paramExpense });
-             log.audit({ title: 'finish - objRecord', details: objRecord });
-
-             if (!objRecord) {
-                 log.error({ title: 'finish', details: objRecord + ' objRecord is not fill.' });
-                 return "Ha fallado la actualización de reportes de gastos.";
-             }
-
-             var numLine = objRecord.getLineCount({
-                 sublistId: 'expense'
-             });
-
-
-             log.error({ title: 'finish', details: paramXML });
-             if (paramHasInvoice == 'T') {
-                 paramXML = JSON.parse(paramXML);
-             }
-             paramPDf = JSON.parse(paramPDf);
-
-             log.error({ title: 'finish', details: paramXML });
-             if (paramHasInvoice == 'T') {
-
-                 if (!paramXML) {
-                     log.error({ title: 'finish', details: 'ParamXML is empty!' });
-                     return;
-                 }
-                 var xmlText = readFile(paramXML.id);
-                 log.audit("xmlText", xmlText);
-                 var uuid = getValueXMl(xmlText, 'cfdi:Comprobante//cfdi:Complemento//tfd:TimbreFiscalDigital ', 'UUID');
-                 log.audit({ title: 'finish - uuid', details: uuid });
-                 var totalXML = getValueXMl(xmlText, 'cfdi:Comprobante', 'Total');
-                 log.audit({ title: 'TOTAL EN XML', details: totalXML });
-
-
-                 //Obtener IVA y IEPS trasladado
-                 // try{
-                 //     var taxTrasladado = getTaxNodes(xmlText, '/cfdi:Comprobante/cfdi:Impuestos/cfdi:Traslados/cfdi:Traslado/@Impuesto|/cfdi:Comprobante/cfdi:Impuestos/cfdi:Traslados/cfdi:Traslado/@TasaOCuota|/cfdi:Comprobante/cfdi:Impuestos/cfdi:Traslados/cfdi:Traslado/@Importe');
-                 //     log.audit({title: 'Impuestos trasladados: ', details:taxTrasladado});
-                 //
-                 //     var arr_len = taxTrasladado.length;
-                 //     log.audit({title: 'Length of trasladados array', details:arr_len});
-                 //
-                 //     var i = 0;
-                 //     var montoIeps = 0;
-                 //     //Recorrer el array para extraer los impuestos trasladados IVA e IEPS (Si es que existe)
-                 //     for (i;i < arr_len;i++){
-                 //         log.audit({title: 'IMPRIMIENDO ELEMENTO' + i, details:''});
-                 //         log.audit({title: taxTrasladado[i].name , details:''});
-                 //         log.audit({title: taxTrasladado[i].value , details:''});
-                 //
-                 //         //Si esta iteracion es IEPS, irlo acumulando
-                 //         if(taxTrasladado[i].name == 'Impuesto' && taxTrasladado[i].value == '003'){
-                 //             log.audit({title: 'ESTA ITERACION ES DE IEPS', details:'ESTA ITERACION ES DE IEPS'});
-                 //             var val_ieps  = taxTrasladado[i + 2].value;
-                 //             montoIeps = Number(montoIeps)  + Number(val_ieps);
-                 //         }
-                 //
-                 //
-                 //         //Si esta itereacion es de IVA Guardar la tasa de IVA
-                 //         if(taxTrasladado[i].name == 'Impuesto' && taxTrasladado[i].value == '002'){
-                 //             log.audit({title: 'El iva se encuentra en la posicion' + i, details:''});
-                 //             var tasaIvaCoef = Number(taxTrasladado[i + 1].value);
-                 //             var tasaIvaCoef = Number(tasaIvaCoef + 1);
-                 //             var tasaIva = Number(taxTrasladado[i + 1].value) * 100;
-                 //             var montoIva = Number(taxTrasladado[i + 2].value);
-                 //             log.audit({title: 'Con una monto global de ' + montoIva, details:''});
-                 //             log.audit({title: 'Con una tasa del' + tasaIva, details:''});
-                 //
-                 //         }
-                 //
-                 //     }
-                 //
-                 //     log.audit({title: '--------- LA TASA ENCONTRADA DE IVA ES  ' + tasaIva, details:''});
-                 //     log.audit({title: '--------- EL MONTO ENCONTRADO DE IVA ES  ' + montoIva, details:montoIva});
-                 //     log.audit({title: '----------EL MONTO TOTAL DE IEPS ES   ' + montoIeps, details:montoIeps});
-                 //
-                 //
-                 // }catch (e) {
-                 //     log.audit({title: 'NO SE ENCONTRARON IMPUESTOS TRASLADADOS EN EL XML', details:''});
-                 // }
-
-                 //Obtener monto de impuestos retenidos
-                 // try{
-                 //     var taxRetenido = getTaxNodes(xmlText, '/cfdi:Comprobante/cfdi:Impuestos/@TotalImpuestosRetenidos');
-                 //     log.audit({title: 'VALOR DE TAXRETENIDO VAR ', details:taxRetenido});
-                 //     taxRetenido = taxRetenido[0].value;
-                 //     log.audit({title: 'Impuestos retenidos: ', details:taxRetenido});
-                 // }catch (e) {
-                 //     var taxRetenido = 0;
-                 //     log.audit({title: 'Valor de taxRetenido', details:taxRetenido});
-                 //     log.audit({title: e, details:''});
-                 // }
-
-                 // var taxAttr = getTaxNodes(xmlText, '/cfdi:Comprobante/cfdi:Impuestos/cfdi:Traslados/cfdi:Traslado/@Impuesto|/cfdi:Comprobante/cfdi:Impuestos/cfdi:Traslados/cfdi:Traslado/@Importe|/cfdi:Comprobante/cfdi:Impuestos/cfdi:Traslados/cfdi:Traslado/@TasaOCuota');
-                 // log.audit({title: 'TYPEOF taxAttr', details:typeof(taxAttr) });
-                 // log.audit({title: 'finish - taxAttr', details: taxAttr}
-                 // );
-                 // var tasaOCuota = getValueXMl(xmlText, 'cfdi:Comprobante/cfdi:Impuestos/cfdi:Traslados/cfdi:Traslado', 'TasaOCuota');
-                 // log.audit({title: 'finish - tasaOCuota', details: tasaOCuota});
-
-                 var subTotal = getValueXMl(xmlText, 'cfdi:Comprobante', 'SubTotal');
-                 log.audit({ title: 'finish - subTotal', details: subTotal });
-
-                 // log.audit({title: 'Operadores para hacer la formula', details:'Operadores para hacer la formula'});
-                 // log.audit({title: 'SUBTOTAL: ', details:subTotal});
-                 // //log.audit({title: 'IEPS: ', details:montoIeps});
-                 // //log.audit({title: 'RETENCION: ', details:taxRetenido});
-                 // log.audit({title: 'TASA IVA: ', details:tasaIva});
-                 // log.audit({title: 'TASA IVA COEF: ', details:tasaIvaCoef});
-                 //
-                 // var nuevoSubtotal = Number(subTotal) + Number(montoIeps);
-
-                 // var res_mult =   Number(subTotal)  *  Number(tasaIvaCoef);
-                 // log.audit({title: 'Prev Mult', details:res_mult});
-
-
-                 //Determinar el monto total a poner en la linea del reporte de gastos
-                 //Si hay IVA entonces multiplicarlo por el porcenje
-                 // if(tasaIva != 0){
-                 //     log.audit({title: 'SUMA DE SUBT + IEPS', details:Number(subTotal)  + Number(montoIeps)});
-                 //     log.audit({title: 'SUMA DE SUBT + IEPS * tasaIVA', details:(Number(subTotal)  + Number(montoIeps)) *  Number(tasaIvaCoef)});
-                 //     log.audit({title: 'SUMA DE SUBT + IEPS * tasaIVA - retenciones', details:(Number(subTotal)  + Number(montoIeps)) *  Number(tasaIvaCoef)- Number(taxRetenido)});
-                 //     //var total_linea = (Number(subTotal)  + Number(montoIeps)) *  Number(tasaIvaCoef) - Number(taxRetenido) ;
-                 //     var total_linea = Math.round((Number(subTotal)  + Number(montoIeps)) *  Number(tasaIvaCoef)*100)/100 - Number(taxRetenido) ;
-                 //     //Redondear a 2 decimales
-                 //     total_linea = Math.round(total_linea * 100) / 100 ;
-                 //     log.audit({title: 'TOTAL DENTRO DE IF', details:total_linea});
-                 // }else{
-                 //     log.audit({title: 'ENTRO IF NO HAY TASA IVA', details:''});
-                 //     //Si la tasa IVA es 0 entonces no multiplicarlo por 0
-                 //     var total_linea = Number(subTotal)  + Number(montoIeps) - Number(taxRetenido) ;
-                 //     //Redondear a 2 decimales
-                 //     total_linea = Math.round(total_linea * 100) / 100 ;
-                 // }
-
-
-                 // log.audit({title: '*****************************************-', details:'*****************************************-'});
-                 // log.audit({title: '*****************************************-', details:'*****************************************-'});
-                 // log.audit({title: 'EL NUEVO SUBTOTAL DE LA LINEA DE ESTE REPORTE DE GASTOS SERIA', details:nuevoSubtotal});
-                 // log.audit({title: 'EL TOTAL DE LA LINEA DE ESTE REPORTE DE GASTOS SERIA', details:total_linea});
-                 // log.audit({title: '*****************************************-', details:'*****************************************-'});
-                 // log.audit({title: '*****************************************-', details:'*****************************************-'});
-
-                 // if(tasaIva == 16) {
-                 //     var taxgrpname = 'IVA16';
-                 // }
-                 // if(tasaIva == 8) {
-                 //     var taxgrpname = 'IVA8';
-                 // }
-                 // if(tasaIva == 0) {
-                 //     var taxgrpname = 'IVA0';
-                 // }
-                 //
-                 // log.audit({title: 'TAX GROUP NAME PARA BUSQUEDA', details:taxgrpname});
-                 //
-                 // var resultTax = search.create({
-                 //     type: 'taxgroup',
-                 //     filters: [
-                 //         ['itemid', search.Operator.IS, taxgrpname]
-                 //     ],
-                 //     columns: [
-                 //         { name: 'internalid' }
-                 //     ]
-                 // });
-                 //
-                 // var resultData = resultTax.run();
-                 //
-                 // var resultSet = resultData.getRange(0, 10);
-                 // log.audit({title: 'finish - resultSet', details: resultSet[0]});
-                 //
-                 // var taxCode = resultSet[0].getValue({ name: 'internalid' }) || 0;
-                 //
-                 // log.audit({title: 'TAXTAXTAXTAXCODE PARA ESTE IVA ES', details:taxCode});
-
-             }
-             else {
-                 var xmlText = null;
-                 var taxAttr = null;
-                 var tasaOCuota = null;
-                 var subTotal = paramAmount;
-             }
-
-             objRecord.selectNewLine({
-                 sublistId: 'expense'
-             });
-
-             objRecord.setCurrentSublistValue({
-                 sublistId: 'expense',
-                 fieldId: 'category',
-                 value: paramCategory,
-                 ignoreFieldChange: false
-             });
-
-
-
-
-             log.audit("userObj", userObj);
-
-
-             var userEmployee = record.load({
-                 type: record.Type.EMPLOYEE,
-                 id: userObj.id,
-                 isDynamic: true,
-             });
-             var currency = userEmployee.getValue({
-                 fieldId: 'currency'
-             });
-
-             if (!currency) {
-                 currency = userEmployee.getValue({
-                     fieldId: 'defaultexpensereportcurrency'
-                 });
-             }
-
-             log.audit("currency", currency);
-             objRecord.setCurrentSublistValue({
-                 sublistId: 'expense',
-                 fieldId: 'currency',
-                 value: currency,
-                 ignoreFieldChange: false
-             });
-             log.error({title:'filepdf', details:paramPDf.id});
-             objRecord.setCurrentSublistValue({
-                 sublistId: 'expense',
-                 fieldId: 'custcol_xml_line_file_pdf',
-                 value: paramPDf.id,
-                 ignoreFieldChange: false
-             });
-
-
-             // objRecord.setCurrentSublistValue({
-             //     sublistId: 'expense',
-             //     fieldId: 'foreignamount',
-             //     value: nuevoSubtotal,
-             //     ignoreFieldChange: false
-             // });
-
-             //Get company wide taxgroups for expense categories
-             var taxgrparrendamiento = runtime.getCurrentScript().getParameter({ name: 'custscript_efx_taxcode_arr' });
-             log.audit({ title: 'ID DE GRUPO DE IMPUESTOS PARA ARRENDAMIENTO', details: taxgrparrendamiento });
-
-             var taxgrpservprofind = runtime.getCurrentScript().getParameter({ name: 'custscript_efx_taxcode_hon' });
-             log.audit({ title: 'ID DE GRUPO DE IMPUESTOS PARA SERVICIOS PROFESIONALES INDEPENDIENTES', details: taxgrpservprofind });
-
-             var taxgrpprovpendpago = runtime.getCurrentScript().getParameter({ name: 'custscript_efx_taxcode_ppp' });
-             log.audit({ title: 'ID DE GRUPO DE IMPUESTOS PARA PROV. PEDIENTES DE PAGO', details: taxgrpprovpendpago });
-
-             var taxgrpfletes = runtime.getCurrentScript().getParameter({ name: 'custscript_efx_taxcode_flete' });
-             log.audit({ title: 'ID DE GRUPO DE IMPUESTOS PARA PROV. PEDIENTES DE PAGO', details: taxgrpfletes });
-
-             // var dif = total_linea - subTotal;
-             // log.audit({title: '000000000000000 DIFERENCIA A PONER 0000000000000000', details:dif});
-
-             log.audit({ title: 'Valor de paramCategory antes de evaluar switch', details: paramCategory });
-             log.audit({ title: 'type of paramCategory', details: typeof (paramCategory) });
-
-             switch (Number(paramCategory)) {
-                 //Comida:iva
-                 case 4:
-                     log.audit({ title: 'ENTRO CASE 2', details: 'ENTRO CASE 2' });
-                     var taxCode = 107;
-                     log.audit({ title: 'TAXCODE DENTRO DE CASE VALE', details: taxCode });
-                     break;
-                 //Arrendamiento
-                 case 6:
-                     var taxCode = taxgrparrendamiento;
-                     break;
-                 //Servicios profesionales independientes
-                 case 7:
-                     var taxCode = taxgrpservprofind;
-                     break;
-                 //IVA Ret. Prov. pend. pago
-                 case 8:
-                     var taxCode = taxgrpprovpendpago;
-                     break;
-                 //IVA Ret. Fletes
-                 case 9:
-                     var taxCode = taxgrpfletes;
-                     break;
-             }
-
-             // log.audit({title: '111111111111111111111111111111111111111111111111111111', details:'11111111111111111111111111111111111111111111111'});
-             // log.audit({title: '111111111111111111111111111111111111111111111111111111', details:'11111111111111111111111111111111111111111111111'});
-             // log.audit({title: 'PARAM EVALUADO:', details:paramCategory});
-             // log.audit({title: 'TAX CODE A PONER:', details:taxCode});
-             // log.audit({title: '111111111111111111111111111111111111111111111111111111', details:'11111111111111111111111111111111111111111111111'});
-             // log.audit({title: '111111111111111111111111111111111111111111111111111111', details:'11111111111111111111111111111111111111111111111'});
-
-             objRecord.setCurrentSublistValue({
-                 sublistId: 'expense',
-                 fieldId: 'taxcode',
-                 value: taxCode,
-                 ignoreFieldChange: false
-             });
-
-             // objRecord.setCurrentSublistValue({
-             //     sublistId: 'expense',
-             //     fieldId: 'tax1amt',
-             //     value: montoIva,
-             //     ignoreFieldChange: false
-             // });
-
-
-
-
-             objRecord.setCurrentSublistValue({
-                 sublistId: 'expense',
-                 fieldId: 'amount',
-                 value: subTotal,
-                 ignoreFieldChange: false
-             });
-
-
-             // log.audit({title: 'VALUE A PONER EN GROSSAMT con no ignore', details:total_linea});
-             //
-             // objRecord.setCurrentSublistValue({
-             //     sublistId: 'expense',
-             //     fieldId: 'grossamt',
-             //     value: total_linea,
-             //     ignoreFieldChange: false
-             // });
-
-
-
-
-             objRecord.setCurrentSublistValue({
-                 sublistId: 'expense',
-                 fieldId: 'custcol_xml_from_assistant',
-                 value: true,
-                 ignoreFieldChange: false
-             });
-             objRecord.setCurrentSublistValue({
-                 sublistId: 'expense',
-                 fieldId: 'memo',
-                 value: paramNotes,
-                 ignoreFieldChange: false
-             });
-             // objRecord.setCurrentSublistValue({
-             //     sublistId: 'expense',
-             //     fieldId: 'customer',
-             //     value: paramCustomer,
-             //     ignoreFieldChange: false
-             // });
-             if (paramHasInvoice == 'T') {
-                 objRecord.setCurrentSublistValue({
-                     sublistId: 'expense',
-                     fieldId: 'custcol_xml_line_file_xml',
-                     value: paramXML.id,
-                     ignoreFieldChange: false
-                 });
-                 objRecord.setCurrentSublistValue({
-                     sublistId: 'expense',
-                     fieldId: 'custcol_xml_uuid',
-                     value: uuid,
-                     ignoreFieldChange: false
-                 });
-             }
-             if (paramHasInvoice == 'F' && paramCurrency) {
-                 objRecord.setCurrentSublistValue({
-                     sublistId: 'expense',
-                     fieldId: 'currency',
-                     value: paramCurrency,
-                     ignoreFieldChange: false
-                 });
-             }
-
-             // objRecord.setCurrentSublistValue({
-             //     sublistId: 'expense',
-             //     fieldId: 'tax1amt',
-             //     value: montoIva,
-             //     ignoreFieldChange: false
-             // });
-
-             //Revisar si el amount de la linea calculado por NS coincide con el del XML
-             var totallineaNS = objRecord.getCurrentSublistValue({ sublistId: 'expense', fieldId: 'grossamt' });
-
-             log.audit({ title: '/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/', details: '/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/' });
-             log.audit({ title: '/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/', details: '/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/' });
-             log.audit({ title: 'El total calculado por NS antes de hacer comit a la linea es de: ' + totallineaNS, details: '' });
-             log.audit({ title: 'El total leido del XML es : ' + totalXML, details: '' });
-             log.audit({ title: '/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/', details: '/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/' });
-             log.audit({ title: '/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/', details: '/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/' });
-
-             if (totallineaNS != totalXML) {
-                 log.audit({ title: 'El total debe ser ajustado al valor del XML', details: '' });
-                 log.audit({ title: 'Poniendo el valor de grossamt a ' + totalXML, details: '' });
-                 objRecord.setCurrentSublistValue({
-                     sublistId: 'expense',
-                     fieldId: 'grossamt',
-                     value: totalXML,
-                     ignoreFieldChange: false
-
-                 });
-
-             } else {
-                 log.audit({ title: 'El total de NS coincide con el XML, no hay que hacer cambios', details: '' });
-             }
-
-
-             var numExpense = objRecord.commitLine({
-                 sublistId: 'expense'
-             });
-             var parse = parseFloat(subTotal);
-
-             if (paramExpense == -1) {
-                 log.audit({ title: 'IF verdadero', details: paramExpense });
-
-                 objRecord.setValue({
-                     fieldId: 'advance',
-                     value: parse
-                 });
-
-             } else {
-
-                 var Totaltotal = 0;
-
-                 var exp = record.load({
-                     type: record.Type.EXPENSE_REPORT,
-                     id: paramExpense,
-                     isDynamic: true,
-                 });
-
-                 var rersp = exp.getLineCount('expense');
-
-                 for (var i = 0; i < rersp; i++) {
-
-                     cantAjus = exp.getSublistValue({
-                         sublistId: 'expense',
-                         fieldId: 'amount',
-                         line: i
-                     });
-
-
-                     var ma = Math.round(cantAjus * 100) / 100;
-
-
-                     // var pa = parseInt(ma);
-
-                     Totaltotal = Totaltotal + ma;
-
-                 }
-
-
-
-
-
-
-                 var Totalmath = Math.round(Totaltotal * 100) / 100;
-
-                 var advance = Totalmath + parse;
-
-                 var advancema = Math.round(advance * 100) / 100;
-
-                 objRecord.setValue({
-                     fieldId: 'advance',
-                     value: advancema
-                 });
-
-
-                 log.audit({ title: 'advance', details: advancema });
-                 log.audit({ title: 'Totaltotal', details: Totalmath });
-                 log.audit({ title: 'subTotal', details: subTotal });
-
-                 log.audit({ title: 'rersp', details: rersp });
-                 log.audit({ title: 'IF falso', details: paramExpense });
-             }
-
-
-
-             //TODO: incrementar valor de línea
-             var recordId = objRecord.save({
-                 enableSourcing: true,
-                 ignoreMandatoryFields: true
-             });
-             expenseReportId = recordId;
-
-             var idFolder = getCreateFolder(recordId);
-             log.audit("idFolder", idFolder);
-
-
-             var pdfFile = file.load({
-                 id: paramPDf.id
-             });
-             pdfFile.folder = idFolder;
-             pdfFile.name = "ExpensePDF" + recordId + "-" + paramPDf.id; //numLine;
-             pdfFile.save();
-
-             log.debug({title:'Antes if', details:"Linea 1979"});
-             if (paramHasInvoice == 'T') {
-                log.debug({title:'En el if 1980', details:"en el if 1980"});
-                 if (!xmlFile) {
-                     xmlFile = file.load({
-                         id: paramXML.id
-                     });
-                 }
-                 xmlFile.folder = idFolder;
-                 xmlFile.name = "ExpenseXML" + recordId + "-" + paramXML.id; //numLine;
-                 xmlFile.save();
-                 var uuidRecord = record.create({
-                     type: 'customrecord_xml_used_uuid',
-                     isDynamic: true
-                 });
-                 uuidRecord.setValue({
-                     fieldId: 'name',
-                     value: uuid
-                 });
-                 var uuidID = uuidRecord.save({
-                     enableSourcing: true,
-                     ignoreMandatoryFields: true
-                 });
-             }
-
-             return "Se ha concluido satisfactoriamente el proceso!";
-
-         } catch (e) {
-             log.error({ title: 'finish', details: e });
-             return "Ha ocurrido un error al intentar insertar la información."
-             throw "Ha ocurrido un error.";
-         }
-     }
+    function finish() {
+        try {
+        log.debug({title:'paramExpenses', details:paramExpense});
+            if (!paramExpense) {
+                log.error({ title: 'finish', details: paramExpense + ' is not fill.' });
+                return "Ha fallado la actualización de reportes de gastos."
+            }
+
+            var objRecord = null;
+            var userObj = runtime.getCurrentUser();
+            if (paramExpense == -1) {
+                var idAuthor = userObj.id;
+
+                log.audit({ title: '+++++++++++++++++ ENTRO RECORD CREATE +++++++++++++++++', details: '+++++++++++++++++ ENTRO RECORD CREATE +++++++++++++++++' });
+
+                objRecord = record.create({
+                    type: record.Type.EXPENSE_REPORT,
+                    isDynamic: true,
+                    // defaultValues: {entity: 'ExpRept:A'}
+                    //    defaultValues: {entity: idAuthor}
+                });
+                log.audit({ title: 'ID Author: ', details: idAuthor });
+                objRecord.setValue({
+                    fieldId: 'entity',
+                    value: idAuthor
+                });
+
+                objRecord.setValue({
+                    fieldId: 'approvalstatus',
+                    value: 11
+                });
+                objRecord.setValue({
+                    fieldId: 'complete',
+                    value: false
+                });
+            }else {
+                log.audit({ title: '+++++++++++++++++ ENTRO RECORD LOAD +++++++++++++++++', details: '+++++++++++++++++ ENTRO RECORD LOAD +++++++++++++++++' });
+                objRecord = record.load({
+                    type: record.Type.EXPENSE_REPORT,
+                    id: paramExpense,
+                    isDynamic: true,
+                });
+                log.audit({ title: '+++++++++++++++++ TERMINA RECORD LOAD +++++++++++++++++', details: '+++++++++++++++++ TERMINA RECORD LOAD +++++++++++++++++' });
+            }
+            log.audit({ title: 'finish - paramExpense', details: paramExpense });
+            log.audit({ title: 'finish - objRecord', details: objRecord });
+
+            if (!objRecord) {
+                log.error({ title: 'finish', details: objRecord + ' objRecord is not fill.' });
+                return "Ha fallado la actualización de reportes de gastos.";
+            }
+
+            var numLine = objRecord.getLineCount({
+                sublistId: 'expense'
+            });
+
+
+            log.error({ title: 'finish', details: paramXML });
+            if (paramHasInvoice == 'T') {
+                paramXML = JSON.parse(paramXML);
+            }
+            paramPDf = JSON.parse(paramPDf);
+
+            log.error({ title: 'finish', details: paramXML });
+            if (paramHasInvoice == 'T') {
+
+                if (!paramXML) {
+                    log.error({ title: 'finish', details: 'ParamXML is empty!' });
+                    return;
+                }
+                var xmlText = readFile(paramXML.id);
+                log.audit("xmlText", xmlText);
+                var uuid = getValueXMl(xmlText, 'cfdi:Comprobante//cfdi:Complemento//tfd:TimbreFiscalDigital ', 'UUID');
+                log.audit({ title: 'finish - uuid', details: uuid });
+                var totalXML = getValueXMl(xmlText, 'cfdi:Comprobante', 'Total');
+                log.audit({ title: 'TOTAL EN XML', details: totalXML });
+
+
+                //Obtener IVA y IEPS trasladado
+                // try{
+                //     var taxTrasladado = getTaxNodes(xmlText, '/cfdi:Comprobante/cfdi:Impuestos/cfdi:Traslados/cfdi:Traslado/@Impuesto|/cfdi:Comprobante/cfdi:Impuestos/cfdi:Traslados/cfdi:Traslado/@TasaOCuota|/cfdi:Comprobante/cfdi:Impuestos/cfdi:Traslados/cfdi:Traslado/@Importe');
+                //     log.audit({title: 'Impuestos trasladados: ', details:taxTrasladado});
+                //
+                //     var arr_len = taxTrasladado.length;
+                //     log.audit({title: 'Length of trasladados array', details:arr_len});
+                //
+                //     var i = 0;
+                //     var montoIeps = 0;
+                //     //Recorrer el array para extraer los impuestos trasladados IVA e IEPS (Si es que existe)
+                //     for (i;i < arr_len;i++){
+                //         log.audit({title: 'IMPRIMIENDO ELEMENTO' + i, details:''});
+                //         log.audit({title: taxTrasladado[i].name , details:''});
+                //         log.audit({title: taxTrasladado[i].value , details:''});
+                //
+                //         //Si esta iteracion es IEPS, irlo acumulando
+                //         if(taxTrasladado[i].name == 'Impuesto' && taxTrasladado[i].value == '003'){
+                //             log.audit({title: 'ESTA ITERACION ES DE IEPS', details:'ESTA ITERACION ES DE IEPS'});
+                //             var val_ieps  = taxTrasladado[i + 2].value;
+                //             montoIeps = Number(montoIeps)  + Number(val_ieps);
+                //         }
+                //
+                //
+                //         //Si esta itereacion es de IVA Guardar la tasa de IVA
+                //         if(taxTrasladado[i].name == 'Impuesto' && taxTrasladado[i].value == '002'){
+                //             log.audit({title: 'El iva se encuentra en la posicion' + i, details:''});
+                //             var tasaIvaCoef = Number(taxTrasladado[i + 1].value);
+                //             var tasaIvaCoef = Number(tasaIvaCoef + 1);
+                //             var tasaIva = Number(taxTrasladado[i + 1].value) * 100;
+                //             var montoIva = Number(taxTrasladado[i + 2].value);
+                //             log.audit({title: 'Con una monto global de ' + montoIva, details:''});
+                //             log.audit({title: 'Con una tasa del' + tasaIva, details:''});
+                //
+                //         }
+                //
+                //     }
+                //
+                //     log.audit({title: '--------- LA TASA ENCONTRADA DE IVA ES  ' + tasaIva, details:''});
+                //     log.audit({title: '--------- EL MONTO ENCONTRADO DE IVA ES  ' + montoIva, details:montoIva});
+                //     log.audit({title: '----------EL MONTO TOTAL DE IEPS ES   ' + montoIeps, details:montoIeps});
+                //
+                //
+                // }catch (e) {
+                //     log.audit({title: 'NO SE ENCONTRARON IMPUESTOS TRASLADADOS EN EL XML', details:''});
+                // }
+
+                //Obtener monto de impuestos retenidos
+                // try{
+                //     var taxRetenido = getTaxNodes(xmlText, '/cfdi:Comprobante/cfdi:Impuestos/@TotalImpuestosRetenidos');
+                //     log.audit({title: 'VALOR DE TAXRETENIDO VAR ', details:taxRetenido});
+                //     taxRetenido = taxRetenido[0].value;
+                //     log.audit({title: 'Impuestos retenidos: ', details:taxRetenido});
+                // }catch (e) {
+                //     var taxRetenido = 0;
+                //     log.audit({title: 'Valor de taxRetenido', details:taxRetenido});
+                //     log.audit({title: e, details:''});
+                // }
+
+                // var taxAttr = getTaxNodes(xmlText, '/cfdi:Comprobante/cfdi:Impuestos/cfdi:Traslados/cfdi:Traslado/@Impuesto|/cfdi:Comprobante/cfdi:Impuestos/cfdi:Traslados/cfdi:Traslado/@Importe|/cfdi:Comprobante/cfdi:Impuestos/cfdi:Traslados/cfdi:Traslado/@TasaOCuota');
+                // log.audit({title: 'TYPEOF taxAttr', details:typeof(taxAttr) });
+                // log.audit({title: 'finish - taxAttr', details: taxAttr}
+                // );
+                // var tasaOCuota = getValueXMl(xmlText, 'cfdi:Comprobante/cfdi:Impuestos/cfdi:Traslados/cfdi:Traslado', 'TasaOCuota');
+                // log.audit({title: 'finish - tasaOCuota', details: tasaOCuota});
+
+                var subTotal = getValueXMl(xmlText, 'cfdi:Comprobante', 'SubTotal');
+                log.audit({ title: 'finish - subTotal', details: subTotal });
+
+                // log.audit({title: 'Operadores para hacer la formula', details:'Operadores para hacer la formula'});
+                // log.audit({title: 'SUBTOTAL: ', details:subTotal});
+                // //log.audit({title: 'IEPS: ', details:montoIeps});
+                // //log.audit({title: 'RETENCION: ', details:taxRetenido});
+                // log.audit({title: 'TASA IVA: ', details:tasaIva});
+                // log.audit({title: 'TASA IVA COEF: ', details:tasaIvaCoef});
+                //
+                // var nuevoSubtotal = Number(subTotal) + Number(montoIeps);
+
+                // var res_mult =   Number(subTotal)  *  Number(tasaIvaCoef);
+                // log.audit({title: 'Prev Mult', details:res_mult});
+
+
+                //Determinar el monto total a poner en la linea del reporte de gastos
+                //Si hay IVA entonces multiplicarlo por el porcenje
+                // if(tasaIva != 0){
+                //     log.audit({title: 'SUMA DE SUBT + IEPS', details:Number(subTotal)  + Number(montoIeps)});
+                //     log.audit({title: 'SUMA DE SUBT + IEPS * tasaIVA', details:(Number(subTotal)  + Number(montoIeps)) *  Number(tasaIvaCoef)});
+                //     log.audit({title: 'SUMA DE SUBT + IEPS * tasaIVA - retenciones', details:(Number(subTotal)  + Number(montoIeps)) *  Number(tasaIvaCoef)- Number(taxRetenido)});
+                //     //var total_linea = (Number(subTotal)  + Number(montoIeps)) *  Number(tasaIvaCoef) - Number(taxRetenido) ;
+                //     var total_linea = Math.round((Number(subTotal)  + Number(montoIeps)) *  Number(tasaIvaCoef)*100)/100 - Number(taxRetenido) ;
+                //     //Redondear a 2 decimales
+                //     total_linea = Math.round(total_linea * 100) / 100 ;
+                //     log.audit({title: 'TOTAL DENTRO DE IF', details:total_linea});
+                // }else{
+                //     log.audit({title: 'ENTRO IF NO HAY TASA IVA', details:''});
+                //     //Si la tasa IVA es 0 entonces no multiplicarlo por 0
+                //     var total_linea = Number(subTotal)  + Number(montoIeps) - Number(taxRetenido) ;
+                //     //Redondear a 2 decimales
+                //     total_linea = Math.round(total_linea * 100) / 100 ;
+                // }
+
+
+                // log.audit({title: '*****************************************-', details:'*****************************************-'});
+                // log.audit({title: '*****************************************-', details:'*****************************************-'});
+                // log.audit({title: 'EL NUEVO SUBTOTAL DE LA LINEA DE ESTE REPORTE DE GASTOS SERIA', details:nuevoSubtotal});
+                // log.audit({title: 'EL TOTAL DE LA LINEA DE ESTE REPORTE DE GASTOS SERIA', details:total_linea});
+                // log.audit({title: '*****************************************-', details:'*****************************************-'});
+                // log.audit({title: '*****************************************-', details:'*****************************************-'});
+
+                // if(tasaIva == 16) {
+                //     var taxgrpname = 'IVA16';
+                // }
+                // if(tasaIva == 8) {
+                //     var taxgrpname = 'IVA8';
+                // }
+                // if(tasaIva == 0) {
+                //     var taxgrpname = 'IVA0';
+                // }
+                //
+                // log.audit({title: 'TAX GROUP NAME PARA BUSQUEDA', details:taxgrpname});
+                //
+                // var resultTax = search.create({
+                //     type: 'taxgroup',
+                //     filters: [
+                //         ['itemid', search.Operator.IS, taxgrpname]
+                //     ],
+                //     columns: [
+                //         { name: 'internalid' }
+                //     ]
+                // });
+                //
+                // var resultData = resultTax.run();
+                //
+                // var resultSet = resultData.getRange(0, 10);
+                // log.audit({title: 'finish - resultSet', details: resultSet[0]});
+                //
+                // var taxCode = resultSet[0].getValue({ name: 'internalid' }) || 0;
+                //
+                // log.audit({title: 'TAXTAXTAXTAXCODE PARA ESTE IVA ES', details:taxCode});
+
+            }else {
+                var xmlText = null;
+                var taxAttr = null;
+                var tasaOCuota = null;
+                var subTotal = paramAmount;
+            }
+
+            objRecord.selectNewLine({
+                sublistId: 'expense'
+            });
+
+            objRecord.setCurrentSublistValue({
+                sublistId: 'expense',
+                fieldId: 'category',
+                value: paramCategory,
+                ignoreFieldChange: false
+            });
+
+
+
+
+            log.audit("userObj", userObj);
+
+
+            var userEmployee = record.load({
+                type: record.Type.EMPLOYEE,
+                id: userObj.id,
+                isDynamic: true,
+            });
+            var currency = userEmployee.getValue({
+                fieldId: 'currency'
+            });
+
+            if (!currency) {
+                currency = userEmployee.getValue({
+                    fieldId: 'defaultexpensereportcurrency'
+                });
+            }
+
+            log.audit("currency", currency);
+            objRecord.setCurrentSublistValue({
+                sublistId: 'expense',
+                fieldId: 'currency',
+                value: currency,
+                ignoreFieldChange: false
+            });
+            log.error({title:'filepdf', details:paramPDf.id});
+            objRecord.setCurrentSublistValue({
+                sublistId: 'expense',
+                fieldId: 'custcol_xml_line_file_pdf',
+                value: paramPDf.id,
+                ignoreFieldChange: false
+            });
+
+
+            // objRecord.setCurrentSublistValue({
+            //     sublistId: 'expense',
+            //     fieldId: 'foreignamount',
+            //     value: nuevoSubtotal,
+            //     ignoreFieldChange: false
+            // });
+
+            //Get company wide taxgroups for expense categories
+            var taxgrparrendamiento = runtime.getCurrentScript().getParameter({ name: 'custscript_efx_taxcode_arr' });
+            log.audit({ title: 'ID DE GRUPO DE IMPUESTOS PARA ARRENDAMIENTO', details: taxgrparrendamiento });
+
+            var taxgrpservprofind = runtime.getCurrentScript().getParameter({ name: 'custscript_efx_taxcode_hon' });
+            log.audit({ title: 'ID DE GRUPO DE IMPUESTOS PARA SERVICIOS PROFESIONALES INDEPENDIENTES', details: taxgrpservprofind });
+
+            var taxgrpprovpendpago = runtime.getCurrentScript().getParameter({ name: 'custscript_efx_taxcode_ppp' });
+            log.audit({ title: 'ID DE GRUPO DE IMPUESTOS PARA PROV. PEDIENTES DE PAGO', details: taxgrpprovpendpago });
+
+            var taxgrpfletes = runtime.getCurrentScript().getParameter({ name: 'custscript_efx_taxcode_flete' });
+            log.audit({ title: 'ID DE GRUPO DE IMPUESTOS PARA PROV. PEDIENTES DE PAGO', details: taxgrpfletes });
+
+            // var dif = total_linea - subTotal;
+            // log.audit({title: '000000000000000 DIFERENCIA A PONER 0000000000000000', details:dif});
+
+            log.audit({ title: 'Valor de paramCategory antes de evaluar switch', details: paramCategory });
+            log.audit({ title: 'type of paramCategory', details: typeof (paramCategory) });
+
+            switch (Number(paramCategory)) {
+                //Comida:iva
+                case 4:
+                    log.audit({ title: 'ENTRO CASE 2', details: 'ENTRO CASE 2' });
+                    var taxCode = 107;
+                    log.audit({ title: 'TAXCODE DENTRO DE CASE VALE', details: taxCode });
+                    break;
+                //Arrendamiento
+                case 6:
+                    var taxCode = taxgrparrendamiento;
+                    break;
+                //Servicios profesionales independientes
+                case 7:
+                    var taxCode = taxgrpservprofind;
+                    break;
+                //IVA Ret. Prov. pend. pago
+                case 8:
+                    var taxCode = taxgrpprovpendpago;
+                    break;
+                //IVA Ret. Fletes
+                case 9:
+                    var taxCode = taxgrpfletes;
+                    break;
+            }
+
+            // log.audit({title: '111111111111111111111111111111111111111111111111111111', details:'11111111111111111111111111111111111111111111111'});
+            // log.audit({title: '111111111111111111111111111111111111111111111111111111', details:'11111111111111111111111111111111111111111111111'});
+            // log.audit({title: 'PARAM EVALUADO:', details:paramCategory});
+            // log.audit({title: 'TAX CODE A PONER:', details:taxCode});
+            // log.audit({title: '111111111111111111111111111111111111111111111111111111', details:'11111111111111111111111111111111111111111111111'});
+            // log.audit({title: '111111111111111111111111111111111111111111111111111111', details:'11111111111111111111111111111111111111111111111'});
+
+            objRecord.setCurrentSublistValue({
+                sublistId: 'expense',
+                fieldId: 'taxcode',
+                value: taxCode,
+                ignoreFieldChange: false
+            });
+
+            // objRecord.setCurrentSublistValue({
+            //     sublistId: 'expense',
+            //     fieldId: 'tax1amt',
+            //     value: montoIva,
+            //     ignoreFieldChange: false
+            // });
+
+
+
+
+            objRecord.setCurrentSublistValue({
+                sublistId: 'expense',
+                fieldId: 'amount',
+                value: subTotal,
+                ignoreFieldChange: false
+            });
+
+
+            // log.audit({title: 'VALUE A PONER EN GROSSAMT con no ignore', details:total_linea});
+            //
+            // objRecord.setCurrentSublistValue({
+            //     sublistId: 'expense',
+            //     fieldId: 'grossamt',
+            //     value: total_linea,
+            //     ignoreFieldChange: false
+            // });
+
+
+
+
+            objRecord.setCurrentSublistValue({
+                sublistId: 'expense',
+                fieldId: 'custcol_xml_from_assistant',
+                value: true,
+                ignoreFieldChange: false
+            });
+            objRecord.setCurrentSublistValue({
+                sublistId: 'expense',
+                fieldId: 'memo',
+                value: paramNotes,
+                ignoreFieldChange: false
+            });
+            // objRecord.setCurrentSublistValue({
+            //     sublistId: 'expense',
+            //     fieldId: 'customer',
+            //     value: paramCustomer,
+            //     ignoreFieldChange: false
+            // });
+            if (paramHasInvoice == 'T') {
+                objRecord.setCurrentSublistValue({
+                    sublistId: 'expense',
+                    fieldId: 'custcol_xml_line_file_xml',
+                    value: paramXML.id,
+                    ignoreFieldChange: false
+                });
+                objRecord.setCurrentSublistValue({
+                    sublistId: 'expense',
+                    fieldId: 'custcol_xml_uuid',
+                    value: uuid,
+                    ignoreFieldChange: false
+                });
+            }
+            if (paramHasInvoice == 'F' && paramCurrency) {
+                objRecord.setCurrentSublistValue({
+                    sublistId: 'expense',
+                    fieldId: 'currency',
+                    value: paramCurrency,
+                    ignoreFieldChange: false
+                });
+            }
+
+            // objRecord.setCurrentSublistValue({
+            //     sublistId: 'expense',
+            //     fieldId: 'tax1amt',
+            //     value: montoIva,
+            //     ignoreFieldChange: false
+            // });
+
+            //Revisar si el amount de la linea calculado por NS coincide con el del XML
+            var totallineaNS = objRecord.getCurrentSublistValue({ sublistId: 'expense', fieldId: 'grossamt' });
+
+            log.audit({ title: '/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/', details: '/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/' });
+            log.audit({ title: '/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/', details: '/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/' });
+            log.audit({ title: 'El total calculado por NS antes de hacer comit a la linea es de: ' + totallineaNS, details: '' });
+            log.audit({ title: 'El total leido del XML es : ' + totalXML, details: '' });
+            log.audit({ title: '/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/', details: '/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/' });
+            log.audit({ title: '/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/', details: '/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/' });
+
+            if (totallineaNS != totalXML) {
+                log.audit({ title: 'El total debe ser ajustado al valor del XML', details: '' });
+                log.audit({ title: 'Poniendo el valor de grossamt a ' + totalXML, details: '' });
+                objRecord.setCurrentSublistValue({
+                    sublistId: 'expense',
+                    fieldId: 'grossamt',
+                    value: totalXML,
+                    ignoreFieldChange: false
+
+                });
+
+            } else {
+                log.audit({ title: 'El total de NS coincide con el XML, no hay que hacer cambios', details: '' });
+            }
+
+
+            var numExpense = objRecord.commitLine({
+                sublistId: 'expense'
+            });
+            var parse = parseFloat(subTotal);
+
+            if (paramExpense == -1) {
+                log.audit({ title: 'IF verdadero', details: paramExpense });
+
+                objRecord.setValue({
+                    fieldId: 'advance',
+                    value: parse
+                });
+
+            } else {
+
+                var Totaltotal = 0;
+
+                var exp = record.load({
+                    type: record.Type.EXPENSE_REPORT,
+                    id: paramExpense,
+                    isDynamic: true,
+                });
+
+                var rersp = exp.getLineCount('expense');
+
+                for (var i = 0; i < rersp; i++) {
+
+                    cantAjus = exp.getSublistValue({
+                        sublistId: 'expense',
+                        fieldId: 'amount',
+                        line: i
+                    });
+
+
+                    var ma = Math.round(cantAjus * 100) / 100;
+
+
+                    // var pa = parseInt(ma);
+
+                    Totaltotal = Totaltotal + ma;
+
+                }
+
+
+
+
+
+
+                var Totalmath = Math.round(Totaltotal * 100) / 100;
+
+                var advance = Totalmath + parse;
+
+                var advancema = Math.round(advance * 100) / 100;
+
+                objRecord.setValue({
+                    fieldId: 'advance',
+                    value: advancema
+                });
+
+
+                log.audit({ title: 'advance', details: advancema });
+                log.audit({ title: 'Totaltotal', details: Totalmath });
+                log.audit({ title: 'subTotal', details: subTotal });
+
+                log.audit({ title: 'rersp', details: rersp });
+                log.audit({ title: 'IF falso', details: paramExpense });
+            }
+
+
+
+            //TODO: incrementar valor de línea
+            var recordId = objRecord.save({
+                enableSourcing: true,
+                ignoreMandatoryFields: true
+            });
+            expenseReportId = recordId;
+
+            var idFolder = getCreateFolder(recordId);
+            log.audit("idFolder", idFolder);
+
+
+            var pdfFile = file.load({
+                id: paramPDf.id
+            });
+            pdfFile.folder = idFolder;
+            pdfFile.name = "ExpensePDF" + recordId + "-" + paramPDf.id; //numLine;
+            pdfFile.save();
+
+            log.debug({title:'Antes if', details:"Linea 1979"});
+            if (paramHasInvoice == 'T') {
+            log.debug({title:'En el if 1980', details:"en el if 1980"});
+                if (!xmlFile) {
+                    xmlFile = file.load({
+                        id: paramXML.id
+                    });
+                }
+                xmlFile.folder = idFolder;
+                xmlFile.name = "ExpenseXML" + recordId + "-" + paramXML.id; //numLine;
+                xmlFile.save();
+                var uuidRecord = record.create({
+                    type: 'customrecord_xml_used_uuid',
+                    isDynamic: true
+                });
+                uuidRecord.setValue({
+                    fieldId: 'name',
+                    value: uuid
+                });
+                var uuidID = uuidRecord.save({
+                    enableSourcing: true,
+                    ignoreMandatoryFields: true
+                });
+            }
+
+            return "Se ha concluido satisfactoriamente el proceso!";
+
+        } catch (e) {
+            log.error({ title: 'finish', details: e });
+            return "Ha ocurrido un error al intentar insertar la información."
+            throw "Ha ocurrido un error.";
+        }
+    }
 
      function getCreateFolder(idReport) {
 
@@ -2296,20 +2294,20 @@
          return nodeInfo;
      }
 
-     function readFile(fileId) {
-         try {
-             var uploadedFile = file.load({
-                 'id': fileId
-             });
-
-             var fileContent = uploadedFile.getContents();
-             xmlFile = uploadedFile;
-             return fileContent;
-         } catch (e) {
-             log.error({ title: 'readFile', details: e });
-             throw "Ha ocurrido un error.";
-         }
-     }
+    function readFile(fileId) {
+        try {
+            var uploadedFile = file.load({
+                'id': fileId
+            });
+            log.debug({title:'readFile ID:', details:fileId});
+            var fileContent = uploadedFile.getContents();
+            xmlFile = uploadedFile;
+            return fileContent;
+        } catch (e) {
+            log.error({ title: 'readFile', details: e });
+            throw "Ha ocurrido un error.";
+        }
+    }
 
     function getTranslationLabel(idField) {
         var currentUser = runtime.getCurrentUser(),

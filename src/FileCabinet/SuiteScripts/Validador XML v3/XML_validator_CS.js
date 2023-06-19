@@ -68,27 +68,25 @@ define(['N/search', 'N/record'], function(search, record) {
         var id = currentRecord.getValue({
             fieldId: 'custpage_expense_report'
         });
+        var customData = customFieldsData();
+        console.log('CustomData', customData);
         if(id != -1){
             var objRecord = record.load({
                 type: record.Type.EXPENSE_REPORT, 
                 id: id
             });
-
             var total = objRecord.getValue({
                 fieldId: 'total'
             });
             var nonreimbursable = objRecord.getValue({
                 fieldId: 'nonreimbursable'
             });
-
             var reimbursable = objRecord.getValue({
                 fieldId: 'reimbursable'
             });
-
             var corporatecard = objRecord.getValue({
                 fieldId: 'corporatecard'
             });
-
             var advance2 = objRecord.getValue({
                 fieldId: 'advance2'
             });
@@ -98,8 +96,18 @@ define(['N/search', 'N/record'], function(search, record) {
             var tranid = objRecord.getValue({
                 fieldId: 'tranid'
             });
-        }
-        else{
+            if (customData.sucess == true) {
+                for (var newLineField = 0; newLineField < customData.data.length; newLineField++) {
+                    var lineValues = customData.data[newLineField];
+                    var valueFound = objRecord.getValue({
+                        fieldId: lineValues.idNetsuite
+                    });
+                    lineValues['valorNetsuite'] = valueFound
+                    lineValues['isDisabled'] = true;
+                    customData.data[newLineField] = lineValues;
+                }
+            }
+        }else{
             var tranid ="N/A";
             var total = 0.0;
             var nonreimbursable = 0.0;
@@ -107,8 +115,15 @@ define(['N/search', 'N/record'], function(search, record) {
             var corporatecard = 0.0;
             var advance2 = 0.0;
             var amount = 0.0;
+            if (customData.sucess == true) {
+                for (var newLineField = 0; newLineField < customData.data.length; newLineField++) {
+                    var lineValues = customData.data[newLineField];
+                    lineValues['valorNetsuite'] = '';
+                    lineValues['isDisabled'] = false;
+                    customData.data[newLineField] = lineValues;
+                }
+            }
         }
-
         currentRecord.setValue({
             fieldId: 'custpage_expense_report_id',
             value: tranid
@@ -137,9 +152,79 @@ define(['N/search', 'N/record'], function(search, record) {
             fieldId: 'custpage_summary_amount',
             value: amount || '0.0'
         });
-
+        console.log('DataFound', customData)
+        if (customData.sucess == true) {
+            for (var newLineField = 0; newLineField < customData.data.length; newLineField++) {
+                var lineValues = customData.data[newLineField];
+                currentRecord.setValue({
+                    fieldId: 'custpage_' + lineValues.idTraduccion,
+                    value: lineValues.valorNetsuite
+                });
+                var campoinput = document.getElementById('custpage_' + lineValues.idTraduccion);
+                if (lineValues.isDisabled == true) {
+                    campoinput.disabled = true;
+                }else{
+                    campoinput.disabled = false;
+                }
+            }
+        }
     }
 
+    function customFieldsData() {
+        var dataReturn = {sucess: false, error: '', data: []};
+        try {
+            var camposSearch = search.create({
+                type: "customrecord_fb_validator_fields",
+                filters:
+                [
+                   ["isinactive","is","F"]
+                ],
+                columns:
+                [
+                   search.createColumn({
+                      name: "internalid",
+                      sort: search.Sort.ASC,
+                      label: "ID interno"
+                   }),
+                   search.createColumn({name: "custrecord_fb_validator_field_id_trad", label: "Id de traducción"}),
+                   search.createColumn({name: "custrecord_fb_validator_field_id_nets", label: "ID valor a setear"}),
+                   search.createColumn({name: "custrecord_fb_validator_field_type", label: "Tipo de campo"}),
+                   search.createColumn({name: "custrecord_fb_validator_field_type_reg", label: "Lista/Registro"}),
+                   search.createColumn({name: "custrecord_fb_validator_field_mandatory", label: "Obligatorio"}),
+                   search.createColumn({name: "custrecord_fb_validator_field_id_search", label: "ID valor a buscar"}),
+                   search.createColumn({name: "custrecord_fb_validator_field_filters", label: "Filtros sobre el resultado"})
+                ]
+            });
+            var camposResult = camposSearch.runPaged({
+                pageSize: 1000
+            });
+            console.log("Campos nuevos",camposResult.count);
+            var dataCampos = [];
+            if (camposResult.count > 0) {
+                camposResult.pageRanges.forEach(function(pageRange){
+                    var myPage = camposResult.fetch({index: pageRange.index});
+                    myPage.data.forEach(function(result){
+                        var idTraduccion = result.getValue({name: 'custrecord_fb_validator_field_id_trad'});
+                        var idNetsuite = result.getValue({name: 'custrecord_fb_validator_field_id_nets'});
+                        var tipoCampo = result.getValue({name: 'custrecord_fb_validator_field_type'});
+                        var listaUse = result.getValue({name: 'custrecord_fb_validator_field_type_reg'}) || '';
+                        var mandatory = result.getValue({name: 'custrecord_fb_validator_field_mandatory'});
+                        var idSearch = result.getValue({name: 'custrecord_fb_validator_field_id_search'});
+                        var extraFilter = result.getValue({name: 'custrecord_fb_validator_field_filters'});
+                        dataCampos.push({idTraduccion: idTraduccion, idNetsuite: idNetsuite, idSearch: idSearch, tipoCampo:tipoCampo, listaUse: listaUse, mandatory: mandatory, filtros: extraFilter});
+                    });
+                });
+                console.log({title:'dataCampos', details:dataCampos});
+            }
+            dataReturn.sucess = true;
+            dataReturn.data = dataCampos;
+        } catch (error) {
+            console.error('customFieldsData', error);
+            dataReturn.sucess = false;
+            dataReturn.error = error
+        }
+        return dataReturn;
+    }
 
     function fieldChanged(context) {
         var id = context.fieldId;

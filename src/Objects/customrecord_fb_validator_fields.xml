@@ -315,36 +315,4 @@
       <subtab></subtab>
     </customrecordcustomfield>
   </customrecordcustomfields>
-  <instances>
-    <instance scriptid="val_334624_t905028_725">
-      <custrecord_fb_validator_field_filters></custrecord_fb_validator_field_filters>
-      <custrecord_fb_validator_field_id_nets>memo</custrecord_fb_validator_field_id_nets>
-      <custrecord_fb_validator_field_id_search></custrecord_fb_validator_field_id_search>
-      <custrecord_fb_validator_field_id_trad>av_memo_prueba</custrecord_fb_validator_field_id_trad>
-      <custrecord_fb_validator_field_mandatory>T</custrecord_fb_validator_field_mandatory>
-      <custrecord_fb_validator_field_type>15</custrecord_fb_validator_field_type>
-      <custrecord_fb_validator_field_type_reg></custrecord_fb_validator_field_type_reg>
-      <isinactive>T</isinactive>
-    </instance>
-    <instance scriptid="val_334628_t905028_918">
-      <custrecord_fb_validator_field_filters>[&quot;isperson&quot;,&quot;is&quot;,&quot;T&quot;]:[&quot;companyname&quot;,&quot;is&quot;,&quot;GSW&quot;]</custrecord_fb_validator_field_filters>
-      <custrecord_fb_validator_field_id_nets>customer</custrecord_fb_validator_field_id_nets>
-      <custrecord_fb_validator_field_id_search>entityid</custrecord_fb_validator_field_id_search>
-      <custrecord_fb_validator_field_id_trad>customer_line</custrecord_fb_validator_field_id_trad>
-      <custrecord_fb_validator_field_mandatory>T</custrecord_fb_validator_field_mandatory>
-      <custrecord_fb_validator_field_type>12</custrecord_fb_validator_field_type>
-      <custrecord_fb_validator_field_type_reg>CUSTOMER</custrecord_fb_validator_field_type_reg>
-      <isinactive>F</isinactive>
-    </instance>
-    <instance scriptid="val_334631_t905028_213">
-      <custrecord_fb_validator_field_filters>[&quot;custrecord_efx_fe_se_pais_ns&quot;,&quot;anyof&quot;,&quot;1&quot;]</custrecord_fb_validator_field_filters>
-      <custrecord_fb_validator_field_id_nets>NANANA</custrecord_fb_validator_field_id_nets>
-      <custrecord_fb_validator_field_id_search>name</custrecord_fb_validator_field_id_search>
-      <custrecord_fb_validator_field_id_trad>asociado_a</custrecord_fb_validator_field_id_trad>
-      <custrecord_fb_validator_field_mandatory>F</custrecord_fb_validator_field_mandatory>
-      <custrecord_fb_validator_field_type>12</custrecord_fb_validator_field_type>
-      <custrecord_fb_validator_field_type_reg>customrecord_efx_fe_sat_estado</custrecord_fb_validator_field_type_reg>
-      <isinactive>F</isinactive>
-    </instance>
-  </instances>
 </customrecordtype>
