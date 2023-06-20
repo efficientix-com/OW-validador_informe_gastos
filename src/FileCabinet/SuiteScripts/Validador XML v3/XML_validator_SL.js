@@ -7,31 +7,32 @@
 
 
 
-     var assistant,
-         preId = 'custpage_pre',
-         firstId = 'custpage_files',
-         secondId = 'custpage_validating',
-         thirdId = 'custpage_finish',
-         finishStep = false,
-         expenseReportId = 0,
-         params,
-         request,
-         response,
-         paramAmount = null,
-         paramCredit = null,
-         paramNotes = '',
-         paramPDf = null,
-         paramXML = null,
-         paramCurrency = 0,
-         paramPreviousStep = '',
-         paramHasInvoice = null,
-         paramFinished = null,
-         paramSubsidiary = 0,
-         paramExpense = 0,
-         paramCategory = 0,
-         paramCustomer = null,
-         xmlFile = null,
-         errorConfig = [];
+    var assistant,
+        preId = 'custpage_pre',
+        firstId = 'custpage_files',
+        secondId = 'custpage_validating',
+        thirdId = 'custpage_finish',
+        finishStep = false,
+        expenseReportId = 0,
+        params,
+        request,
+        response,
+        paramAmount = null,
+        paramCredit = null,
+        paramNotes = '',
+        paramPDf = null,
+        paramXML = null,
+        paramCurrency = 0,
+        paramPreviousStep = '',
+        paramHasInvoice = null,
+        paramFinished = null,
+        paramSubsidiary = 0,
+        paramExpense = 0,
+        paramCategory = 0,
+        paramCustomer = null,
+        xmlFile = null,
+        customFieldsValues = {},
+        errorConfig = [];
 
      function onRequest(context) {
          var form = null;
@@ -93,6 +94,27 @@
             }
             log.audit({ title: 'onRequest', details: 'paramHasInvoice: ' + paramHasInvoice });
             log.audit({ title: 'onRequest', details: 'paramPreviousStep: ' + paramPreviousStep });
+            // ------------------------------------------------------------------------------
+            customFieldsValues = params.custpage_newfields || null;
+            log.audit({ title: 'Inicio customFieldsValues', details: customFieldsValues });
+            if (customFieldsValues == null) {
+                var customFieldsValuesAux = [];
+                var fieldResults = getCustomFields();
+                log.debug({title:'fieldResults', details:fieldResults});
+                if (fieldResults.sucess == true) {
+                    for (var fieldLine = 0; fieldLine < fieldResults.data.length; fieldLine++) {
+                        var dataField = fieldResults.data[fieldLine];
+                        // var fieldIdCustom = 'custpage_' + dataField.idTraduccion;
+                        // var lineValidated = {fieldId: , valueSet: ''}
+                        var dato = params['custpage_' + dataField.idTraduccion];
+                        var fieldNetsuite = dataField.idNetsuite;
+                        customFieldsValuesAux.push({fieldId: 'custpage_' + dataField.idTraduccion, value: dato, fieldNetsuite: fieldNetsuite});
+                    }
+                    customFieldsValues = JSON.stringify({data: customFieldsValuesAux});
+                }
+            }
+            log.audit({ title: 'After customFieldsValues', details: customFieldsValues });
+            // ------------------------------------------------------------------------------
 
             var finish = createInterface({});
             //Aqui esta el finish
@@ -409,63 +431,63 @@
      /**
       * Método para agregar los elementos que componen al asistente, en cada uno de sus pasos.
       */
-     function fillAssistant(finish) {
-         try {
-             if (!assistant) {
-                 log.error({ title: 'Assistant - fillAssistant', details: 'Assistant is not inizialitated' });
-                 return null;
-             }
+    function fillAssistant(finish) {
+        try {
+            if (!assistant) {
+                log.error({ title: 'Assistant - fillAssistant', details: 'Assistant is not inizialitated' });
+                return null;
+            }
 
-             var currentStepId = assistant.currentStep == null ? firstId : assistant.currentStep.id;
-             if (currentStepId != firstId) {
-                 addHiddenField("custpage_deductible", paramHasInvoice, ui.FieldType.CHECKBOX);
-                 addHiddenField("custpage_pdf", paramPDf, ui.FieldType.LONGTEXT);
-                 addHiddenField("custpage_finished", paramFinished, ui.FieldType.CHECKBOX);
-                 addHiddenField("custpage_xml", paramXML, ui.FieldType.LONGTEXT);
-             }
+            var currentStepId = assistant.currentStep == null ? firstId : assistant.currentStep.id;
+            if (currentStepId != firstId) {
+                addHiddenField("custpage_deductible", paramHasInvoice, ui.FieldType.CHECKBOX);
+                addHiddenField("custpage_pdf", paramPDf, ui.FieldType.LONGTEXT);
+                addHiddenField("custpage_finished", paramFinished, ui.FieldType.CHECKBOX);
+                addHiddenField("custpage_xml", paramXML, ui.FieldType.LONGTEXT);
+            }
 
-             if (currentStepId != preId) {
-                 addHiddenField("custpage_subsidiary", paramSubsidiary, ui.FieldType.TEXT);
-                 addHiddenField("custpage_expense_report", paramExpense, ui.FieldType.TEXT);
-             }
+            if (currentStepId != preId) {
+                addHiddenField("custpage_subsidiary", paramSubsidiary, ui.FieldType.TEXT);
+                addHiddenField("custpage_expense_report", paramExpense, ui.FieldType.TEXT);
+                addHiddenField("custpage_newfields", customFieldsValues, ui.FieldType.LONGTEXT);
+            }
 
-             var msgs = {
-                 attachfile: getTranslationLabel('attach_file_msg'),
-                 pdftype: getTranslationLabel('pdf_type_msg'),
-                 xmltype: getTranslationLabel('xml_type_msg'),
-                 noallow: getTranslationLabel('no_allow_msg'),
-             };
+            var msgs = {
+                attachfile: getTranslationLabel('attach_file_msg'),
+                pdftype: getTranslationLabel('pdf_type_msg'),
+                xmltype: getTranslationLabel('xml_type_msg'),
+                noallow: getTranslationLabel('no_allow_msg'),
+            };
+            addHiddenField("custpage_trans_msgs", JSON.stringify(msgs), ui.FieldType.LONGTEXT);
 
-             addHiddenField("custpage_trans_msgs", JSON.stringify(msgs), ui.FieldType.LONGTEXT);
+            addHiddenField("custparam_step", currentStepId, ui.FieldType.TEXT);
 
-             addHiddenField("custparam_step", currentStepId, ui.FieldType.TEXT);
+            switch (currentStepId) {
+                case preId:
+                    log.audit({ title: 'fillAssistant', details: 'Pre Step Started' });
+                    preStep();
+                    break;
+                case firstId:
+                    log.audit({ title: 'fillAssistant', details: 'First Step Started' });
+                    firstStep();
+                    break;
+                case secondId:
+                    log.audit({ title: 'fillAssistant', details: 'Second Step Started' });
+                    secondStep();
+                    break;
+                case thirdId:
+                    log.audit({ title: 'fillAssistant', details: 'Third Step Started' });
+                    thirdStep();
+                    break;
+            };
 
-             switch (currentStepId) {
-                 case preId:
-                     log.audit({ title: 'fillAssistant', details: 'Pre Step Started' });
-                     preStep();
-                     break;
-                 case firstId:
-                     log.audit({ title: 'fillAssistant', details: 'First Step Started' });
-                     firstStep();
-                     break;
-                 case secondId:
-                     log.audit({ title: 'fillAssistant', details: 'Second Step Started' });
-                     secondStep();
-                     break;
-                 case thirdId:
-                     log.audit({ title: 'fillAssistant', details: 'Third Step Started' });
-                     thirdStep();
-                     break;
-             };
-
-             return true;
-         }
-         catch (e) {
-             log.error({ title: 'fillAssistant', details: e });
-             return false;
-         }
-     }
+            return true;
+        }
+        catch (e) {
+            log.error({ title: 'fillAssistant', details: e });
+            return false;
+        }
+    }
 
      //Verificar si el UUID ha sido usado anteriormente
      function isUsedUUID(xmlText) {
@@ -1139,171 +1161,137 @@
                 log.audit("subsidiary 1139", subsidiary);
             }
             // Inicio agregar nuevos campos
-            var camposSearch = search.create({
-                type: "customrecord_fb_validator_fields",
-                filters:
-                [
-                   ["isinactive","is","F"]
-                ],
-                columns:
-                [
-                   search.createColumn({
-                      name: "internalid",
-                      sort: search.Sort.ASC,
-                      label: "ID interno"
-                   }),
-                   search.createColumn({name: "custrecord_fb_validator_field_id_trad", label: "Id de traducción"}),
-                   search.createColumn({name: "custrecord_fb_validator_field_id_nets", label: "ID valor a setear"}),
-                   search.createColumn({name: "custrecord_fb_validator_field_type", label: "Tipo de campo"}),
-                   search.createColumn({name: "custrecord_fb_validator_field_type_reg", label: "Lista/Registro"}),
-                   search.createColumn({name: "custrecord_fb_validator_field_mandatory", label: "Obligatorio"}),
-                   search.createColumn({name: "custrecord_fb_validator_field_id_search", label: "ID valor a buscar"}),
-                   search.createColumn({name: "custrecord_fb_validator_field_filters", label: "Filtros sobre el resultado"})
-                ]
-            });
-            var camposResult = camposSearch.runPaged({
-                pageSize: 1000
-            });
-            log.audit("Campos nuevos",camposResult.count);
-            if (camposResult.count > 0) {
-                var dataCampos = [];
-                var infoObj;
-                if (expenseReportId) {
-                    infoObj = record.load({
-                        type: record.Type.EXPENSE_REPORT,
-                        id: expenseReportId
-                    });
-                }
-                camposResult.pageRanges.forEach(function(pageRange){
-                    var myPage = camposResult.fetch({index: pageRange.index});
-                    myPage.data.forEach(function(result){
-                        var idTraduccion = result.getValue({name: 'custrecord_fb_validator_field_id_trad'});
-                        var idNetsuite = result.getValue({name: 'custrecord_fb_validator_field_id_nets'});
-                        var tipoCampo = result.getValue({name: 'custrecord_fb_validator_field_type'});
-                        var listaUse = result.getValue({name: 'custrecord_fb_validator_field_type_reg'}) || '';
-                        var mandatory = result.getValue({name: 'custrecord_fb_validator_field_mandatory'});
-                        var idSearch = result.getValue({name: 'custrecord_fb_validator_field_id_search'});
-                        var extraFilter = result.getValue({name: 'custrecord_fb_validator_field_filters'});
-                        dataCampos.push({idTraduccion: idTraduccion, idNetsuite: idNetsuite, idSearch: idSearch, tipoCampo:tipoCampo, listaUse: listaUse, mandatory: mandatory, filtros: extraFilter});
-                    });
-                });
-                log.audit({title:'dataCampos', details:dataCampos});
-                for (var campoLine = 0; campoLine < dataCampos.length; campoLine++) {
-                    var tipoUse;
-                    var tipoDeCampo = Number(dataCampos[campoLine].tipoCampo);
-                    var isSelect = false;
-                    switch (tipoDeCampo) {
-                        case 35: // Texto Largo
-                            tipoUse = ui.FieldType.LONGTEXT;
-                            break;
-                        case 15: // Zona de Texto
-                            tipoUse = ui.FieldType.TEXTAREA;
-                            break;
-                        case 24: // Texto enriquecido
-                            tipoUse = ui.FieldType.RICHTEXT;
-                            break;
-                        case 1: // Texto de formato libre
-                            tipoUse = ui.FieldType.TEXT;
-                            break;
-                        case 16: // Seleccion multiple
-                            tipoUse = ui.FieldType.MULTISELECT;
-                            isSelect = true;
-                            break;
-                        case 28: // Porcentaje
-                            tipoUse = ui.FieldType.PERCENT;
-                            break;
-                        case 10: // Numero entero
-                            tipoUse = ui.FieldType.INTEGER;
-                            break;
-                        case 8: // Numero decimal
-                            tipoUse = ui.FieldType.FLOAT;
-                            break;
-                        case 3: // Numero de telefono
-                            tipoUse = ui.FieldType.PHONE;
-                            break;
-                        case 6: // Moneda
-                            tipoUse = ui.FieldType.CURRENCY;
-                            break;
-                        case 12: // Lista/Registro
-                            tipoUse = ui.FieldType.SELECT;
-                            isSelect = true;
-                            break;
-                        case 17: // Imagen
-                            tipoUse = ui.FieldType.IMAGE;
-                            break;
-                        case 40: // HTML en linea
-                            tipoUse = ui.FieldType.INLINEHTML;
-                            break;
-                        case 14: // Hora del dia
-                            tipoUse = ui.FieldType.DATETIMETZ;
-                            break;
-                        case 13: // Hipervinculo
-                            tipoUse = ui.FieldType.URL;
-                            break;
-                        case 46: // Fecha/hora
-                            tipoUse = ui.FieldType.DATETIME;
-                            break;
-                        case 4: // Fecha
-                            tipoUse = ui.FieldType.DATE;
-                            break;
-                        case 18: // Documento
-                            tipoUse = ui.FieldType.FILE;
-                            break;
-                        case 2: // Direccion de correo electronico
-                            tipoUse = ui.FieldType.EMAIL;
-                            break;
-                        case 20: // Contraseña
-                            tipoUse = ui.FieldType.PASSWORD;
-                            break;
-                        case 11: // Casilla de verificacion
-                            tipoUse = ui.FieldType.CHECKBOX;
-                            break;
-                        case 23: // Ayuda
-                            tipoUse = ui.FieldType.HELP;
-                            break;
-                        default:
-                            tipoUse = ui.FieldType.TEXT;
-                            break;
-                    }
-                    var fieldCustom;
-                    if (isSelect == true) {
-                        fieldCustom = assistant.addField({
-                            id: 'custpage_' + dataCampos[campoLine].idTraduccion,
-                            type: tipoUse,
-                            label: getTranslationLabel(dataCampos[campoLine].idTraduccion)
-                        });
-                        fieldCustom.addSelectOption({
-                            value: -1,
-                            text: getTranslationLabel('new_text')
-                        });
-                        var searchResult = getDataCustomField(dataCampos[campoLine].listaUse, dataCampos[campoLine].idSearch, dataCampos[campoLine].filtros);
-                        log.debug({title:'searchResult', details:searchResult});
-                        if (searchResult.sucess ==  true) {
-                            for (var i = 0; i < searchResult.data.length; i++) {
-                                fieldCustom.addSelectOption({
-                                    value: searchResult.data[i].id,
-                                    text: searchResult.data[i].value
-                                });
-                            }
-                        }
-                    }else{
-                        fieldCustom = assistant.addField({
-                            id: 'custpage_' + dataCampos[campoLine].idTraduccion,
-                            type: tipoUse,
-                            label: getTranslationLabel(dataCampos[campoLine].idTraduccion)
-                        });
-                        fieldCustom.updateDisplayType({
-                            displayType: ui.FieldDisplayType.NORMAL
-                        });
-                    }
-                    if (dataCampos[campoLine].mandatory == true) {
-                        fieldCustom.isMandatory = true;
-                    }
+            var camposResult = getCustomFields();
+            if (camposResult.sucess == true) {
+                log.audit("Campos nuevos",camposResult.data.length);
+                if (camposResult.data.length > 0) {
+                    var dataCampos = camposResult.data;
+                    
+                    var infoObj;
                     if (expenseReportId) {
-                        fieldCustom.updateDisplayType({
-                            displayType: ui.FieldDisplayType.DISABLED
+                        infoObj = record.load({
+                            type: record.Type.EXPENSE_REPORT,
+                            id: expenseReportId
                         });
-                        fieldCustom.defaultValue = infoObj.getValue({fieldId: dataCampos[campoLine].idNetsuite});;
+                    }
+                    log.audit({title:'dataCampos', details:dataCampos});
+                    for (var campoLine = 0; campoLine < dataCampos.length; campoLine++) {
+                        var tipoUse;
+                        var tipoDeCampo = Number(dataCampos[campoLine].tipoCampo);
+                        var isSelect = false;
+                        switch (tipoDeCampo) {
+                            case 35: // Texto Largo
+                                tipoUse = ui.FieldType.LONGTEXT;
+                                break;
+                            case 15: // Zona de Texto
+                                tipoUse = ui.FieldType.TEXTAREA;
+                                break;
+                            case 24: // Texto enriquecido
+                                tipoUse = ui.FieldType.RICHTEXT;
+                                break;
+                            case 1: // Texto de formato libre
+                                tipoUse = ui.FieldType.TEXT;
+                                break;
+                            case 16: // Seleccion multiple
+                                tipoUse = ui.FieldType.MULTISELECT;
+                                isSelect = true;
+                                break;
+                            case 28: // Porcentaje
+                                tipoUse = ui.FieldType.PERCENT;
+                                break;
+                            case 10: // Numero entero
+                                tipoUse = ui.FieldType.INTEGER;
+                                break;
+                            case 8: // Numero decimal
+                                tipoUse = ui.FieldType.FLOAT;
+                                break;
+                            case 3: // Numero de telefono
+                                tipoUse = ui.FieldType.PHONE;
+                                break;
+                            case 6: // Moneda
+                                tipoUse = ui.FieldType.CURRENCY;
+                                break;
+                            case 12: // Lista/Registro
+                                tipoUse = ui.FieldType.SELECT;
+                                isSelect = true;
+                                break;
+                            case 17: // Imagen
+                                tipoUse = ui.FieldType.IMAGE;
+                                break;
+                            case 40: // HTML en linea
+                                tipoUse = ui.FieldType.INLINEHTML;
+                                break;
+                            case 14: // Hora del dia
+                                tipoUse = ui.FieldType.DATETIMETZ;
+                                break;
+                            case 13: // Hipervinculo
+                                tipoUse = ui.FieldType.URL;
+                                break;
+                            case 46: // Fecha/hora
+                                tipoUse = ui.FieldType.DATETIME;
+                                break;
+                            case 4: // Fecha
+                                tipoUse = ui.FieldType.DATE;
+                                break;
+                            case 18: // Documento
+                                tipoUse = ui.FieldType.FILE;
+                                break;
+                            case 2: // Direccion de correo electronico
+                                tipoUse = ui.FieldType.EMAIL;
+                                break;
+                            case 20: // Contraseña
+                                tipoUse = ui.FieldType.PASSWORD;
+                                break;
+                            case 11: // Casilla de verificacion
+                                tipoUse = ui.FieldType.CHECKBOX;
+                                break;
+                            case 23: // Ayuda
+                                tipoUse = ui.FieldType.HELP;
+                                break;
+                            default:
+                                tipoUse = ui.FieldType.TEXT;
+                                break;
+                        }
+                        var fieldCustom;
+                        if (isSelect == true) {
+                            fieldCustom = assistant.addField({
+                                id: 'custpage_' + dataCampos[campoLine].idTraduccion,
+                                type: tipoUse,
+                                label: getTranslationLabel(dataCampos[campoLine].idTraduccion)
+                            });
+                            fieldCustom.addSelectOption({
+                                value: -1,
+                                text: getTranslationLabel('new_text')
+                            });
+                            var searchResult = getDataCustomField(dataCampos[campoLine].listaUse, dataCampos[campoLine].idSearch, dataCampos[campoLine].filtros);
+                            log.debug({title:'searchResult', details:searchResult});
+                            if (searchResult.sucess ==  true) {
+                                for (var i = 0; i < searchResult.data.length; i++) {
+                                    fieldCustom.addSelectOption({
+                                        value: searchResult.data[i].id,
+                                        text: searchResult.data[i].value
+                                    });
+                                }
+                            }
+                        }else{
+                            fieldCustom = assistant.addField({
+                                id: 'custpage_' + dataCampos[campoLine].idTraduccion,
+                                type: tipoUse,
+                                label: getTranslationLabel(dataCampos[campoLine].idTraduccion)
+                            });
+                            fieldCustom.updateDisplayType({
+                                displayType: ui.FieldDisplayType.NORMAL
+                            });
+                        }
+                        if (dataCampos[campoLine].mandatory == true) {
+                            fieldCustom.isMandatory = true;
+                        }
+                        if (expenseReportId) {
+                            fieldCustom.updateDisplayType({
+                                displayType: ui.FieldDisplayType.DISABLED
+                            });
+                            fieldCustom.defaultValue = infoObj.getValue({fieldId: dataCampos[campoLine].idNetsuite});;
+                        }
                     }
                 }
             }
@@ -1674,6 +1662,8 @@
 
             var objRecord = null;
             var userObj = runtime.getCurrentUser();
+            customFieldsValues = JSON.parse(customFieldsValues);
+            log.debug({title:'customFieldsValues Final', details:customFieldsValues});
             if (paramExpense == -1) {
                 var idAuthor = userObj.id;
 
@@ -1699,6 +1689,18 @@
                     fieldId: 'complete',
                     value: false
                 });
+                if (customFieldsValues.data) {
+                    customFieldsValues = customFieldsValues.data;
+                    log.debug({title:'customFieldsValues Final After', details:customFieldsValues});
+                    for (var cstfldLine = 0; cstfldLine < customFieldsValues.length; cstfldLine++) {
+                        var field = customFieldsValues[cstfldLine];
+                        log.debug({title:'set field custom value', details:field});
+                        objRecord.setValue({
+                            fieldId: field.fieldNetsuite,
+                            value: field.value
+                        });
+                    }
+                }
             }else {
                 log.audit({ title: '+++++++++++++++++ ENTRO RECORD LOAD +++++++++++++++++', details: '+++++++++++++++++ ENTRO RECORD LOAD +++++++++++++++++' });
                 objRecord = record.load({
@@ -2372,6 +2374,61 @@
             resultLabel = resultData[0].getValue({ name: idLanguage }) || 'No Label';;
         }
         return resultLabel;
+    }
+
+    function getCustomFields() {
+        var dataReturn = {sucess: false, error: '', data: []}
+        try {
+            var camposSearch = search.create({
+                type: "customrecord_fb_validator_fields",
+                filters:
+                [
+                   ["isinactive","is","F"]
+                ],
+                columns:
+                [
+                   search.createColumn({
+                      name: "internalid",
+                      sort: search.Sort.ASC,
+                      label: "ID interno"
+                   }),
+                   search.createColumn({name: "custrecord_fb_validator_field_id_trad", label: "Id de traducción"}),
+                   search.createColumn({name: "custrecord_fb_validator_field_id_nets", label: "ID valor a setear"}),
+                   search.createColumn({name: "custrecord_fb_validator_field_type", label: "Tipo de campo"}),
+                   search.createColumn({name: "custrecord_fb_validator_field_type_reg", label: "Lista/Registro"}),
+                   search.createColumn({name: "custrecord_fb_validator_field_mandatory", label: "Obligatorio"}),
+                   search.createColumn({name: "custrecord_fb_validator_field_id_search", label: "ID valor a buscar"}),
+                   search.createColumn({name: "custrecord_fb_validator_field_filters", label: "Filtros sobre el resultado"})
+                ]
+            });
+            var camposResult = camposSearch.runPaged({
+                pageSize: 1000
+            });
+            if (camposResult.count > 0) {
+                var dataCampos = [];
+                camposResult.pageRanges.forEach(function(pageRange){
+                    var myPage = camposResult.fetch({index: pageRange.index});
+                    myPage.data.forEach(function(result){
+                        var idTraduccion = result.getValue({name: 'custrecord_fb_validator_field_id_trad'});
+                        var idNetsuite = result.getValue({name: 'custrecord_fb_validator_field_id_nets'});
+                        var tipoCampo = result.getValue({name: 'custrecord_fb_validator_field_type'});
+                        var listaUse = result.getValue({name: 'custrecord_fb_validator_field_type_reg'}) || '';
+                        var mandatory = result.getValue({name: 'custrecord_fb_validator_field_mandatory'});
+                        var idSearch = result.getValue({name: 'custrecord_fb_validator_field_id_search'});
+                        var extraFilter = result.getValue({name: 'custrecord_fb_validator_field_filters'});
+                        dataCampos.push({idTraduccion: idTraduccion, idNetsuite: idNetsuite, idSearch: idSearch, tipoCampo:tipoCampo, listaUse: listaUse, mandatory: mandatory, filtros: extraFilter});
+                    });
+                });
+                log.audit({title:'dataCampos', details:dataCampos});
+            }
+            dataReturn.sucess = true;
+            dataReturn.data = dataCampos;
+        } catch (error) {
+            log.error({title:'getCustomFields', details:error});
+            dataReturn.sucess = false;
+            dataReturn.error = error;
+        }
+        return dataReturn;
     }
 
     return {

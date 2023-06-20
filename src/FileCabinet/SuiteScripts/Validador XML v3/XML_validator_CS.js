@@ -1,5 +1,5 @@
 /**
- *@NApiVersion 2.x
+ *@NApiVersion 2.1
  *@NScriptType ClientScript
  */
 define(['N/search', 'N/record'], function(search, record) {
@@ -69,7 +69,6 @@ define(['N/search', 'N/record'], function(search, record) {
             fieldId: 'custpage_expense_report'
         });
         var customData = customFieldsData();
-        console.log('CustomData', customData);
         if(id != -1){
             var objRecord = record.load({
                 type: record.Type.EXPENSE_REPORT, 
@@ -118,7 +117,11 @@ define(['N/search', 'N/record'], function(search, record) {
             if (customData.sucess == true) {
                 for (var newLineField = 0; newLineField < customData.data.length; newLineField++) {
                     var lineValues = customData.data[newLineField];
-                    lineValues['valorNetsuite'] = '';
+                    if (lineValues.isSelect) {
+                        lineValues['valorNetsuite'] = -1;
+                    }else{
+                        lineValues['valorNetsuite'] = '';
+                    }
                     lineValues['isDisabled'] = false;
                     customData.data[newLineField] = lineValues;
                 }
@@ -152,21 +155,17 @@ define(['N/search', 'N/record'], function(search, record) {
             fieldId: 'custpage_summary_amount',
             value: amount || '0.0'
         });
-        console.log('DataFound', customData)
         if (customData.sucess == true) {
-            for (var newLineField = 0; newLineField < customData.data.length; newLineField++) {
-                var lineValues = customData.data[newLineField];
-                currentRecord.setValue({
-                    fieldId: 'custpage_' + lineValues.idTraduccion,
-                    value: lineValues.valorNetsuite
-                });
-                var campoinput = document.getElementById('custpage_' + lineValues.idTraduccion);
+            customData.data.forEach(lineValues=>{
+                console.log(lineValues);
+                currentRecord.setValue({fieldId: `custpage_${lineValues.idTraduccion}`, value: lineValues.valorNetsuite});
+                var customField = currentRecord.getField({fieldId: `custpage_${lineValues.idTraduccion}`});
                 if (lineValues.isDisabled == true) {
-                    campoinput.disabled = true;
+                    customField.isDisabled = true;
                 }else{
-                    campoinput.disabled = false;
+                    customField.isDisabled = false;
                 }
-            }
+            })
         }
     }
 
@@ -211,7 +210,12 @@ define(['N/search', 'N/record'], function(search, record) {
                         var mandatory = result.getValue({name: 'custrecord_fb_validator_field_mandatory'});
                         var idSearch = result.getValue({name: 'custrecord_fb_validator_field_id_search'});
                         var extraFilter = result.getValue({name: 'custrecord_fb_validator_field_filters'});
-                        dataCampos.push({idTraduccion: idTraduccion, idNetsuite: idNetsuite, idSearch: idSearch, tipoCampo:tipoCampo, listaUse: listaUse, mandatory: mandatory, filtros: extraFilter});
+                        var tipoDeCampo = Number(tipoCampo);
+                        var isSelect = false;
+                        if (tipoDeCampo == 16 || tipoDeCampo == 12) {
+                            isSelect = true;
+                        }
+                        dataCampos.push({idTraduccion: idTraduccion, idNetsuite: idNetsuite, idSearch: idSearch, tipoCampo:tipoCampo, listaUse: listaUse, mandatory: mandatory, filtros: extraFilter, isSelect: isSelect});
                     });
                 });
                 console.log({title:'dataCampos', details:dataCampos});
