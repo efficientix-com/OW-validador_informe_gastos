@@ -413,13 +413,16 @@
                 assistant.currentStep = assistant.getNextStep();
             }else if (action == ui.AssistantSubmitAction.FINISH) {
                 log.audit('FINISH', 'Finish action');
-                finish();
-                redirect.toSuitelet({
-                    scriptId: 'customscript_xml_val_sl',
-                    deploymentId: 'customdeploy_xml_val_sl',
-                    parameters: { hasER: true, er: expenseReportId }
-                });
-                return true;
+                var finishResult = finish();
+                log.audit({title:'FinishResult', details:finishResult});
+                if (finishResult.sucess == true) {
+                    redirect.toSuitelet({
+                        scriptId: 'customscript_xml_val_sl',
+                        deploymentId: 'customdeploy_xml_val_sl',
+                        parameters: { hasER: true, er: expenseReportId }
+                    });
+                    return true;
+                }
             }
             return end;
         }
@@ -1653,11 +1656,14 @@
      }
 
     function finish() {
+        var dataReturn = {sucess: false, error: ''};
         try {
         log.debug({title:'paramExpenses', details:paramExpense});
             if (!paramExpense) {
                 log.error({ title: 'finish', details: paramExpense + ' is not fill.' });
-                return "Ha fallado la actualización de reportes de gastos."
+                dataReturn.error = "Ha fallado la actualización de reportes de gastos."
+                dataReturn.sucess = false;
+                return dataReturn;
             }
 
             var objRecord = null;
@@ -1689,6 +1695,10 @@
                     fieldId: 'complete',
                     value: false
                 });
+                objRecord.setValue({
+                    fieldId: 'nexus',
+                    value: 1
+                });
                 if (customFieldsValues.data) {
                     customFieldsValues = customFieldsValues.data;
                     log.debug({title:'customFieldsValues Final After', details:customFieldsValues});
@@ -1715,7 +1725,9 @@
 
             if (!objRecord) {
                 log.error({ title: 'finish', details: objRecord + ' objRecord is not fill.' });
-                return "Ha fallado la actualización de reportes de gastos.";
+                dataReturn.error = "Ha fallado la actualización de reportes de gastos.";
+                dataReturn.sucess = false;
+                return dataReturn;
             }
 
             var numLine = objRecord.getLineCount({
@@ -1734,7 +1746,9 @@
 
                 if (!paramXML) {
                     log.error({ title: 'finish', details: 'ParamXML is empty!' });
-                    return;
+                    dataReturn.error = 'El XML se encuentra vacio';
+                    dataReturn.sucess = false;
+                    return dataReturn;
                 }
                 var xmlText = readFile(paramXML.id);
                 log.audit("xmlText", xmlText);
@@ -1901,13 +1915,7 @@
                 value: paramCategory,
                 ignoreFieldChange: false
             });
-
-
-
-
             log.audit("userObj", userObj);
-
-
             var userEmployee = record.load({
                 type: record.Type.EMPLOYEE,
                 id: userObj.id,
@@ -1916,13 +1924,11 @@
             var currency = userEmployee.getValue({
                 fieldId: 'currency'
             });
-
             if (!currency) {
                 currency = userEmployee.getValue({
                     fieldId: 'defaultexpensereportcurrency'
                 });
             }
-
             log.audit("currency", currency);
             objRecord.setCurrentSublistValue({
                 sublistId: 'expense',
@@ -1937,8 +1943,6 @@
                 value: paramPDf.id,
                 ignoreFieldChange: false
             });
-
-
             // objRecord.setCurrentSublistValue({
             //     sublistId: 'expense',
             //     fieldId: 'foreignamount',
@@ -1958,10 +1962,6 @@
 
             var taxgrpfletes = runtime.getCurrentScript().getParameter({ name: 'custscript_efx_taxcode_flete' });
             log.audit({ title: 'ID DE GRUPO DE IMPUESTOS PARA PROV. PEDIENTES DE PAGO', details: taxgrpfletes });
-
-            // var dif = total_linea - subTotal;
-            // log.audit({title: '000000000000000 DIFERENCIA A PONER 0000000000000000', details:dif});
-
             log.audit({ title: 'Valor de paramCategory antes de evaluar switch', details: paramCategory });
             log.audit({ title: 'type of paramCategory', details: typeof (paramCategory) });
 
@@ -2003,37 +2003,12 @@
                 value: taxCode,
                 ignoreFieldChange: false
             });
-
-            // objRecord.setCurrentSublistValue({
-            //     sublistId: 'expense',
-            //     fieldId: 'tax1amt',
-            //     value: montoIva,
-            //     ignoreFieldChange: false
-            // });
-
-
-
-
             objRecord.setCurrentSublistValue({
                 sublistId: 'expense',
                 fieldId: 'amount',
                 value: subTotal,
                 ignoreFieldChange: false
             });
-
-
-            // log.audit({title: 'VALUE A PONER EN GROSSAMT con no ignore', details:total_linea});
-            //
-            // objRecord.setCurrentSublistValue({
-            //     sublistId: 'expense',
-            //     fieldId: 'grossamt',
-            //     value: total_linea,
-            //     ignoreFieldChange: false
-            // });
-
-
-
-
             objRecord.setCurrentSublistValue({
                 sublistId: 'expense',
                 fieldId: 'custcol_xml_from_assistant',
@@ -2046,12 +2021,6 @@
                 value: paramNotes,
                 ignoreFieldChange: false
             });
-            // objRecord.setCurrentSublistValue({
-            //     sublistId: 'expense',
-            //     fieldId: 'customer',
-            //     value: paramCustomer,
-            //     ignoreFieldChange: false
-            // });
             if (paramHasInvoice == 'T') {
                 objRecord.setCurrentSublistValue({
                     sublistId: 'expense',
@@ -2115,24 +2084,18 @@
 
             if (paramExpense == -1) {
                 log.audit({ title: 'IF verdadero', details: paramExpense });
-
                 objRecord.setValue({
                     fieldId: 'advance',
                     value: parse
                 });
-
             } else {
-
                 var Totaltotal = 0;
-
                 var exp = record.load({
                     type: record.Type.EXPENSE_REPORT,
                     id: paramExpense,
                     isDynamic: true,
                 });
-
                 var rersp = exp.getLineCount('expense');
-
                 for (var i = 0; i < rersp; i++) {
 
                     cantAjus = exp.getSublistValue({
@@ -2150,32 +2113,83 @@
                     Totaltotal = Totaltotal + ma;
 
                 }
-
-
-
-
-
-
                 var Totalmath = Math.round(Totaltotal * 100) / 100;
-
                 var advance = Totalmath + parse;
-
                 var advancema = Math.round(advance * 100) / 100;
-
                 objRecord.setValue({
                     fieldId: 'advance',
                     value: advancema
                 });
-
-
                 log.audit({ title: 'advance', details: advancema });
                 log.audit({ title: 'Totaltotal', details: Totalmath });
                 log.audit({ title: 'subTotal', details: subTotal });
-
                 log.audit({ title: 'rersp', details: rersp });
                 log.audit({ title: 'IF falso', details: paramExpense });
             }
 
+            // ---------------------------------------------------------------------------
+            if (paramHasInvoice == 'T') {
+                var taxDataResult = getTaxesXML(paramXML.id);
+                log.debug({title:'taxDataResult', details:taxDataResult});
+                if (taxDataResult.sucess == false) {
+                    log.error({ title: 'finish', details: taxDataResult.error });
+                    dataReturn.error = taxDataResult.error;
+                    dataReturn.sucess = false;
+                    return dataReturn;
+                }else{
+                    var totalLinesExpense = objRecord.getLineCount({
+                        sublistId: 'expense'
+                    });
+                    log.debug({title:'numexpense', details:totalLinesExpense});
+                    var taxReference = objRecord.getSublistValue({
+                        sublistId: 'expense',
+                        fieldId: 'taxdetailsreference',
+                        line: totalLinesExpense-1
+                    });
+                    log.debug({title:'taxReference', details:taxReference});
+                    for (var taxLine = 0; taxLine < taxDataResult.data.length; taxLine++) {
+                        var datosSet = taxDataResult.data[taxLine];
+                        log.debug({title:'datosSet', details:datosSet});
+                        objRecord.selectNewLine({
+                            sublistId: 'taxdetails'
+                        });
+                        objRecord.setCurrentSublistValue({
+                            sublistId: 'taxdetails',
+                            fieldId: 'taxdetailsreference',
+                            value: taxReference,
+                        });
+                        objRecord.setCurrentSublistValue({
+                            sublistId: 'taxdetails',
+                            fieldId: 'taxtype',
+                            value: datosSet.taxtype,
+                        });
+                        objRecord.setCurrentSublistValue({
+                            sublistId: 'taxdetails',
+                            fieldId: 'taxcode',
+                            value: datosSet.taxid,
+                        });
+                        objRecord.setCurrentSublistValue({
+                            sublistId: 'taxdetails',
+                            fieldId: 'taxbasis',
+                            value: datosSet.base,
+                        });
+                        objRecord.setCurrentSublistValue({
+                            sublistId: 'taxdetails',
+                            fieldId: 'taxrate',
+                            value: datosSet.porcenttasa,
+                        });
+                        objRecord.setCurrentSublistValue({
+                            sublistId: 'taxdetails',
+                            fieldId: 'taxamount',
+                            value: datosSet.importe,
+                        });
+                        var numExpense = objRecord.commitLine({
+                            sublistId: 'taxdetails'
+                        });
+                    }
+                }
+            }
+            // ---------------------------------------------------------------------------
 
 
             //TODO: incrementar valor de línea
@@ -2221,13 +2235,237 @@
                 });
             }
 
-            return "Se ha concluido satisfactoriamente el proceso!";
-
+            // return "Se ha concluido satisfactoriamente el proceso!";
+            dataReturn.sucess = true;
         } catch (e) {
             log.error({ title: 'finish', details: e });
-            return "Ha ocurrido un error al intentar insertar la información."
-            throw "Ha ocurrido un error.";
+            dataReturn.error = "Ha ocurrido un error al intentar insertar la información. Catch"
+            dataReturn.sucess = false;
+            return dataReturn;
+            // throw "Ha ocurrido un error.";
         }
+        return dataReturn;
+    }
+
+    function getTaxesXML(xmlId) {
+        var dataReturn = {sucess: false, error: '', data: []};
+        try {
+            var scriptObj = runtime.getCurrentScript();
+            log.debug('Remaining governance units: ' + scriptObj.getRemainingUsage());
+            log.debug({title:'xmlID', details:xmlId});
+            var xmlText = readFile(xmlId);
+            var xml_vars = xml.Parser.fromString({
+                text: xmlText
+            });
+            log.audit({
+                title: "xml_vars",
+                details: xml_vars
+            });
+            // ---------------------Impuestos resumen---------------------
+            var nodoImpuestosRes = xml.XPath.select({
+                node: xml_vars,
+                xpath: 'cfdi:Comprobante//cfdi:Impuestos//cfdi:Traslados//cfdi:Traslado'
+            });
+            log.debug({title:'nodoImpuestosRes.length', details:nodoImpuestosRes.length});
+            var impuestosXML = [];
+            for (var index = 0; index < nodoImpuestosRes.length; index++) {
+                // log.audit({title:'anyProveedor1_index: ' + index, details:nodoImpuestosRes[index]});
+                var impuesto = nodoImpuestosRes[index].getAttributeNode({
+                    name: 'Impuesto'
+                });
+                impuesto = impuesto.value;
+                var base = nodoImpuestosRes[index].getAttributeNode({
+                    name: 'Base'
+                });
+                base = base.value;
+                var factor = nodoImpuestosRes[index].getAttributeNode({
+                    name: 'TipoFactor'
+                });
+                factor = factor.value;
+                var tasaOCuota = nodoImpuestosRes[index].getAttributeNode({
+                    name: 'TasaOCuota'
+                });
+                tasaOCuota = tasaOCuota.value;
+                var importe = nodoImpuestosRes[index].getAttributeNode({
+                    name: 'Importe'
+                });
+                importe = importe.value;
+                var datosLine = {
+                    impuesto: impuesto,
+                    base: base,
+                    factor: factor,
+                    tasaOCuota: tasaOCuota,
+                    importe: importe,
+                    taxid: '',
+                    taxtype: '',
+                    porcenttasa: ''
+                }
+                impuestosXML.push(datosLine);
+                // log.audit({ title: 'Data impuestos index: ' + index, details: JSON.stringify(datosLine)});
+            }
+            impuestosXML = impuestosXML.reverse();
+            log.debug({title:'impuestosXML_resumen', details:impuestosXML});
+            var impuestosClear = [];
+            var impuestosCodes = [];
+            var impuestoAux = [];
+            for (var index = 0; index < impuestosXML.length; index++) {
+                var dataLine = impuestosXML[index];
+                var impuesto_xml = dataLine.impuesto;
+                var tasaOCuota_xml = dataLine.tasaOCuota;
+                var datAux = impuesto_xml + tasaOCuota_xml;
+                if (impuestoAux.indexOf(datAux) == -1) { // Impuesto no guardado 
+                    impuestoAux.push(datAux);
+                    impuestosClear.push(dataLine);
+                    impuestosCodes.push(impuesto_xml);
+                }
+            }
+            log.debug({title:'impuestos en resumen', details:impuestosClear});
+            // ---------------------Impuestos locales---------------------
+            var nodoImpuestosLoc = xml.XPath.select({
+                node: xml_vars,
+                xpath: 'cfdi:Comprobante//cfdi:Complemento//implocal:ImpuestosLocales//implocal:TrasladosLocales'
+            });
+            log.debug({title:'nodoImpuestosLoc.length', details:nodoImpuestosLoc.length});
+            for (var index = 0; index < nodoImpuestosLoc.length; index++) {
+                var locTrasladado = nodoImpuestosLoc[index].getAttributeNode({
+                    name: 'ImpLocTrasladado'
+                });
+                locTrasladado = locTrasladado.value;
+                var tasadeTraslado = nodoImpuestosLoc[index].getAttributeNode({
+                    name: 'TasadeTraslado'
+                });
+                tasadeTraslado = tasadeTraslado.value;
+                var importe = nodoImpuestosLoc[index].getAttributeNode({
+                    name: 'Importe'
+                });
+                importe = importe.value;
+                var porcentAux = parseFloat(tasadeTraslado/100);
+                var base = Number(importe) / Number(porcentAux);
+                base = base.toFixed(2);
+
+                var datosLine = {
+                    locTrasladado: locTrasladado,
+                    tasadeTraslado: tasadeTraslado,
+                    base: base,
+                    importe: importe,
+                    taxid: '',
+                    taxtype: '',
+                    porcenttasa: ''
+                }
+                impuestosClear.push(datosLine);
+                impuestosCodes.push(locTrasladado);
+                // log.audit({ title: 'Data Local index: ' + index, details: JSON.stringify(datosLine)});
+            }
+            log.debug({title:'impuestosXML_con_Locales', details:impuestosClear});
+            // ---------------------Impuestos con ID's de Netsuite---------------------
+            log.debug({title:'impuestosSearch', details:impuestosCodes});
+            var taxFiltersAux = [];
+            for (var filterLine = 0; filterLine < impuestosCodes.length; filterLine++) {
+                taxFiltersAux.push(["custrecord_fb_codigo_sat.custrecord_fb_cofido_sat_codigo","is",impuestosCodes[filterLine]]);
+                if (filterLine < (impuestosCodes.length - 1)) {
+                    taxFiltersAux.push("OR");
+                }
+            }
+            var taxFilters = [["isinactive","is","F"], "AND", taxFiltersAux];
+            log.debug({title:'taxFilters', details:taxFilters});
+            var salestaxitemSearchObj = search.create({
+                type: search.Type.SALES_TAX_ITEM,
+                filters: taxFilters,
+                columns:
+                [
+                   search.createColumn({
+                      name: "internalid",
+                      sort: search.Sort.ASC,
+                      label: "ID interno"
+                   }),
+                   search.createColumn({name: "name", label: "Nombre"}),
+                   search.createColumn({name: "taxtype", label: "Tipo de impuesto"}),
+                   search.createColumn({name: "custrecord_ste_taxcode_ratetype", label: "Tax Rate Type"}),
+                   search.createColumn({name: "custrecord_fb_codigo_sat", label: "Codigo SAT"}),
+                   search.createColumn({
+                      name: "custrecord_fb_cofido_sat_codigo",
+                      join: "CUSTRECORD_FB_CODIGO_SAT",
+                      label: "Codigo en XML"
+                   }),
+                   search.createColumn({
+                      name: "custrecord_fb_codigos_sat_tasa",
+                      join: "CUSTRECORD_FB_CODIGO_SAT",
+                      label: "Tasa"
+                   })
+                ]
+            });
+            var taxResult = salestaxitemSearchObj.runPaged({
+                pageSize: 1000
+            });
+            log.debug({title:'taxResult.count', details:taxResult.count});
+            if (taxResult.count > 0) {
+                var taxesData = [];
+                taxResult.pageRanges.forEach(function(pageRange){
+                    var myPage = taxResult.fetch({index: pageRange.index});
+                    myPage.data.forEach(function(result){
+                        var taxId = result.getValue({name: 'internalid'});
+                        var taxName = result.getValue({name: 'name'});
+                        var taxType = result.getValue({name: 'taxtype'});
+                        var taxCodeSat = result.getValue({name: 'custrecord_fb_codigo_sat'});
+                        var taxCodeXML = result.getValue({
+                            name: "custrecord_fb_cofido_sat_codigo",
+                            join: "CUSTRECORD_FB_CODIGO_SAT"
+                        });
+                        var taxCodeTasa = result.getValue({
+                            name: "custrecord_fb_codigos_sat_tasa",
+                            join: "CUSTRECORD_FB_CODIGO_SAT"
+                        });
+                        var taxObj = {
+                            taxId: taxId,
+                            taxName: taxName,
+                            taxType: taxType,
+                            taxCodeSat: taxCodeSat,
+                            taxCodeXML: taxCodeXML,
+                            taxCodeTasa: taxCodeTasa
+                        };
+                        taxesData.push(taxObj);
+                        // log.debug({title:'taxObj', details:taxObj});
+                    });
+                });
+                log.audit({title:'taxesData', details:taxesData});
+                log.debug({title:'impuestosXML_con_Locales 2433', details:impuestosClear});
+                for (var lineI = 0; lineI < impuestosClear.length; lineI++) {
+                    var impuestoCode, impuestoTasa;
+                    if (impuestosClear[lineI].impuesto) { // es Impuesto
+                        impuestoCode = impuestosClear[lineI].impuesto;
+                        impuestoTasa = Number(impuestosClear[lineI].tasaOCuota);
+                        impuestoTasa = impuestoTasa * 100;
+                    }else if(impuestosClear[lineI].locTrasladado){ // es impuesto local
+                        impuestoCode = impuestosClear[lineI].locTrasladado;
+                        impuestoTasa = Number(impuestosClear[lineI].tasadeTraslado);
+                    }
+                    log.debug({title:'Datos de impuesto lineI: ' + lineI, details:{impuestoCode: impuestoCode, impuestoTasa: impuestoTasa}});
+                    for (var lineJ = 0; lineJ < taxesData.length; lineJ++) {
+                        var nestuiteCode = taxesData[lineJ].taxCodeXML;
+                        var netsuiteTasa = taxesData[lineJ].taxCodeTasa;
+                        netsuiteTasa = netsuiteTasa.replace(/%/g, '');
+                        netsuiteTasa = Number(netsuiteTasa);
+                        log.debug({title:'Datos de netsuite lineJ: ' + lineJ, details:{nestuiteCode: nestuiteCode, netsuiteTasa: netsuiteTasa}});
+                        if (nestuiteCode == impuestoCode && netsuiteTasa == impuestoTasa) {
+                            var taxId = taxesData[lineJ].taxId;
+                            var taxType = taxesData[lineJ].taxType;
+                            impuestosClear[lineI].taxid = taxId;
+                            impuestosClear[lineI].taxtype = taxType;
+                            impuestosClear[lineI].porcenttasa = netsuiteTasa;
+                            break;
+                        }
+                    }
+                }
+                log.debug({title:'impuestosXML_clear', details:impuestosClear});
+                dataReturn.sucess = true;
+                dataReturn.data = impuestosClear;
+            }
+        } catch (error) {
+            log.error({title:'getTaxesXML', details:error});
+            dataReturn.sucess=false;
+            dataReturn.error=error;
+        }
+        return dataReturn;
     }
 
      function getCreateFolder(idReport) {

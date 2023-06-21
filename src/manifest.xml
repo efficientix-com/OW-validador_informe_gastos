@@ -16,9 +16,11 @@
       <feature required="false">MAILMERGE</feature>
       <feature required="true">CUSTOMRECORDS</feature>
       <feature required="false">TIMETRACKING</feature>
+      <feature required="false">PERIODENDJOURNALENTRIES</feature>
       <feature required="false">WEBSITE</feature>
       <feature required="true">SERVERSIDESCRIPTING</feature>
       <feature required="false">PAYCHECKJOURNAL</feature>
+      <feature required="false">OPPORTUNITIES</feature>
       <feature required="false">CUSTOMSEGMENTS</feature>
       <feature required="false">WORKORDERS</feature>
       <feature required="false">CREATESUITEBUNDLES</feature>
