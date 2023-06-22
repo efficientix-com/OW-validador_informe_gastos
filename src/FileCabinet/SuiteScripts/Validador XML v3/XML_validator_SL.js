@@ -2137,61 +2137,114 @@
                     dataReturn.sucess = false;
                     return dataReturn;
                 }else{
-                    var totalLinesExpense = objRecord.getLineCount({
-                        sublistId: 'expense'
-                    });
-                    log.debug({title:'numexpense', details:totalLinesExpense});
-                    var taxReference = objRecord.getSublistValue({
-                        sublistId: 'expense',
-                        fieldId: 'taxdetailsreference',
-                        line: totalLinesExpense-1
-                    });
-                    log.debug({title:'taxReference', details:taxReference});
-                    for (var taxLine = 0; taxLine < taxDataResult.data.length; taxLine++) {
-                        var datosSet = taxDataResult.data[taxLine];
-                        log.debug({title:'datosSet', details:datosSet});
-                        objRecord.selectNewLine({
-                            sublistId: 'taxdetails'
+                    if (taxDataResult.dataTax.length) {
+                        var totalLinesExpense = objRecord.getLineCount({
+                            sublistId: 'expense'
                         });
-                        objRecord.setCurrentSublistValue({
-                            sublistId: 'taxdetails',
+                        log.debug({title:'numexpense', details:totalLinesExpense});
+                        var taxReference = objRecord.getSublistValue({
+                            sublistId: 'expense',
                             fieldId: 'taxdetailsreference',
-                            value: taxReference,
+                            line: totalLinesExpense-1
                         });
-                        objRecord.setCurrentSublistValue({
-                            sublistId: 'taxdetails',
-                            fieldId: 'taxtype',
-                            value: datosSet.taxtype,
-                        });
-                        objRecord.setCurrentSublistValue({
-                            sublistId: 'taxdetails',
-                            fieldId: 'taxcode',
-                            value: datosSet.taxid,
-                        });
-                        objRecord.setCurrentSublistValue({
-                            sublistId: 'taxdetails',
-                            fieldId: 'taxbasis',
-                            value: datosSet.base,
-                        });
-                        objRecord.setCurrentSublistValue({
-                            sublistId: 'taxdetails',
-                            fieldId: 'taxrate',
-                            value: datosSet.porcenttasa,
-                        });
-                        objRecord.setCurrentSublistValue({
-                            sublistId: 'taxdetails',
-                            fieldId: 'taxamount',
-                            value: datosSet.importe,
-                        });
-                        var numExpense = objRecord.commitLine({
-                            sublistId: 'taxdetails'
-                        });
+                        log.debug({title:'taxReference', details:taxReference});
+                        for (var taxLine = 0; taxLine < taxDataResult.dataTax.length; taxLine++) {
+                            var datosSet = taxDataResult.dataTax[taxLine];
+                            // log.debug({title:'datosSet', details:datosSet});
+                            objRecord.selectNewLine({
+                                sublistId: 'taxdetails'
+                            });
+                            objRecord.setCurrentSublistValue({
+                                sublistId: 'taxdetails',
+                                fieldId: 'taxdetailsreference',
+                                value: taxReference,
+                            });
+                            objRecord.setCurrentSublistValue({
+                                sublistId: 'taxdetails',
+                                fieldId: 'taxtype',
+                                value: datosSet.taxtype,
+                            });
+                            objRecord.setCurrentSublistValue({
+                                sublistId: 'taxdetails',
+                                fieldId: 'taxcode',
+                                value: datosSet.taxid,
+                            });
+                            objRecord.setCurrentSublistValue({
+                                sublistId: 'taxdetails',
+                                fieldId: 'taxbasis',
+                                value: datosSet.base,
+                            });
+                            objRecord.setCurrentSublistValue({
+                                sublistId: 'taxdetails',
+                                fieldId: 'taxrate',
+                                value: datosSet.porcenttasa,
+                            });
+                            objRecord.setCurrentSublistValue({
+                                sublistId: 'taxdetails',
+                                fieldId: 'taxamount',
+                                value: datosSet.importe,
+                            });
+                            var numExpense = objRecord.commitLine({
+                                sublistId: 'taxdetails'
+                            });
+                        }
+                    }
+                    if (taxDataResult.dataReten.length) {
+                        var catRetencion = runtime.getCurrentScript().getParameter({ name: 'custscript_fb_cat_reten' });
+                        log.audit({ title: 'catRetencion', details: catRetencion });
+                        for (var retenLine = 0; retenLine < taxDataResult.dataReten.length; retenLine++) {
+                            objRecord.selectNewLine({
+                                sublistId: 'expense'
+                            });
+                            objRecord.setCurrentSublistValue({
+                                sublistId: 'expense',
+                                fieldId: 'category',
+                                value: catRetencion,
+                                ignoreFieldChange: false
+                            });
+                            objRecord.setCurrentSublistValue({
+                                sublistId: 'expense',
+                                fieldId: 'currency',
+                                value: currency,
+                                ignoreFieldChange: false
+                            });
+                            objRecord.setCurrentSublistValue({
+                                sublistId: 'expense',
+                                fieldId: 'amount',
+                                value: taxDataResult.dataReten[retenLine].importe,
+                                ignoreFieldChange: false
+                            });
+                            objRecord.setCurrentSublistValue({
+                                sublistId: 'expense',
+                                fieldId: 'custcol_xml_from_assistant',
+                                value: true,
+                                ignoreFieldChange: false
+                            });
+                            objRecord.setCurrentSublistValue({
+                                sublistId: 'expense',
+                                fieldId: 'memo',
+                                value: paramNotes,
+                                ignoreFieldChange: false
+                            });
+                            if (paramHasInvoice == 'T') {
+                                objRecord.setCurrentSublistValue({
+                                    sublistId: 'expense',
+                                    fieldId: 'custcol_xml_uuid',
+                                    value: uuid,
+                                    ignoreFieldChange: false
+                                });
+                            }
+                            var numExpense = objRecord.commitLine({
+                                sublistId: 'expense'
+                            });
+                        }
                     }
                 }
             }
             // ---------------------------------------------------------------------------
 
-
+            // dataReturn.sucess = false;
+            // return dataReturn;
             //TODO: incrementar valor de línea
             var recordId = objRecord.save({
                 enableSourcing: true,
@@ -2248,7 +2301,7 @@
     }
 
     function getTaxesXML(xmlId) {
-        var dataReturn = {sucess: false, error: '', data: []};
+        var dataReturn = {sucess: false, error: '', dataTax: [], dataReten: []};
         try {
             var scriptObj = runtime.getCurrentScript();
             log.debug('Remaining governance units: ' + scriptObj.getRemainingUsage());
@@ -2321,10 +2374,16 @@
             }
             log.debug({title:'impuestos en resumen', details:impuestosClear});
             // ---------------------Impuestos locales---------------------
-            var nodoImpuestosLoc = xml.XPath.select({
-                node: xml_vars,
-                xpath: 'cfdi:Comprobante//cfdi:Complemento//implocal:ImpuestosLocales//implocal:TrasladosLocales'
-            });
+            var nodoImpuestosLoc
+            try {
+                nodoImpuestosLoc = xml.XPath.select({
+                    node: xml_vars,
+                    xpath: 'cfdi:Comprobante//cfdi:Complemento//implocal:ImpuestosLocales//implocal:TrasladosLocales'
+                });
+            } catch (error) {
+                nodoImpuestosLoc = [];
+                log.error({title:'ErrorControlado no impuesto local', details:error});
+            }
             log.debug({title:'nodoImpuestosLoc.length', details:nodoImpuestosLoc.length});
             for (var index = 0; index < nodoImpuestosLoc.length; index++) {
                 var locTrasladado = nodoImpuestosLoc[index].getAttributeNode({
@@ -2439,13 +2498,13 @@
                         impuestoCode = impuestosClear[lineI].locTrasladado;
                         impuestoTasa = Number(impuestosClear[lineI].tasadeTraslado);
                     }
-                    log.debug({title:'Datos de impuesto lineI: ' + lineI, details:{impuestoCode: impuestoCode, impuestoTasa: impuestoTasa}});
+                    // log.debug({title:'Datos de impuesto lineI: ' + lineI, details:{impuestoCode: impuestoCode, impuestoTasa: impuestoTasa}});
                     for (var lineJ = 0; lineJ < taxesData.length; lineJ++) {
                         var nestuiteCode = taxesData[lineJ].taxCodeXML;
                         var netsuiteTasa = taxesData[lineJ].taxCodeTasa;
                         netsuiteTasa = netsuiteTasa.replace(/%/g, '');
                         netsuiteTasa = Number(netsuiteTasa);
-                        log.debug({title:'Datos de netsuite lineJ: ' + lineJ, details:{nestuiteCode: nestuiteCode, netsuiteTasa: netsuiteTasa}});
+                        // log.debug({title:'Datos de netsuite lineJ: ' + lineJ, details:{nestuiteCode: nestuiteCode, netsuiteTasa: netsuiteTasa}});
                         if (nestuiteCode == impuestoCode && netsuiteTasa == impuestoTasa) {
                             var taxId = taxesData[lineJ].taxId;
                             var taxType = taxesData[lineJ].taxType;
@@ -2457,9 +2516,50 @@
                     }
                 }
                 log.debug({title:'impuestosXML_clear', details:impuestosClear});
-                dataReturn.sucess = true;
-                dataReturn.data = impuestosClear;
+                dataReturn.dataTax = impuestosClear;
             }
+            // ---------------------Impuestos Retenciones---------------------
+            var nodoImpuestosReten = xml.XPath.select({
+                node: xml_vars,
+                xpath: 'cfdi:Comprobante//cfdi:Impuestos//cfdi:Retenciones//cfdi:Retencion'
+            });
+            log.debug({title:'nodoImpuestosReten.length', details:nodoImpuestosReten.length});
+            if (nodoImpuestosReten.length) {
+                var retencionesXML = [];
+                for (var index = 0; index < nodoImpuestosReten.length; index++) {
+                    log.audit({title:'nodoImpuestosReten_index: ' + index, details:nodoImpuestosReten[index]});
+                    var impuesto = nodoImpuestosReten[index].getAttributeNode({
+                        name: 'Impuesto'
+                    });
+                    impuesto = impuesto.value;
+                    var importe = nodoImpuestosReten[index].getAttributeNode({
+                        name: 'Importe'
+                    });
+                    importe = importe.value;
+                    var datosLine = {
+                        impuesto: impuesto,
+                        importe: importe
+                    }
+                    retencionesXML.push(datosLine);
+                    log.debug({title:'DataFound', details:{impuesto: impuesto, importe: importe}});
+                }
+                retencionesXML = retencionesXML.reverse();
+                log.debug({title:'retencionesXML_resumen', details:retencionesXML});
+                var retencionesClear = [];
+                var impuestoAux = [];
+                for (var index = 0; index < retencionesXML.length; index++) {
+                    var dataLine = retencionesXML[index];
+                    var impuesto_xml = dataLine.impuesto;
+                    if (impuestoAux.indexOf(impuesto_xml) == -1) { // Impuesto no guardado 
+                        impuestoAux.push(impuesto_xml);
+                        retencionesClear.push(dataLine);
+                    }
+                }
+                log.debug({title:'retenciones en Clear', details:retencionesClear});
+                dataReturn.dataReten = retencionesClear;
+            }
+            // ---------------------FIN---------------------
+            dataReturn.sucess = true;
         } catch (error) {
             log.error({title:'getTaxesXML', details:error});
             dataReturn.sucess=false;
