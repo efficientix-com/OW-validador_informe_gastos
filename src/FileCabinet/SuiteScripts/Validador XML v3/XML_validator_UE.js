@@ -11,10 +11,7 @@
             var scriptObject = runtime.getCurrentScript();
             var checkRedirect = scriptObject.getParameter({name: 'custscript_tkio_redirect'});
             log.audit({title:"check: ", details:checkRedirect});
-            if(checkRedirect == true)
-            {
-
-            
+            if(checkRedirect == true){
                 var form = context.form;
                 var currentRecord = context.newRecord;
                 form.clientScriptModulePath = './XML_validator_ue_CS.js';
@@ -110,7 +107,7 @@
                 type: "customrecord_xml_used_uuid",
                 filters:
                 [
-                   ["name","contains",txUUID]
+                   ["name","is",txUUID]
                 ],
                 columns:
                 [
