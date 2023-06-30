@@ -108,7 +108,7 @@
                         // var lineValidated = {fieldId: , valueSet: ''}
                         var dato = params['custpage_' + dataField.idTraduccion];
                         var fieldNetsuite = dataField.idNetsuite;
-                        customFieldsValuesAux.push({fieldId: 'custpage_' + dataField.idTraduccion, value: dato, fieldNetsuite: fieldNetsuite});
+                        customFieldsValuesAux.push({fieldId: 'custpage_' + dataField.idTraduccion, value: dato, fieldNetsuite: fieldNetsuite, lineLevel: dataField.nivelCampo, sublista: dataField.sublista});
                     }
                     customFieldsValues = JSON.stringify({data: customFieldsValuesAux});
                 }
@@ -1289,7 +1289,7 @@
                         if (dataCampos[campoLine].mandatory == true) {
                             fieldCustom.isMandatory = true;
                         }
-                        if (expenseReportId) {
+                        if (expenseReportId && dataCampos[campoLine].nivelCampo == false) {
                             fieldCustom.updateDisplayType({
                                 displayType: ui.FieldDisplayType.DISABLED
                             });
@@ -1669,6 +1669,7 @@
             var objRecord = null;
             var userObj = runtime.getCurrentUser();
             customFieldsValues = JSON.parse(customFieldsValues);
+
             log.debug({title:'customFieldsValues Final', details:customFieldsValues});
             if (paramExpense == -1) {
                 var idAuthor = userObj.id;
@@ -1700,15 +1701,17 @@
                     value: 1
                 });
                 if (customFieldsValues.data) {
-                    customFieldsValues = customFieldsValues.data;
-                    log.debug({title:'customFieldsValues Final After', details:customFieldsValues});
-                    for (var cstfldLine = 0; cstfldLine < customFieldsValues.length; cstfldLine++) {
-                        var field = customFieldsValues[cstfldLine];
+                    var customFieldsValues_create = customFieldsValues.data;
+                    log.debug({title:'customFieldsValues_create Final After', details:customFieldsValues_create});
+                    for (var cstfldLine = 0; cstfldLine < customFieldsValues_create.length; cstfldLine++) {
+                        var field = customFieldsValues_create[cstfldLine];
                         log.debug({title:'set field custom value', details:field});
-                        objRecord.setValue({
-                            fieldId: field.fieldNetsuite,
-                            value: field.value
-                        });
+                        if (field.lineLevel == false) {
+                            objRecord.setValue({
+                                fieldId: field.fieldNetsuite,
+                                value: field.value
+                            });
+                        }
                     }
                 }
             }else {
@@ -1756,148 +1759,8 @@
                 log.audit({ title: 'finish - uuid', details: uuid });
                 var totalXML = getValueXMl(xmlText, 'cfdi:Comprobante', 'Total');
                 log.audit({ title: 'TOTAL EN XML', details: totalXML });
-
-
-                //Obtener IVA y IEPS trasladado
-                // try{
-                //     var taxTrasladado = getTaxNodes(xmlText, '/cfdi:Comprobante/cfdi:Impuestos/cfdi:Traslados/cfdi:Traslado/@Impuesto|/cfdi:Comprobante/cfdi:Impuestos/cfdi:Traslados/cfdi:Traslado/@TasaOCuota|/cfdi:Comprobante/cfdi:Impuestos/cfdi:Traslados/cfdi:Traslado/@Importe');
-                //     log.audit({title: 'Impuestos trasladados: ', details:taxTrasladado});
-                //
-                //     var arr_len = taxTrasladado.length;
-                //     log.audit({title: 'Length of trasladados array', details:arr_len});
-                //
-                //     var i = 0;
-                //     var montoIeps = 0;
-                //     //Recorrer el array para extraer los impuestos trasladados IVA e IEPS (Si es que existe)
-                //     for (i;i < arr_len;i++){
-                //         log.audit({title: 'IMPRIMIENDO ELEMENTO' + i, details:''});
-                //         log.audit({title: taxTrasladado[i].name , details:''});
-                //         log.audit({title: taxTrasladado[i].value , details:''});
-                //
-                //         //Si esta iteracion es IEPS, irlo acumulando
-                //         if(taxTrasladado[i].name == 'Impuesto' && taxTrasladado[i].value == '003'){
-                //             log.audit({title: 'ESTA ITERACION ES DE IEPS', details:'ESTA ITERACION ES DE IEPS'});
-                //             var val_ieps  = taxTrasladado[i + 2].value;
-                //             montoIeps = Number(montoIeps)  + Number(val_ieps);
-                //         }
-                //
-                //
-                //         //Si esta itereacion es de IVA Guardar la tasa de IVA
-                //         if(taxTrasladado[i].name == 'Impuesto' && taxTrasladado[i].value == '002'){
-                //             log.audit({title: 'El iva se encuentra en la posicion' + i, details:''});
-                //             var tasaIvaCoef = Number(taxTrasladado[i + 1].value);
-                //             var tasaIvaCoef = Number(tasaIvaCoef + 1);
-                //             var tasaIva = Number(taxTrasladado[i + 1].value) * 100;
-                //             var montoIva = Number(taxTrasladado[i + 2].value);
-                //             log.audit({title: 'Con una monto global de ' + montoIva, details:''});
-                //             log.audit({title: 'Con una tasa del' + tasaIva, details:''});
-                //
-                //         }
-                //
-                //     }
-                //
-                //     log.audit({title: '--------- LA TASA ENCONTRADA DE IVA ES  ' + tasaIva, details:''});
-                //     log.audit({title: '--------- EL MONTO ENCONTRADO DE IVA ES  ' + montoIva, details:montoIva});
-                //     log.audit({title: '----------EL MONTO TOTAL DE IEPS ES   ' + montoIeps, details:montoIeps});
-                //
-                //
-                // }catch (e) {
-                //     log.audit({title: 'NO SE ENCONTRARON IMPUESTOS TRASLADADOS EN EL XML', details:''});
-                // }
-
-                //Obtener monto de impuestos retenidos
-                // try{
-                //     var taxRetenido = getTaxNodes(xmlText, '/cfdi:Comprobante/cfdi:Impuestos/@TotalImpuestosRetenidos');
-                //     log.audit({title: 'VALOR DE TAXRETENIDO VAR ', details:taxRetenido});
-                //     taxRetenido = taxRetenido[0].value;
-                //     log.audit({title: 'Impuestos retenidos: ', details:taxRetenido});
-                // }catch (e) {
-                //     var taxRetenido = 0;
-                //     log.audit({title: 'Valor de taxRetenido', details:taxRetenido});
-                //     log.audit({title: e, details:''});
-                // }
-
-                // var taxAttr = getTaxNodes(xmlText, '/cfdi:Comprobante/cfdi:Impuestos/cfdi:Traslados/cfdi:Traslado/@Impuesto|/cfdi:Comprobante/cfdi:Impuestos/cfdi:Traslados/cfdi:Traslado/@Importe|/cfdi:Comprobante/cfdi:Impuestos/cfdi:Traslados/cfdi:Traslado/@TasaOCuota');
-                // log.audit({title: 'TYPEOF taxAttr', details:typeof(taxAttr) });
-                // log.audit({title: 'finish - taxAttr', details: taxAttr}
-                // );
-                // var tasaOCuota = getValueXMl(xmlText, 'cfdi:Comprobante/cfdi:Impuestos/cfdi:Traslados/cfdi:Traslado', 'TasaOCuota');
-                // log.audit({title: 'finish - tasaOCuota', details: tasaOCuota});
-
                 var subTotal = getValueXMl(xmlText, 'cfdi:Comprobante', 'SubTotal');
                 log.audit({ title: 'finish - subTotal', details: subTotal });
-
-                // log.audit({title: 'Operadores para hacer la formula', details:'Operadores para hacer la formula'});
-                // log.audit({title: 'SUBTOTAL: ', details:subTotal});
-                // //log.audit({title: 'IEPS: ', details:montoIeps});
-                // //log.audit({title: 'RETENCION: ', details:taxRetenido});
-                // log.audit({title: 'TASA IVA: ', details:tasaIva});
-                // log.audit({title: 'TASA IVA COEF: ', details:tasaIvaCoef});
-                //
-                // var nuevoSubtotal = Number(subTotal) + Number(montoIeps);
-
-                // var res_mult =   Number(subTotal)  *  Number(tasaIvaCoef);
-                // log.audit({title: 'Prev Mult', details:res_mult});
-
-
-                //Determinar el monto total a poner en la linea del reporte de gastos
-                //Si hay IVA entonces multiplicarlo por el porcenje
-                // if(tasaIva != 0){
-                //     log.audit({title: 'SUMA DE SUBT + IEPS', details:Number(subTotal)  + Number(montoIeps)});
-                //     log.audit({title: 'SUMA DE SUBT + IEPS * tasaIVA', details:(Number(subTotal)  + Number(montoIeps)) *  Number(tasaIvaCoef)});
-                //     log.audit({title: 'SUMA DE SUBT + IEPS * tasaIVA - retenciones', details:(Number(subTotal)  + Number(montoIeps)) *  Number(tasaIvaCoef)- Number(taxRetenido)});
-                //     //var total_linea = (Number(subTotal)  + Number(montoIeps)) *  Number(tasaIvaCoef) - Number(taxRetenido) ;
-                //     var total_linea = Math.round((Number(subTotal)  + Number(montoIeps)) *  Number(tasaIvaCoef)*100)/100 - Number(taxRetenido) ;
-                //     //Redondear a 2 decimales
-                //     total_linea = Math.round(total_linea * 100) / 100 ;
-                //     log.audit({title: 'TOTAL DENTRO DE IF', details:total_linea});
-                // }else{
-                //     log.audit({title: 'ENTRO IF NO HAY TASA IVA', details:''});
-                //     //Si la tasa IVA es 0 entonces no multiplicarlo por 0
-                //     var total_linea = Number(subTotal)  + Number(montoIeps) - Number(taxRetenido) ;
-                //     //Redondear a 2 decimales
-                //     total_linea = Math.round(total_linea * 100) / 100 ;
-                // }
-
-
-                // log.audit({title: '*****************************************-', details:'*****************************************-'});
-                // log.audit({title: '*****************************************-', details:'*****************************************-'});
-                // log.audit({title: 'EL NUEVO SUBTOTAL DE LA LINEA DE ESTE REPORTE DE GASTOS SERIA', details:nuevoSubtotal});
-                // log.audit({title: 'EL TOTAL DE LA LINEA DE ESTE REPORTE DE GASTOS SERIA', details:total_linea});
-                // log.audit({title: '*****************************************-', details:'*****************************************-'});
-                // log.audit({title: '*****************************************-', details:'*****************************************-'});
-
-                // if(tasaIva == 16) {
-                //     var taxgrpname = 'IVA16';
-                // }
-                // if(tasaIva == 8) {
-                //     var taxgrpname = 'IVA8';
-                // }
-                // if(tasaIva == 0) {
-                //     var taxgrpname = 'IVA0';
-                // }
-                //
-                // log.audit({title: 'TAX GROUP NAME PARA BUSQUEDA', details:taxgrpname});
-                //
-                // var resultTax = search.create({
-                //     type: 'taxgroup',
-                //     filters: [
-                //         ['itemid', search.Operator.IS, taxgrpname]
-                //     ],
-                //     columns: [
-                //         { name: 'internalid' }
-                //     ]
-                // });
-                //
-                // var resultData = resultTax.run();
-                //
-                // var resultSet = resultData.getRange(0, 10);
-                // log.audit({title: 'finish - resultSet', details: resultSet[0]});
-                //
-                // var taxCode = resultSet[0].getValue({ name: 'internalid' }) || 0;
-                //
-                // log.audit({title: 'TAXTAXTAXTAXCODE PARA ESTE IVA ES', details:taxCode});
-
             }else {
                 var xmlText = null;
                 var taxAttr = null;
@@ -2075,8 +1938,21 @@
             } else {
                 log.audit({ title: 'El total de NS coincide con el XML, no hay que hacer cambios', details: '' });
             }
-
-
+            if (customFieldsValues.data) {
+                var customFieldsValues_line = customFieldsValues.data;
+                for (var customLineF = 0; customLineF < customFieldsValues_line.length; customLineF++) {
+                    var field = customFieldsValues_line[customLineF];
+                    log.debug({title:'set field custom value line', details:field});
+                    if (field.lineLevel == true && field.sublista == 'expense') {
+                        objRecord.setCurrentSublistValue({
+                            sublistId: 'expense',
+                            fieldId: field.fieldNetsuite,
+                            value: field.value,
+                            ignoreFieldChange: false
+                        });
+                    }
+                }
+            }
             var numExpense = objRecord.commitLine({
                 sublistId: 'expense'
             });
@@ -2538,7 +2414,7 @@
                     importe = importe.value;
                     var datosLine = {
                         impuesto: impuesto,
-                        importe: importe
+                        importe: importe * -1
                     }
                     retencionesXML.push(datosLine);
                     log.debug({title:'DataFound', details:{impuesto: impuesto, importe: importe}});
@@ -2736,7 +2612,9 @@
                    search.createColumn({name: "custrecord_fb_validator_field_type_reg", label: "Lista/Registro"}),
                    search.createColumn({name: "custrecord_fb_validator_field_mandatory", label: "Obligatorio"}),
                    search.createColumn({name: "custrecord_fb_validator_field_id_search", label: "ID valor a buscar"}),
-                   search.createColumn({name: "custrecord_fb_validator_field_filters", label: "Filtros sobre el resultado"})
+                   search.createColumn({name: "custrecord_fb_validator_field_filters", label: "Filtros sobre el resultado"}),
+                   search.createColumn({name: "custrecord_fb_validator_field_level", label: "Campo a nivel Linea"}),
+                   search.createColumn({name: "custrecord_fb_validator_field_sublist", label: "Sublista"})
                 ]
             });
             var camposResult = camposSearch.runPaged({
@@ -2752,9 +2630,11 @@
                         var tipoCampo = result.getValue({name: 'custrecord_fb_validator_field_type'});
                         var listaUse = result.getValue({name: 'custrecord_fb_validator_field_type_reg'}) || '';
                         var mandatory = result.getValue({name: 'custrecord_fb_validator_field_mandatory'});
-                        var idSearch = result.getValue({name: 'custrecord_fb_validator_field_id_search'});
+                        var idSearch = result.getValue({name: 'custrecord_fb_validator_field_id_search'}) || '';
                         var extraFilter = result.getValue({name: 'custrecord_fb_validator_field_filters'});
-                        dataCampos.push({idTraduccion: idTraduccion, idNetsuite: idNetsuite, idSearch: idSearch, tipoCampo:tipoCampo, listaUse: listaUse, mandatory: mandatory, filtros: extraFilter});
+                        var nivelCampo = result.getValue({name: 'custrecord_fb_validator_field_level'});
+                        var sublista = result.getValue({name: 'custrecord_fb_validator_field_sublist'}) || '';
+                        dataCampos.push({idTraduccion: idTraduccion, idNetsuite: idNetsuite, idSearch: idSearch, tipoCampo:tipoCampo, listaUse: listaUse, mandatory: mandatory, filtros: extraFilter, nivelCampo: nivelCampo, sublista: sublista});
                     });
                 });
                 log.audit({title:'dataCampos', details:dataCampos});

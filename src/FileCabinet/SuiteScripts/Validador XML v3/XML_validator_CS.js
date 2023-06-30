@@ -98,12 +98,14 @@ define(['N/search', 'N/record'], function(search, record) {
             if (customData.sucess == true) {
                 for (var newLineField = 0; newLineField < customData.data.length; newLineField++) {
                     var lineValues = customData.data[newLineField];
-                    var valueFound = objRecord.getValue({
-                        fieldId: lineValues.idNetsuite
-                    });
-                    lineValues['valorNetsuite'] = valueFound
-                    lineValues['isDisabled'] = true;
-                    customData.data[newLineField] = lineValues;
+                    if (lineValues.nivelCampo == false) {
+                        var valueFound = objRecord.getValue({
+                            fieldId: lineValues.idNetsuite
+                        });
+                        lineValues['valorNetsuite'] = valueFound
+                        lineValues['isDisabled'] = true;
+                        customData.data[newLineField] = lineValues;
+                    }
                 }
             }
         }else{
@@ -158,12 +160,14 @@ define(['N/search', 'N/record'], function(search, record) {
         if (customData.sucess == true) {
             customData.data.forEach(lineValues=>{
                 console.log(lineValues);
-                currentRecord.setValue({fieldId: `custpage_${lineValues.idTraduccion}`, value: lineValues.valorNetsuite});
-                var customField = currentRecord.getField({fieldId: `custpage_${lineValues.idTraduccion}`});
-                if (lineValues.isDisabled == true) {
-                    customField.isDisabled = true;
-                }else{
-                    customField.isDisabled = false;
+                if (lineValues.nivelCampo == false) {
+                    currentRecord.setValue({fieldId: `custpage_${lineValues.idTraduccion}`, value: lineValues.valorNetsuite});
+                    var customField = currentRecord.getField({fieldId: `custpage_${lineValues.idTraduccion}`});
+                    if (lineValues.isDisabled == true) {
+                        customField.isDisabled = true;
+                    }else{
+                        customField.isDisabled = false;
+                    }
                 }
             })
         }
@@ -191,7 +195,9 @@ define(['N/search', 'N/record'], function(search, record) {
                    search.createColumn({name: "custrecord_fb_validator_field_type_reg", label: "Lista/Registro"}),
                    search.createColumn({name: "custrecord_fb_validator_field_mandatory", label: "Obligatorio"}),
                    search.createColumn({name: "custrecord_fb_validator_field_id_search", label: "ID valor a buscar"}),
-                   search.createColumn({name: "custrecord_fb_validator_field_filters", label: "Filtros sobre el resultado"})
+                   search.createColumn({name: "custrecord_fb_validator_field_filters", label: "Filtros sobre el resultado"}),
+                   search.createColumn({name: "custrecord_fb_validator_field_level", label: "Campo a nivel Linea"}),
+                   search.createColumn({name: "custrecord_fb_validator_field_sublist", label: "Sublista"})
                 ]
             });
             var camposResult = camposSearch.runPaged({
@@ -208,14 +214,16 @@ define(['N/search', 'N/record'], function(search, record) {
                         var tipoCampo = result.getValue({name: 'custrecord_fb_validator_field_type'});
                         var listaUse = result.getValue({name: 'custrecord_fb_validator_field_type_reg'}) || '';
                         var mandatory = result.getValue({name: 'custrecord_fb_validator_field_mandatory'});
-                        var idSearch = result.getValue({name: 'custrecord_fb_validator_field_id_search'});
+                        var idSearch = result.getValue({name: 'custrecord_fb_validator_field_id_search'}) || '';
                         var extraFilter = result.getValue({name: 'custrecord_fb_validator_field_filters'});
+                        var nivelCampo = result.getValue({name: 'custrecord_fb_validator_field_level'});
+                        var sublista = result.getValue({name: 'custrecord_fb_validator_field_sublist'}) || '';
                         var tipoDeCampo = Number(tipoCampo);
                         var isSelect = false;
                         if (tipoDeCampo == 16 || tipoDeCampo == 12) {
                             isSelect = true;
                         }
-                        dataCampos.push({idTraduccion: idTraduccion, idNetsuite: idNetsuite, idSearch: idSearch, tipoCampo:tipoCampo, listaUse: listaUse, mandatory: mandatory, filtros: extraFilter, isSelect: isSelect});
+                        dataCampos.push({idTraduccion: idTraduccion, idNetsuite: idNetsuite, idSearch: idSearch, tipoCampo:tipoCampo, listaUse: listaUse, mandatory: mandatory, filtros: extraFilter, isSelect: isSelect, nivelCampo: nivelCampo, sublista: sublista});
                     });
                 });
                 console.log({title:'dataCampos', details:dataCampos});

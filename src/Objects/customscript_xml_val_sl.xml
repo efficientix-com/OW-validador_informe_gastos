@@ -218,6 +218,12 @@
       <runasrole>ADMINISTRATOR</runasrole>
       <status>RELEASED</status>
       <title>XML validator SL Deploy</title>
+      <links>
+        <link>
+          <linkcategory>EMPLOYEEHOMEEXPENSEREPORTS</linkcategory>
+          <linklabel>Validador de xml</linklabel>
+        </link>
+      </links>
     </scriptdeployment>
   </scriptdeployments>
 </suitelet>
