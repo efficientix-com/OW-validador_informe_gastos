@@ -1118,6 +1118,7 @@
                 id: userObj.id,
                 isDynamic: true,
             });
+            var multiSubsidiary = userEmployee.getValue({fieldId: 'custentity_fb_inf_gas_multi_subs'}) || false;
             if (SUBSIDIARIES) {
                 var subsidiary = userEmployee.getValue({
                     fieldId: 'subsidiary'
@@ -1154,12 +1155,13 @@
                     label: getTranslationLabel('subsidiary_text'),
                     source: record.Type.SUBSIDIARY
                 });
-                fieldSubs.isMandatory = true;
-                fieldSubs.updateDisplayType({
-                    displayType: ui.FieldDisplayType.DISABLED
-                });
-
                 fieldSubs.defaultValue = subsidiary;
+                fieldSubs.isMandatory = true;
+                if (multiSubsidiary == false) {
+                    fieldSubs.updateDisplayType({
+                        displayType: ui.FieldDisplayType.DISABLED
+                    });
+                }
 
                 log.audit("subsidiary 1139", subsidiary);
             }

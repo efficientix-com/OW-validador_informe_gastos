@@ -2,7 +2,7 @@
  *@NApiVersion 2.1
  *@NScriptType ClientScript
  */
-define(['N/search', 'N/record'], function(search, record) {
+define(['N/search', 'N/record', 'N/runtime'], function(search, record, runtime) {
 
     
     function saveRecord(context) {
@@ -68,8 +68,17 @@ define(['N/search', 'N/record'], function(search, record) {
         var id = currentRecord.getValue({
             fieldId: 'custpage_expense_report'
         });
+        var userObj = runtime.getCurrentUser();
+        var userMulti_subsi = search.lookupFields({
+           type: search.Type.EMPLOYEE,
+           id: userObj.id,
+           columns: ['custentity_fb_inf_gas_multi_subs']
+        });
+        userMulti_subsi = userMulti_subsi.custentity_fb_inf_gas_multi_subs;
         var customData = customFieldsData();
-        if(id != -1){
+        console.log('userMulti_subsi', userMulti_subsi);
+        var customField = currentRecord.getField({fieldId: `custpage_subsidiary`});
+        if(id != -1){ // Informe existente
             var objRecord = record.load({
                 type: record.Type.EXPENSE_REPORT, 
                 id: id
@@ -95,9 +104,18 @@ define(['N/search', 'N/record'], function(search, record) {
             var tranid = objRecord.getValue({
                 fieldId: 'tranid'
             });
+            var subsidiary = objRecord.getValue({
+                fieldId: 'subsidiary'
+            });
+            currentRecord.setValue({
+                fieldId: 'custpage_subsidiary',
+                value: subsidiary
+            });
+            customField.isDisabled = true; // inhabilitar campo subsidiaria
             if (customData.sucess == true) {
                 for (var newLineField = 0; newLineField < customData.data.length; newLineField++) {
                     var lineValues = customData.data[newLineField];
+                    console.log('lineValue: ', lineValues);
                     if (lineValues.nivelCampo == false) {
                         var valueFound = objRecord.getValue({
                             fieldId: lineValues.idNetsuite
@@ -108,7 +126,7 @@ define(['N/search', 'N/record'], function(search, record) {
                     }
                 }
             }
-        }else{
+        }else{ // nuevo informe
             var tranid ="N/A";
             var total = 0.0;
             var nonreimbursable = 0.0;
@@ -116,6 +134,11 @@ define(['N/search', 'N/record'], function(search, record) {
             var corporatecard = 0.0;
             var advance2 = 0.0;
             var amount = 0.0;
+            if (userMulti_subsi == true) {
+                customField.isDisabled = false; // habilitar subsidiaria
+            }else{
+                customField.isDisabled = true; // inhabilitar subsidiaria
+            }
             if (customData.sucess == true) {
                 for (var newLineField = 0; newLineField < customData.data.length; newLineField++) {
                     var lineValues = customData.data[newLineField];
@@ -159,7 +182,7 @@ define(['N/search', 'N/record'], function(search, record) {
         });
         if (customData.sucess == true) {
             customData.data.forEach(lineValues=>{
-                console.log(lineValues);
+                console.log('Data:', lineValues);
                 if (lineValues.nivelCampo == false) {
                     currentRecord.setValue({fieldId: `custpage_${lineValues.idTraduccion}`, value: lineValues.valorNetsuite});
                     var customField = currentRecord.getField({fieldId: `custpage_${lineValues.idTraduccion}`});
