@@ -104,11 +104,12 @@
                 if (fieldResults.sucess == true) {
                     for (var fieldLine = 0; fieldLine < fieldResults.data.length; fieldLine++) {
                         var dataField = fieldResults.data[fieldLine];
-                        // var fieldIdCustom = 'custpage_' + dataField.idTraduccion;
-                        // var lineValidated = {fieldId: , valueSet: ''}
                         var dato = params['custpage_' + dataField.idTraduccion];
+                        if (dato == -1 && dataField.tipoCampo == 12) {
+                            dato = '';
+                        }
                         var fieldNetsuite = dataField.idNetsuite;
-                        customFieldsValuesAux.push({fieldId: 'custpage_' + dataField.idTraduccion, value: dato, fieldNetsuite: fieldNetsuite, lineLevel: dataField.nivelCampo, sublista: dataField.sublista});
+                        customFieldsValuesAux.push({fieldId: 'custpage_' + dataField.idTraduccion, value: dato, fieldNetsuite: fieldNetsuite, lineLevel: dataField.nivelCampo, sublista: dataField.sublista, mandatory: dataField.mandatory});
                     }
                     customFieldsValues = JSON.stringify({data: customFieldsValuesAux});
                 }
@@ -2111,6 +2112,21 @@
                                     value: uuid,
                                     ignoreFieldChange: false
                                 });
+                            }
+                            if (customFieldsValues.data) {
+                                var customFieldsValues_line = customFieldsValues.data;
+                                for (var customLineF = 0; customLineF < customFieldsValues_line.length; customLineF++) {
+                                    var field = customFieldsValues_line[customLineF];
+                                    log.debug({title:'set field custom value line', details:field});
+                                    if (field.lineLevel == true && field.sublista == 'expense') {
+                                        objRecord.setCurrentSublistValue({
+                                            sublistId: 'expense',
+                                            fieldId: field.fieldNetsuite,
+                                            value: field.value,
+                                            ignoreFieldChange: false
+                                        });
+                                    }
+                                }
                             }
                             var numExpense = objRecord.commitLine({
                                 sublistId: 'expense'
