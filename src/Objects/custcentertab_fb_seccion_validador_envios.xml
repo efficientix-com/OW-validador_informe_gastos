@@ -1,0 +1,10 @@
+<centertab scriptid="custcentertab_fb_seccion_validador_envios">
+  <allcustomers>F</allcustomers>
+  <allemployees>F</allemployees>
+  <allpartners>F</allpartners>
+  <allroles>T</allroles>
+  <allvendors>F</allvendors>
+  <audslctrole></audslctrole>
+  <center>SHIPPINGCENTER</center>
+  <label>Validador</label>
+</centertab>

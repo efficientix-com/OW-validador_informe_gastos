@@ -208,7 +208,7 @@
       <custscript_efx_taxcode_flete></custscript_efx_taxcode_flete>
       <custscript_efx_taxcode_hon></custscript_efx_taxcode_hon>
       <custscript_efx_taxcode_ppp></custscript_efx_taxcode_ppp>
-      <custscript_fb_cat_reten>[ACCOUNT_SPECIFIC_VALUE]</custscript_fb_cat_reten>
+      <custscript_fb_cat_reten></custscript_fb_cat_reten>
       <custscript_xml_allw_pay_method>[scriptid=customrecord_efx_fe_metodospago.val_15877_t905028_433]</custscript_xml_allw_pay_method>
       <custscript_xml_folder>46129</custscript_xml_folder>
       <eventtype></eventtype>
@@ -218,12 +218,6 @@
       <runasrole>ADMINISTRATOR</runasrole>
       <status>RELEASED</status>
       <title>XML validator SL Deploy</title>
-      <links>
-        <link>
-          <linkcategory>EMPLOYEEHOMEEXPENSEREPORTS</linkcategory>
-          <linklabel>Validador de xml</linklabel>
-        </link>
-      </links>
     </scriptdeployment>
   </scriptdeployments>
 </suitelet>

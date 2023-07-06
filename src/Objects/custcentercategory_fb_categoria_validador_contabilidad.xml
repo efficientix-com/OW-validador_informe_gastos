@@ -1,0 +1,13 @@
+<centercategory scriptid="custcentercategory_fb_categoria_validador_contabilidad">
+  <center>ACCOUNTCENTER</center>
+  <centertab>[scriptid=custcentertab_fb_seccion_validador_contabilidad]</centertab>
+  <label>Informe de gastos</label>
+  <links>
+    <link>
+      <linklabel>Validador de informe de gastos</linklabel>
+      <linkobject>[scriptid=customscript_xml_val_sl.customdeploy_xml_val_sl]</linkobject>
+      <linktasktype>SCRIPT</linktasktype>
+      <shortlist>F</shortlist>
+    </link>
+  </links>
+</centercategory>

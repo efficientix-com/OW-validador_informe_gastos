@@ -21,7 +21,9 @@
       <feature required="true">SERVERSIDESCRIPTING</feature>
       <feature required="false">PAYCHECKJOURNAL</feature>
       <feature required="false">OPPORTUNITIES</feature>
+      <feature required="false">JOBS</feature>
       <feature required="false">CUSTOMSEGMENTS</feature>
+      <feature required="false">ADVANCEDJOBS</feature>
       <feature required="false">WORKORDERS</feature>
       <feature required="false">CREATESUITEBUNDLES</feature>
     </features>
