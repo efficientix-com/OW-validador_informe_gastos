@@ -2638,8 +2638,8 @@
             var camposResult = camposSearch.runPaged({
                 pageSize: 1000
             });
+            var dataCampos = [];
             if (camposResult.count > 0) {
-                var dataCampos = [];
                 camposResult.pageRanges.forEach(function(pageRange){
                     var myPage = camposResult.fetch({index: pageRange.index});
                     myPage.data.forEach(function(result){

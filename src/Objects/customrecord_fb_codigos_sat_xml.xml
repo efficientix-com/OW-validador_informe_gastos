@@ -119,4 +119,78 @@
       <subtab></subtab>
     </customrecordcustomfield>
   </customrecordcustomfields>
+  <instances>
+    <instance scriptid="val_509608_7641095_sb1_478">
+      <custrecord_fb_codigos_sat_tasa>0.0%</custrecord_fb_codigos_sat_tasa>
+      <custrecord_fb_cofido_sat_codigo>0001</custrecord_fb_cofido_sat_codigo>
+      <isinactive>T</isinactive>
+      <name>ISR</name>
+    </instance>
+    <instance scriptid="val_509609_7641095_sb1_521">
+      <custrecord_fb_codigos_sat_tasa>0.0%</custrecord_fb_codigos_sat_tasa>
+      <custrecord_fb_cofido_sat_codigo>0002</custrecord_fb_cofido_sat_codigo>
+      <isinactive>T</isinactive>
+      <name>IVA</name>
+    </instance>
+    <instance scriptid="val_509612_7641095_sb1_266">
+      <custrecord_fb_codigos_sat_tasa>0.0%</custrecord_fb_codigos_sat_tasa>
+      <custrecord_fb_cofido_sat_codigo>0003</custrecord_fb_cofido_sat_codigo>
+      <isinactive>T</isinactive>
+      <name>IEPS</name>
+    </instance>
+    <instance scriptid="val_509613_7641095_sb1_950">
+      <custrecord_fb_codigos_sat_tasa>16.0%</custrecord_fb_codigos_sat_tasa>
+      <custrecord_fb_cofido_sat_codigo>002</custrecord_fb_cofido_sat_codigo>
+      <isinactive>F</isinactive>
+      <name>IVA 16</name>
+    </instance>
+    <instance scriptid="val_509614_7641095_sb1_862">
+      <custrecord_fb_codigos_sat_tasa>0.0%</custrecord_fb_codigos_sat_tasa>
+      <custrecord_fb_cofido_sat_codigo>002</custrecord_fb_cofido_sat_codigo>
+      <isinactive>F</isinactive>
+      <name>IVA 0</name>
+    </instance>
+    <instance scriptid="val_509615_7641095_sb1_924">
+      <custrecord_fb_codigos_sat_tasa>53.0%</custrecord_fb_codigos_sat_tasa>
+      <custrecord_fb_cofido_sat_codigo>003</custrecord_fb_cofido_sat_codigo>
+      <isinactive>F</isinactive>
+      <name>IEPS 53</name>
+    </instance>
+    <instance scriptid="val_509616_7641095_sb1_375">
+      <custrecord_fb_codigos_sat_tasa>3.0%</custrecord_fb_codigos_sat_tasa>
+      <custrecord_fb_cofido_sat_codigo>ISSH</custrecord_fb_cofido_sat_codigo>
+      <isinactive>F</isinactive>
+      <name>ISSH 3</name>
+    </instance>
+    <instance scriptid="val_509620_7641095_sb1_477">
+      <custrecord_fb_codigos_sat_tasa>0.0%</custrecord_fb_codigos_sat_tasa>
+      <custrecord_fb_cofido_sat_codigo>PROPINA</custrecord_fb_cofido_sat_codigo>
+      <isinactive>F</isinactive>
+      <name>PROPINA</name>
+    </instance>
+    <instance scriptid="val_509621_7641095_sb1_264">
+      <custrecord_fb_codigos_sat_tasa>8.0%</custrecord_fb_codigos_sat_tasa>
+      <custrecord_fb_cofido_sat_codigo>002</custrecord_fb_cofido_sat_codigo>
+      <isinactive>F</isinactive>
+      <name>IVA 8</name>
+    </instance>
+    <instance scriptid="val_509622_7641095_sb1_268">
+      <custrecord_fb_codigos_sat_tasa>3.75%</custrecord_fb_codigos_sat_tasa>
+      <custrecord_fb_cofido_sat_codigo>ISH</custrecord_fb_cofido_sat_codigo>
+      <isinactive>F</isinactive>
+      <name>ISH 3.75</name>
+    </instance>
+    <instance scriptid="val_509623_7641095_sb1_562">
+      <custrecord_fb_codigos_sat_tasa>0.03%</custrecord_fb_codigos_sat_tasa>
+      <custrecord_fb_cofido_sat_codigo>ISH</custrecord_fb_cofido_sat_codigo>
+      <isinactive>F</isinactive>
+      <name>ISH 0.03</name>
+    </instance>
+    <instance scriptid="val_509624_7641095_sb1_806">
+      <custrecord_fb_codigos_sat_tasa>4.5%</custrecord_fb_codigos_sat_tasa>
+      <custrecord_fb_cofido_sat_codigo>Impuesto Estatal</custrecord_fb_cofido_sat_codigo>
+      <isinactive>F</isinactive>
+      <name>Impuesto Estatal 4.5</name>
+    </instance>
+  </instances>
 </customrecordtype>
