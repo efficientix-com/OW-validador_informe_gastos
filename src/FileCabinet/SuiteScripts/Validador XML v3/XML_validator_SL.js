@@ -2221,10 +2221,6 @@
                     name: 'Impuesto'
                 });
                 impuesto = impuesto.value;
-                var base = nodoImpuestosRes[index].getAttributeNode({
-                    name: 'Base'
-                });
-                base = base.value;
                 var factor = nodoImpuestosRes[index].getAttributeNode({
                     name: 'TipoFactor'
                 });
@@ -2237,6 +2233,19 @@
                     name: 'Importe'
                 });
                 importe = importe.value;
+                var base = nodoImpuestosRes[index].getAttributeNode({
+                    name: 'Base'
+                });
+                if (base) {
+                    base = base.value;
+                    log.debug({title:'Base', details:base});
+                }else{
+                    var porcentAux = parseFloat(tasaOCuota*100);
+                    base = parseFloat(100*importe);
+                    base = parseFloat(base/porcentAux)
+                    base = base.toFixed(2);
+                    log.debug({title:'Base calculada', details:base});
+                }
                 var datosLine = {
                     impuesto: impuesto,
                     base: base,
