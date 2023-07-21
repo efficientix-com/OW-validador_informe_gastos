@@ -36,7 +36,7 @@ define(['N/search', 'N/record', 'N/runtime'], function(search, record, runtime) 
                     return false;
                 }
                 var extPDF = pdf.split(".")[1];
-                if((extPDF && extPDF != 'pdf') || !extPDF){
+                if((extPDF && (extPDF != 'pdf' && extPDF != 'png' && extPDF != 'jpg')) || !extPDF){
                     alert(msgs.pdftype);
                     return false;
                 }
