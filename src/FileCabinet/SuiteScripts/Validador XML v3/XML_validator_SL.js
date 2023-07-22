@@ -32,7 +32,7 @@
         paramCustomer = null,
         xmlFile = null,
         customFieldsValues = {},
-        errorConfig = [];
+        generalErrors = '';
 
      function onRequest(context) {
          var form = null;
@@ -120,10 +120,15 @@
             var finish = createInterface({});
             //Aqui esta el finish
             log.audit("finishPrueba", finish);
+            log.audit({title:'generalErros', details:generalErrors});
             if (assistant) {
                 response.writePage(assistant);
             }else {
-                var formError = createFormError("Ha ocurrido un error al tratar de construir la interfaz.");
+                if (generalErrors) {
+                    var formError = createFormError('Ha ocurrido un error\n' + generalErrors.name + ': ' + generalErrors.message);
+                }else{
+                    var formError = createFormError("Ha ocurrido un error al tratar de construir la interfaz.");
+                }
                 response.writePage(formError);
             }
          } catch (e) {
@@ -396,7 +401,7 @@
             if (!assistant) {
                 return;
             }
-            var end = false;
+            var end = 1;
 
             if (method == 'GET' || action == ui.AssistantSubmitAction.CANCEL) {
                 assistant.currentStep = assistant.getStep({
@@ -422,13 +427,17 @@
                         deploymentId: 'customdeploy_xml_val_sl',
                         parameters: { hasER: true, er: expenseReportId }
                     });
-                    return true;
+                    return 2;
+                }else{
+                    generalErrors = finishResult.error;
+                    throw finishResult.error;
                 }
             }
             return end;
         }
         catch (e) {
             log.error({ title: 'fillAssistant', details: e });
+            return 0;
         }
     }
 
@@ -437,6 +446,9 @@
       */
     function fillAssistant(finish) {
         try {
+            if (finish == 0) {
+                return false;
+            }
             if (!assistant) {
                 log.error({ title: 'Assistant - fillAssistant', details: 'Assistant is not inizialitated' });
                 return null;
@@ -489,6 +501,7 @@
         }
         catch (e) {
             log.error({ title: 'fillAssistant', details: e });
+            generalErrors = e ;
             return false;
         }
     }
@@ -1585,7 +1598,7 @@
 
         } catch (e) {
             log.error({ title: 'secondStep', details: e });
-            throw "Ha ocurrido un error.";
+            throw e;
         }
     }
 
@@ -2030,6 +2043,9 @@
                         for (var taxLine = 0; taxLine < taxDataResult.dataTax.length; taxLine++) {
                             var datosSet = taxDataResult.dataTax[taxLine];
                             // log.debug({title:'datosSet', details:datosSet});
+                            if (!datosSet.taxid) {
+                                throw {name: 'Impuesto no encontrado', message: 'No se encontró impuesto registrado para su transacción'}
+                            }
                             objRecord.selectNewLine({
                                 sublistId: 'taxdetails'
                             });
@@ -2186,7 +2202,7 @@
             dataReturn.sucess = true;
         } catch (e) {
             log.error({ title: 'finish', details: e });
-            dataReturn.error = "Ha ocurrido un error al intentar insertar la información. Catch"
+            dataReturn.error = e;
             dataReturn.sucess = false;
             return dataReturn;
             // throw "Ha ocurrido un error.";
