@@ -2317,10 +2317,14 @@
                     name: 'Importe'
                 });
                 importe = importe.value;
-                var porcentAux = parseFloat(tasadeTraslado/100);
-                var base = Number(importe) / Number(porcentAux);
+                if (parseFloat(tasadeTraslado) > 1) { // la tasa de traslado es porcentaje y se tiene que convertir
+                    var porcentAux = parseFloat(tasadeTraslado/100);
+                    var base = parseFloat(importe) / parseFloat(porcentAux);
+                }else{ // la tasa de traslado es numerica considerando 1.0 como el 100%
+                    var base = parseFloat(importe) / parseFloat(tasadeTraslado);
+                    tasadeTraslado = parseFloat(tasadeTraslado) * 100;
+                }
                 base = base.toFixed(2);
-
                 var datosLine = {
                     locTrasladado: locTrasladado,
                     tasadeTraslado: tasadeTraslado,
