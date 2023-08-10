@@ -2348,98 +2348,100 @@
                     taxFiltersAux.push("OR");
                 }
             }
-            var taxFilters = [["isinactive","is","F"], "AND", taxFiltersAux];
-            log.debug({title:'taxFilters', details:taxFilters});
-            var salestaxitemSearchObj = search.create({
-                type: search.Type.SALES_TAX_ITEM,
-                filters: taxFilters,
-                columns:
-                [
-                   search.createColumn({
-                      name: "internalid",
-                      sort: search.Sort.ASC,
-                      label: "ID interno"
-                   }),
-                   search.createColumn({name: "name", label: "Nombre"}),
-                   search.createColumn({name: "taxtype", label: "Tipo de impuesto"}),
-                   search.createColumn({name: "custrecord_ste_taxcode_ratetype", label: "Tax Rate Type"}),
-                   search.createColumn({name: "custrecord_fb_codigo_sat", label: "Codigo SAT"}),
-                   search.createColumn({
-                      name: "custrecord_fb_cofido_sat_codigo",
-                      join: "CUSTRECORD_FB_CODIGO_SAT",
-                      label: "Codigo en XML"
-                   }),
-                   search.createColumn({
-                      name: "custrecord_fb_codigos_sat_tasa",
-                      join: "CUSTRECORD_FB_CODIGO_SAT",
-                      label: "Tasa"
-                   })
-                ]
-            });
-            var taxResult = salestaxitemSearchObj.runPaged({
-                pageSize: 1000
-            });
-            log.debug({title:'taxResult.count', details:taxResult.count});
-            if (taxResult.count > 0) {
-                var taxesData = [];
-                taxResult.pageRanges.forEach(function(pageRange){
-                    var myPage = taxResult.fetch({index: pageRange.index});
-                    myPage.data.forEach(function(result){
-                        var taxId = result.getValue({name: 'internalid'});
-                        var taxName = result.getValue({name: 'name'});
-                        var taxType = result.getValue({name: 'taxtype'});
-                        var taxCodeSat = result.getValue({name: 'custrecord_fb_codigo_sat'});
-                        var taxCodeXML = result.getValue({
-                            name: "custrecord_fb_cofido_sat_codigo",
-                            join: "CUSTRECORD_FB_CODIGO_SAT"
-                        });
-                        var taxCodeTasa = result.getValue({
-                            name: "custrecord_fb_codigos_sat_tasa",
-                            join: "CUSTRECORD_FB_CODIGO_SAT"
-                        });
-                        var taxObj = {
-                            taxId: taxId,
-                            taxName: taxName,
-                            taxType: taxType,
-                            taxCodeSat: taxCodeSat,
-                            taxCodeXML: taxCodeXML,
-                            taxCodeTasa: taxCodeTasa
-                        };
-                        taxesData.push(taxObj);
-                        // log.debug({title:'taxObj', details:taxObj});
-                    });
+            if (taxFiltersAux.length) {
+                var taxFilters = [["isinactive","is","F"], "AND", taxFiltersAux];
+                log.debug({title:'taxFilters', details:taxFilters});
+                var salestaxitemSearchObj = search.create({
+                    type: search.Type.SALES_TAX_ITEM,
+                    filters: taxFilters,
+                    columns:
+                    [
+                       search.createColumn({
+                          name: "internalid",
+                          sort: search.Sort.ASC,
+                          label: "ID interno"
+                       }),
+                       search.createColumn({name: "name", label: "Nombre"}),
+                       search.createColumn({name: "taxtype", label: "Tipo de impuesto"}),
+                       search.createColumn({name: "custrecord_ste_taxcode_ratetype", label: "Tax Rate Type"}),
+                       search.createColumn({name: "custrecord_fb_codigo_sat", label: "Codigo SAT"}),
+                       search.createColumn({
+                          name: "custrecord_fb_cofido_sat_codigo",
+                          join: "CUSTRECORD_FB_CODIGO_SAT",
+                          label: "Codigo en XML"
+                       }),
+                       search.createColumn({
+                          name: "custrecord_fb_codigos_sat_tasa",
+                          join: "CUSTRECORD_FB_CODIGO_SAT",
+                          label: "Tasa"
+                       })
+                    ]
                 });
-                log.audit({title:'taxesData', details:taxesData});
-                log.debug({title:'impuestosXML_con_Locales 2433', details:impuestosClear});
-                for (var lineI = 0; lineI < impuestosClear.length; lineI++) {
-                    var impuestoCode, impuestoTasa;
-                    if (impuestosClear[lineI].impuesto) { // es Impuesto
-                        impuestoCode = impuestosClear[lineI].impuesto;
-                        impuestoTasa = Number(impuestosClear[lineI].tasaOCuota);
-                        impuestoTasa = impuestoTasa * 100;
-                    }else if(impuestosClear[lineI].locTrasladado){ // es impuesto local
-                        impuestoCode = impuestosClear[lineI].locTrasladado;
-                        impuestoTasa = Number(impuestosClear[lineI].tasadeTraslado);
-                    }
-                    // log.debug({title:'Datos de impuesto lineI: ' + lineI, details:{impuestoCode: impuestoCode, impuestoTasa: impuestoTasa}});
-                    for (var lineJ = 0; lineJ < taxesData.length; lineJ++) {
-                        var nestuiteCode = taxesData[lineJ].taxCodeXML;
-                        var netsuiteTasa = taxesData[lineJ].taxCodeTasa;
-                        netsuiteTasa = netsuiteTasa.replace(/%/g, '');
-                        netsuiteTasa = Number(netsuiteTasa);
-                        // log.debug({title:'Datos de netsuite lineJ: ' + lineJ, details:{nestuiteCode: nestuiteCode, netsuiteTasa: netsuiteTasa}});
-                        if (nestuiteCode == impuestoCode && netsuiteTasa == impuestoTasa) {
-                            var taxId = taxesData[lineJ].taxId;
-                            var taxType = taxesData[lineJ].taxType;
-                            impuestosClear[lineI].taxid = taxId;
-                            impuestosClear[lineI].taxtype = taxType;
-                            impuestosClear[lineI].porcenttasa = netsuiteTasa;
-                            break;
+                var taxResult = salestaxitemSearchObj.runPaged({
+                    pageSize: 1000
+                });
+                log.debug({title:'taxResult.count', details:taxResult.count});
+                if (taxResult.count > 0) {
+                    var taxesData = [];
+                    taxResult.pageRanges.forEach(function(pageRange){
+                        var myPage = taxResult.fetch({index: pageRange.index});
+                        myPage.data.forEach(function(result){
+                            var taxId = result.getValue({name: 'internalid'});
+                            var taxName = result.getValue({name: 'name'});
+                            var taxType = result.getValue({name: 'taxtype'});
+                            var taxCodeSat = result.getValue({name: 'custrecord_fb_codigo_sat'});
+                            var taxCodeXML = result.getValue({
+                                name: "custrecord_fb_cofido_sat_codigo",
+                                join: "CUSTRECORD_FB_CODIGO_SAT"
+                            });
+                            var taxCodeTasa = result.getValue({
+                                name: "custrecord_fb_codigos_sat_tasa",
+                                join: "CUSTRECORD_FB_CODIGO_SAT"
+                            });
+                            var taxObj = {
+                                taxId: taxId,
+                                taxName: taxName,
+                                taxType: taxType,
+                                taxCodeSat: taxCodeSat,
+                                taxCodeXML: taxCodeXML,
+                                taxCodeTasa: taxCodeTasa
+                            };
+                            taxesData.push(taxObj);
+                            // log.debug({title:'taxObj', details:taxObj});
+                        });
+                    });
+                    log.audit({title:'taxesData', details:taxesData});
+                    log.debug({title:'impuestosXML_con_Locales 2433', details:impuestosClear});
+                    for (var lineI = 0; lineI < impuestosClear.length; lineI++) {
+                        var impuestoCode, impuestoTasa;
+                        if (impuestosClear[lineI].impuesto) { // es Impuesto
+                            impuestoCode = impuestosClear[lineI].impuesto;
+                            impuestoTasa = Number(impuestosClear[lineI].tasaOCuota);
+                            impuestoTasa = impuestoTasa * 100;
+                        }else if(impuestosClear[lineI].locTrasladado){ // es impuesto local
+                            impuestoCode = impuestosClear[lineI].locTrasladado;
+                            impuestoTasa = Number(impuestosClear[lineI].tasadeTraslado);
+                        }
+                        // log.debug({title:'Datos de impuesto lineI: ' + lineI, details:{impuestoCode: impuestoCode, impuestoTasa: impuestoTasa}});
+                        for (var lineJ = 0; lineJ < taxesData.length; lineJ++) {
+                            var nestuiteCode = taxesData[lineJ].taxCodeXML;
+                            var netsuiteTasa = taxesData[lineJ].taxCodeTasa;
+                            netsuiteTasa = netsuiteTasa.replace(/%/g, '');
+                            netsuiteTasa = Number(netsuiteTasa);
+                            // log.debug({title:'Datos de netsuite lineJ: ' + lineJ, details:{nestuiteCode: nestuiteCode, netsuiteTasa: netsuiteTasa}});
+                            if (nestuiteCode == impuestoCode && netsuiteTasa == impuestoTasa) {
+                                var taxId = taxesData[lineJ].taxId;
+                                var taxType = taxesData[lineJ].taxType;
+                                impuestosClear[lineI].taxid = taxId;
+                                impuestosClear[lineI].taxtype = taxType;
+                                impuestosClear[lineI].porcenttasa = netsuiteTasa;
+                                break;
+                            }
                         }
                     }
+                    log.debug({title:'impuestosXML_clear', details:impuestosClear});
+                    dataReturn.dataTax = impuestosClear;
                 }
-                log.debug({title:'impuestosXML_clear', details:impuestosClear});
-                dataReturn.dataTax = impuestosClear;
             }
             // ---------------------Impuestos Retenciones---------------------
             var nodoImpuestosReten = xml.XPath.select({
