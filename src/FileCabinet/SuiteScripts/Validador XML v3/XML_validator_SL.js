@@ -2317,7 +2317,9 @@
                     name: 'Importe'
                 });
                 importe = importe.value;
-                if (parseFloat(tasadeTraslado) > 1) { // la tasa de traslado es porcentaje y se tiene que convertir
+                if (parseFloat(tasadeTraslado) == 0) { // es impuesto de cero
+                    var base = 0;
+                }else if (parseFloat(tasadeTraslado) > 1) { // la tasa de traslado es porcentaje y se tiene que convertir
                     var porcentAux = parseFloat(tasadeTraslado/100);
                     var base = parseFloat(importe) / parseFloat(porcentAux);
                 }else{ // la tasa de traslado es numerica considerando 1.0 como el 100%
