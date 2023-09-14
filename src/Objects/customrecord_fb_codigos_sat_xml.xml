@@ -97,7 +97,7 @@
       <globalsearch>F</globalsearch>
       <help></help>
       <isformula>F</isformula>
-      <ismandatory>T</ismandatory>
+      <ismandatory>F</ismandatory>
       <isparent>F</isparent>
       <label>Tasa</label>
       <linktext></linktext>
