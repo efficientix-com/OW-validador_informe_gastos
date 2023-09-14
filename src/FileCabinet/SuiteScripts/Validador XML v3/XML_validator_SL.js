@@ -2241,14 +2241,19 @@
                     name: 'TipoFactor'
                 });
                 factor = factor.value;
-                var tasaOCuota = nodoImpuestosRes[index].getAttributeNode({
-                    name: 'TasaOCuota'
-                });
-                tasaOCuota = tasaOCuota.value;
-                var importe = nodoImpuestosRes[index].getAttributeNode({
-                    name: 'Importe'
-                });
-                importe = importe.value;
+                if (factor == 'Exento') {
+                    var tasaOCuota = '';
+                    var importe = 0;
+                }else{
+                    var tasaOCuota = nodoImpuestosRes[index].getAttributeNode({
+                        name: 'TasaOCuota'
+                    });
+                    tasaOCuota = tasaOCuota.value;
+                    var importe = nodoImpuestosRes[index].getAttributeNode({
+                        name: 'Importe'
+                    });
+                    importe = importe.value;
+                }
                 var base = nodoImpuestosRes[index].getAttributeNode({
                     name: 'Base'
                 });
@@ -2418,8 +2423,12 @@
                         var impuestoCode, impuestoTasa;
                         if (impuestosClear[lineI].impuesto) { // es Impuesto
                             impuestoCode = impuestosClear[lineI].impuesto;
-                            impuestoTasa = Number(impuestosClear[lineI].tasaOCuota);
-                            impuestoTasa = impuestoTasa * 100;
+                            if (impuestosClear[lineI].tasaOCuota != '') { // si existe tasa o cuota
+                                impuestoTasa = Number(impuestosClear[lineI].tasaOCuota);
+                                impuestoTasa = impuestoTasa * 100;
+                            }else{
+                                impuestoTasa = '';
+                            }
                         }else if(impuestosClear[lineI].locTrasladado){ // es impuesto local
                             impuestoCode = impuestosClear[lineI].locTrasladado;
                             impuestoTasa = Number(impuestosClear[lineI].tasadeTraslado);
@@ -2428,15 +2437,28 @@
                         for (var lineJ = 0; lineJ < taxesData.length; lineJ++) {
                             var nestuiteCode = taxesData[lineJ].taxCodeXML;
                             var netsuiteTasa = taxesData[lineJ].taxCodeTasa;
-                            netsuiteTasa = netsuiteTasa.replace(/%/g, '');
-                            netsuiteTasa = Number(netsuiteTasa);
-                            // log.debug({title:'Datos de netsuite lineJ: ' + lineJ, details:{nestuiteCode: nestuiteCode, netsuiteTasa: netsuiteTasa}});
-                            if (nestuiteCode == impuestoCode && netsuiteTasa == impuestoTasa) {
+                            if (netsuiteTasa != '') {
+                                netsuiteTasa = netsuiteTasa.replace(/%/g, '');
+                                netsuiteTasa = Number(netsuiteTasa);
+                            }else{
+                                netsuiteTasa = '';
+                            }
+                            log.debug({title:'Datos de netsuite lineJ: ' + lineJ, details:{nestuiteCode: nestuiteCode, 
+                                                                                            impuesto: impuestoCode, 
+                                                                                            netsuiteTasa: netsuiteTasa, 
+                                                                                            impuestoTasa: impuestoTasa,
+                                                                                            resultCondition: (nestuiteCode == impuestoCode && netsuiteTasa == impuestoTasa)
+                                                                                        }});
+                            if (nestuiteCode === impuestoCode && netsuiteTasa === impuestoTasa) {
                                 var taxId = taxesData[lineJ].taxId;
                                 var taxType = taxesData[lineJ].taxType;
                                 impuestosClear[lineI].taxid = taxId;
                                 impuestosClear[lineI].taxtype = taxType;
-                                impuestosClear[lineI].porcenttasa = netsuiteTasa;
+                                if (netsuiteTasa != '') {
+                                    impuestosClear[lineI].porcenttasa = netsuiteTasa;
+                                }else{
+                                    impuestosClear[lineI].porcenttasa = 0;
+                                }
                                 break;
                             }
                         }
